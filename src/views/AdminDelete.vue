@@ -27,12 +27,13 @@ export default {
         type:'confirm',
         color: 'danger',
         title: 'Confirm',
-        text: 'Are you sure to delete this admin?',
+        text: 'Are you sure to delete this user?',
         accept: this.acceptAlert,
         parameters: this.adminId
       })
     },
     acceptAlert (args) {
+      console.log(args)
       this.$store.dispatch('user/removeRecord', args)
         .then((response) => {
           this.$vs.notify({
