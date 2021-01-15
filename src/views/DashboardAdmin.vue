@@ -23,8 +23,8 @@
              <div class="vx-col w-full sm:w-1/2 md:w-1/2 lg:w-1/3 xl:w-1/3 mb-base">
                 <statistics-card-line
                   v-if="revenueGenerated.analyticsData"
-                  icon="DollarSignIcon"
-                  :statistic="15 | k_formatter"
+                  icon="BookOpenIcon"
+                  :statistic="totalProject | k_formatter"
                   statisticTitle="Total Projects"
                   :chartData="revenueGenerated.series"
                   color="success"
@@ -34,8 +34,8 @@
             <div class="vx-col w-full sm:w-1/2 md:w-1/2 lg:w-1/3 xl:w-1/3 mb-base">
                 <statistics-card-line
                   v-if="quarterlySales.analyticsData"
-                  icon="ShoppingCartIcon"
-                  :statistic="quarterlySales.analyticsData.sales"
+                  icon="PenToolIcon"
+                  :statistic="totalProject"
                   statisticTitle="Total Complains"
                   :chartData="quarterlySales.series"
                   color="danger"
@@ -226,7 +226,7 @@ import VueApexCharts from 'vue-apexcharts'
 import StatisticsCardLine from '@/components/statistics-cards/StatisticsCardLine.vue'
 import analyticsData from './ui-elements/card/analyticsData.js'
 import ChangeTimeDurationDropdown from '@/components/ChangeTimeDurationDropdown.vue'
-import axios from '@/axios.js'
+import axios from  'axios'
 
 export default{
   components: {
@@ -238,6 +238,7 @@ export default{
   data () {
     return {
       totalUser: '',
+      totalProject: '',
       subscribersGained: {},
       revenueGenerated: {},
       quarterlySales: {},
@@ -329,19 +330,15 @@ export default{
   methods: {
     fetchDatas () {
       //   Fetch user, project, complain
-      axios.get('api/users')
-        .then((response) => {
-          this.totalUser = response.data.length
-        })
-        .catch((error) => {
-          console.error(error)
-        })
-        // .then(axios.spread((...responses) => {
-        //   console.log(responses)
-        // }))
-        .catch((error) => {
-          console.error(error)
-        })
+      const baseURL = 'http://localhost:8081/'
+
+      axios.all([axios.get(`${baseURL}/api/users`),  axios.get(`${baseURL}/api/project`)]).then(axios.spread((...responses) => {
+        this.totalUser = responses[0].data.length
+        this.totalProject = responses[1].data.length
+        // use/access the results
+      })).catch(errors => {
+        console.error(errors)
+      })
     }
   }
 }
