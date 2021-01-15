@@ -39,7 +39,6 @@ export default {
     return new Promise((resolve, reject) => {
       axios.post('/api/task/create', {task})
         .then((response) => {
-          console.log(Object.assign(task, {id: response.data.id}))
           commit('ADD_TASK', Object.assign(task, {id: response.data.id}))
           resolve(response)
         })
