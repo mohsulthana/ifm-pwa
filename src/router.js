@@ -102,7 +102,16 @@ const router = new Router({
         {
           path: '/projects',
           name: 'projects',
-          component: () => import('./views/AdminTable.vue'),
+          component: () => import('./views/ProjectTable.vue'),
+          meta: {
+            admin: true,
+            authRequired: true
+          }
+        },
+        {
+          path: '/complains',
+          name: 'complains',
+          component: () => import('./views/Complains.vue'),
           meta: {
             admin: true,
             authRequired: true
