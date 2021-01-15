@@ -1,43 +1,59 @@
 <!-- =========================================================================================
-    File Name: DashboardEcommerce.vue
-    Description: Dashboard - Ecommerce
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
+  File Name: DashboardAnalytics.vue
+  Description: Dashboard Analytics
+  ----------------------------------------------------------------------------------------
+  Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
+  Author: Pixinvent
+  Author URL: http://www.themeforest.net/user/pixinvent
 ========================================================================================== -->
 
 <template>
-  <div>
-    <vx-card title="Task List" code-toggler>
-      <br />
+  <div id="dashboard-analytics">
+    <div class="vx-row">
+      <!-- CARD 9: DISPATCHED ORDERS -->
+      <div class="vx-col w-full">
+        <vx-card title="Overview for Projects">
+          <div slot="no-body" class="mt-4">
+            <vs-table :data="projects" class="table-dark-inverted">
+              <template slot="thead">
+                <vs-th>PROJECT NO.</vs-th>
+                <vs-th>PROJECT NAME</vs-th>
+                <vs-th>DESCRIPTION</vs-th>
+                <vs-th>CUSTOMER</vs-th>
+                <vs-th>PROGRESS</vs-th>
+                <vs-th>CREATED ON</vs-th>
+              </template>
 
-      <vs-table max-items="10" pagination stripe :data="taskLocal">
-        <template slot="thead">
-          <vs-th>Task</vs-th>
-          <vs-th>Description</vs-th>
-          <vs-th>Status</vs-th>
-          <vs-th>Created at</vs-th>
-        </template>
+              <template slot-scope="{data}">
+                <vs-tr :key="indextr" v-for="(tr, indextr) in data">
+                  <vs-td :data="data[indextr].orderNo">
+                    <span>#{{data[indextr].id}}</span>
+                  </vs-td>
+                  <vs-td :data="data[indextr].orderNo">
+                    <span>{{data[indextr].project}}</span>
+                  </vs-td>
+                  <vs-td :data="data[indextr].orderNo">
+                    <span>{{data[indextr].description}}</span>
+                  </vs-td>
+                  <vs-td :data="data[indextr].orderNo">
+                    <span>{{data[indextr].name}}</span>
+                  </vs-td>
+                  <vs-td :data="data[indextr].orderNo">
+                    <span>{{data[indextr].distance}}</span>
+                    <vs-progress :percent="data[indextr].percent" :color="data[indextr].statusColor"></vs-progress>
+                  </vs-td>
+                  <vs-td :data="data[indextr].orderNo">
+                    <span>{{data[indextr].created_date}}</span>
+                  </vs-td>
+                </vs-tr>
+              </template>
+            </vs-table>
+          </div>
 
-        <template slot-scope="{ data }">
-          <vs-tr :key="indextr" v-for="(tr, indextr) in data">
-            <vs-td :data="data[indextr].task">
-              {{ data[indextr].task }}
-            </vs-td>
-            <vs-td :data="data[indextr].description">
-              {{ data[indextr].description }}
-            </vs-td>
-            <vs-td :data="data[indextr].id">
-              {{ data[indextr].status == 1 ? 'Done' : 'On Progress' }}
-            </vs-td>
-            <vs-td :data="data[indextr].id">
-              {{ data[indextr].created_date }}
-            </vs-td>
-          </vs-tr>
-        </template>
-      </vs-table>
-    </vx-card>
+        </vx-card>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -46,26 +62,48 @@
 export default {
   data () {
     return {
-      title: '',
-      taskLocal: []
+      projects: []
     }
   },
-  mounted () {
-    this.$store.dispatch('todo/fetchTasks')
-      .then((response) => {
-        this.taskLocal = response.data
-      })
+  components: {
+  },
+  created () {
+    this.fetchProjects()
+  },
+  methods: {
+    fetchProjects () {
+      this.$store.dispatch('project/fetchProjects')
+        .then((response) => {
+          this.projects = response.data
+        })
+    }
   }
 }
-
 </script>
 
 <style lang="scss">
-.chat-card-log {
-  height: 400px;
+/*! rtl:begin:ignore */
+#dashboard-analytics {
+  .greet-user{
+    position: relative;
 
-  .chat-sent-msg {
-    background-color: #f2f4f7 !important;
+    .decore-left{
+      position: absolute;
+      left:0;
+      top: 0;
+    }
+    .decore-right{
+      position: absolute;
+      right:0;
+      top: 0;
+    }
+  }
+
+  @media(max-width: 576px) {
+    .decore-left, .decore-right{
+      width: 140px;
+    }
   }
 }
+/*! rtl:end:ignore */
 </style>
