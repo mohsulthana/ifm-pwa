@@ -109,19 +109,13 @@ export default [
       /**
        * Worker
        */
-      {
-        url: '/apps/todo/all',
-        name: 'Todo',
-        slug: 'todo',
-        icon: 'CheckSquareIcon',
-        i18n: 'Todo'
-      },
+
       /* ADMIN */
       {
         url: '/projects',
         name: 'Projects',
         slug: 'projects',
-        icon: 'UserIcon',
+        icon: 'BookOpenIcon',
         i18n: 'Projects'
       },
       {
@@ -130,6 +124,13 @@ export default [
         slug: 'dashboard',
         icon: 'UserIcon',
         i18n: 'Users'
+      },
+      {
+        url: '/complains',
+        name: 'Complains',
+        slug: 'complains',
+        icon: 'PenToolIcon',
+        i18n: 'Complains'
       },
       /* SUPER */
       {
