@@ -9,7 +9,8 @@
 
 
 module.exports = {
-  publicPath: '/',
+  // publicPath: process.env.NODE_ENV === "production" ? "/diamond-vue" : "/"
+  publicPath: '/ifm-pwa',
   transpileDependencies: [
     'vue-echarts',
     'resize-detector'
