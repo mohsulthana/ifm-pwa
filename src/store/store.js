@@ -19,6 +19,8 @@ import actions from './actions'
 Vue.use(Vuex)
 
 import moduleTodo from './todo/moduleTodo.js'
+import moduleProject from './project/moduleProject.js'
+import moduleService from './service/moduleService.js'
 // import moduleCalendar from './calendar/moduleCalendar.js'
 // import moduleChat from './chat/moduleChat.js'
 // import moduleEmail from './email/moduleEmail.js'
@@ -34,7 +36,8 @@ export default new Vuex.Store({
   actions,
   modules: {
     todo: moduleTodo,
-    // calendar: moduleCalendar,
+    project: moduleProject,
+    service: moduleService,
     // chat: moduleChat,
     // email: moduleEmail,
     user: moduleUsers,
