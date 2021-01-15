@@ -1,50 +1,75 @@
-<!-- =========================================================================================
-    File Name: Table.vue
-    Description: Table demo - Imports all table demos
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
-
 <template>
   <div>
-    <vs-row vs-justify="center">
-      <vs-col type="flex" vs-justify="center" vs-align="center" vs-w="6">
-        <vs-card>
-          <div slot="header">
-            <h3>Hello world !</h3>
-          </div>
-          <div>
-            <span
-              >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.</span
-            >
-          </div>
-          <div slot="footer">
-            <vs-row vs-justify="flex-end">
-              <vs-button
-                type="gradient"
-                color="danger"
-                icon="favorite"
-              ></vs-button>
-              <vs-button color="primary" icon="turned_in_not"></vs-button>
-              <vs-button
-                color="rgb(230,230,230)"
-                color-text="rgb(50,50,50)"
-                icon="settings"
-              ></vs-button>
-            </vs-row>
-          </div>
-        </vs-card>
-      </vs-col>
-    </vs-row>
+    <vx-card title="Service">
+      <!-- TABLE ACTION COL-2: ADD NEW USERS -->
+      <template slot="actions">
+        <project-add-new :customer="customers"/>
+      </template>
+      <vs-table max-items="10" pagination search stripe :data="services">
+        <template slot="thead">
+          <vs-th sort-key="no">No</vs-th>
+          <vs-th sort-key="service">Service</vs-th>
+          <vs-th sort-key="description">Description</vs-th>
+          <vs-th sort-key="totalProject">Total Project</vs-th>
+          <vs-th sort-key="action">Action</vs-th>
+        </template>
+
+        <template slot-scope="{ data }">
+          <vs-tr :key="indextr" v-for="(tr, indextr) in data">
+            <vs-td :data="data[indextr].service">
+              {{ indextr + 1 }}
+            </vs-td>
+            <vs-td :data="data[indextr].service">
+              {{ data[indextr].service }}
+            </vs-td>
+            <vs-td :data="data[indextr].description">
+              {{ data[indextr].description }}
+            </vs-td>
+            <vs-td :data="data[indextr].description">
+              {{ data[indextr].description }}
+            </vs-td>
+            <vs-td>
+              <project-edit :projectId="data[indextr].id"/>
+              <project-delete :projectId="data[indextr].id"/>
+            </vs-td>
+          </vs-tr>
+        </template>
+      </vs-table>
+    </vx-card>
   </div>
 </template>
 
 <script>
-export default {}
+import ProjectAddNew          from './ProjectAddNew.vue'
+import ProjectEdit            from './ProjectEdit.vue'
+import ProjectDelete           from './ProjectDelete.vue'
+
+export default {
+  name: 'users-table',
+  data () {
+    return {
+      services: []
+    }
+  },
+  components: {
+    ProjectAddNew,
+    ProjectEdit,
+    ProjectDelete
+  },
+  methods: {
+    fetchServices () {
+      this.$store.dispatch('service/fetchServices')
+        .then((response) => {
+          this.services = response.data.service
+          console.log(this.services)
+        })
+    }
+  },
+  created () {
+    this.fetchServices()
+  }
+}
 </script>
+
+<style>
+</style>
