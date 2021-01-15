@@ -23,7 +23,7 @@ export default {
   },
   fetchAdmin ({ commit }) {
     return new Promise((resolve, reject) => {
-      axios.get('api/users/findAdmin')
+      axios.get('api/users/findUser/admin')
         .then((response) => {
           commit('SET_ADMIN', response.data)
           resolve(response)
@@ -31,9 +31,9 @@ export default {
         .catch((error) => { reject(error) })
     })
   },
-  fetchUsers ({ commit }) {
+  fetchUsers ({ commit }, user) {
     return new Promise((resolve, reject) => {
-      axios.get('/api/users')
+      axios.get(`api/users/findUser/${user}`)
         .then((response) => {
           commit('SET_USERS', response.data)
           resolve(response)
