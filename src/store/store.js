@@ -21,6 +21,7 @@ Vue.use(Vuex)
 import moduleTodo from './todo/moduleTodo.js'
 import moduleProject from './project/moduleProject.js'
 import moduleService from './service/moduleService.js'
+import moduleComplain from './complain/moduleComplain.js'
 // import moduleCalendar from './calendar/moduleCalendar.js'
 // import moduleChat from './chat/moduleChat.js'
 // import moduleEmail from './email/moduleEmail.js'
@@ -38,6 +39,7 @@ export default new Vuex.Store({
     todo: moduleTodo,
     project: moduleProject,
     service: moduleService,
+    complain: moduleComplain,
     // chat: moduleChat,
     // email: moduleEmail,
     user: moduleUsers,
