@@ -35,7 +35,7 @@
                 <statistics-card-line
                   v-if="quarterlySales.analyticsData"
                   icon="PenToolIcon"
-                  :statistic="totalProject"
+                  :statistic="totalComplain | k_formatter"
                   statisticTitle="Total Complains"
                   :chartData="quarterlySales.series"
                   color="danger"
@@ -239,6 +239,7 @@ export default{
     return {
       totalUser: '',
       totalProject: '',
+      totalComplain: '',
       subscribersGained: {},
       revenueGenerated: {},
       quarterlySales: {},
@@ -332,9 +333,10 @@ export default{
       //   Fetch user, project, complain
       const baseURL = 'http://localhost:8081/'
 
-      axios.all([axios.get(`${baseURL}/api/users`),  axios.get(`${baseURL}/api/project`)]).then(axios.spread((...responses) => {
+      axios.all([axios.get(`${baseURL}/api/users`),  axios.get(`${baseURL}/api/project`), axios.get(`${baseURL}/api/complain`)]).then(axios.spread((...responses) => {
         this.totalUser = responses[0].data.length
         this.totalProject = responses[1].data.length
+        this.totalComplain = responses[2].data.length
         // use/access the results
       })).catch(errors => {
         console.error(errors)

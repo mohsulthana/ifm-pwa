@@ -21,20 +21,21 @@
                 v-validate="'required'"
                 name="name"
                 class="w-full mb-4 mt-5"
-                placeholder="User Name"
+                placeholder="Name"
                 v-model="user.name"
                 :color="validateForm ? 'success' : 'danger'"
               />
-              <span>{{ errors.first('name') }}</span>
-             <vs-input
+              <span>{{ errors.first("name") }}</span>
+              <vs-input
                 v-validate="'required|email'"
                 name="email"
                 class="w-full mb-4 mt-5"
-                placeholder="User mail"
+                placeholder="Mail"
+                description-text="This one going to be used to login"
                 v-model="user.email"
                 :color="validateForm ? 'success' : 'danger'"
               />
-              <span>{{ errors.first('email') }}</span>
+              <span>{{ errors.first("email") }}</span>
               <vs-input
                 v-validate="'required|min:6'"
                 type="password"
@@ -45,17 +46,38 @@
                 v-model="user.password"
                 :color="validateForm ? 'success' : 'danger'"
               />
-              <span>{{ errors.first('password') }}</span>
-              <!-- <vs-input
-                v-validate="'required'"
-                type="password"
-                data-vv-as="password"
-                name="password_confirmation"
+              <span>{{ errors.first("password") }}</span>
+                            <vs-select
                 class="w-full mb-4 mt-5"
-                placeholder="Password Confirmation"
-                :color="validateForm ? 'success' : 'danger'"
-              />
-              <span>{{ errors.first('password_confirmation') }}</span> -->
+                label="Role"
+                name="role"
+                v-validate="'required'"
+                v-model="user.role"
+              >
+                <vs-select-item
+                  :key="index"
+                  :value="item.value"
+                  :text="item.text"
+                  v-for="(item, index) in role"
+                />
+              </vs-select>
+              <span>{{ errors.first("role") }}</span>
+              <vs-select
+                class="w-full mb-4 mt-5"
+                label="Service"
+                name="service"
+                v-if="this.user.role === 'admin' || this.user.role === ''"
+                v-validate="'required'"
+                v-model="user.service_id"
+              >
+                <vs-select-item
+                  :key="index"
+                  :value="item.id"
+                  :text="item.service"
+                  v-for="(item, index) in service"
+                />
+              </vs-select>
+              <span>{{ errors.first("service") }}</span>
             </div>
           </div>
         </form>
@@ -66,14 +88,27 @@
 
 <script>
 export default {
+  props: {
+    service: {
+      type: Array
+    }
+  },
   data () {
     return {
+      role: [
+        {
+          text: 'Admin', value: 'admin'
+        }, {
+          text: 'Customer', value: 'customer'
+        }
+      ],
       activePrompt: false,
       user: {
         name: '',
         email: '',
         password: '',
-        role: 'admin'
+        role: '',
+        service_id: ''
       }
     }
   },
@@ -88,13 +123,15 @@ export default {
         name: '',
         email: '',
         password: '',
-        role: 'admin'
+        role: '',
+        service_id: ''
       })
     },
     registerUser () {
       this.$validator.validateAll().then((result) => {
         if (result) {
-          this.$store.dispatch('user/register', Object.assign({}, this.user))
+          this.$store
+            .dispatch('user/register', Object.assign({}, this.user))
             .then(() => {
               this.$vs.notify({
                 title: 'Success',
@@ -110,6 +147,9 @@ export default {
                 icon: 'error',
                 color: 'danger'
               })
+            })
+            .finally(() => {
+              location.reload()
             })
           this.clearFields()
         }

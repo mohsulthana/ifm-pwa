@@ -3,7 +3,7 @@
     <vx-card title="Users">
       <!-- TABLE ACTION COL-2: ADD NEW USERS -->
       <template slot="actions">
-        <admin-add-new/>
+        <admin-add-new :service="services"/>
       </template>
       <vs-table max-items="10" pagination search stripe :data="users">
         <template slot="thead">
@@ -44,7 +44,8 @@ export default {
   name: 'users-table',
   data () {
     return {
-      users: []
+      users: [],
+      services: []
     }
   },
   components: {
@@ -57,11 +58,19 @@ export default {
       this.$store.dispatch('user/fetchAdmin')
         .then((response) => {
           this.users = response.data
+          console.log(response.data)
+        })
+    },
+    fetchService () {
+      this.$store.dispatch('service/fetchServices')
+        .then((response) => {
+          this.services = response.data.service
         })
     }
   },
   created () {
     this.fetchUsers()
+    this.fetchService()
   }
 }
 </script>
