@@ -1,0 +1,28 @@
+/*=========================================================================================
+  File Name: moduleTodoGetters.js
+  Description: Todo Module Getters
+  ----------------------------------------------------------------------------------------
+  Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
+  Author: Pixinvent
+  Author URL: http://www.themeforest.net/user/pixinvent
+==========================================================================================*/
+
+
+export default {
+  queriedTasks: state => state.tasks.filter((task) => {
+    let isItemOfCurrentFilter = false
+    if (
+      (state.todoFilter === 'all' && !task.isTrashed)
+          || (state.todoFilter === 'important' && !task.isTrashed && task.isImportant)
+          || (state.todoFilter === 'starred' && !task.isTrashed && task.isStarred)
+          || (state.todoFilter === 'completed' && !task.isTrashed && task.isCompleted)
+          || (state.todoFilter === 'trashed' && task.isTrashed)
+          || (task.tags.includes(state.todoFilter))
+
+    ) { isItemOfCurrentFilter = true }
+
+    return isItemOfCurrentFilter && (task.task.toLowerCase().includes(state.todoSearchQuery.toLowerCase()) || task.description.toLowerCase().includes(state.todoSearchQuery.toLowerCase()))
+  }),
+  getTask: state => id => state.tasks.find((task) => task.id === id)
+  // getTodosBySection: state => (sectionId) => state.todoArray.filter((task) => task.sectionId == sectionId),
+}
