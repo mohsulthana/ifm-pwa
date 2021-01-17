@@ -20,6 +20,16 @@ export default {
         .catch((error) => { reject(error) })
     })
   },
+  fetchProjectByCustomer ({ commit }, customerId) {
+    return new Promise((resolve, reject) => {
+      axios.delete(`/api/project/projectByCustomer/${customerId}`)
+        .then((response) => {
+          commit('SET_PROJECT', response.data)
+          resolve(response)
+        })
+        .catch((error) => { reject(error) })
+    })
+  },
   removeRecord ({ commit }, projectId) {
     return new Promise((resolve, reject) => {
       axios.delete(`/api/project/delete/${projectId}`)
