@@ -10,9 +10,9 @@
 import axios from '@/axios.js'
 
 export default {
-  fetchServices ({ commit }) {
+  fetchServices ({ commit }, userId) {
     return new Promise((resolve, reject) => {
-      axios.get('api/service')
+      axios.get(`api/service/index/${userId}`)
         .then((response)  => {
           commit('SET_SERVICE', response.data)
           resolve(response)
@@ -30,11 +30,12 @@ export default {
         .catch((error) => { reject(error) })
     })
   },
-  addProject ({ commit }, project) {
+  addService ({ commit }, service) {
     return new Promise((resolve, reject) => {
-      axios.post('/api/project/create', {project})
+      axios.post('/api/service/create', {service})
         .then((response) => {
-          commit('ADD_PROJECT', Object.assign(project, {id: response.data.id}))
+          console.log(response.data)
+          commit('ADD_SERVICE', Object.assign(service, {id: response.data.id}))
           resolve(response)
         })
         .catch((error) => { reject(error) })
