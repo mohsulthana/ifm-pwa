@@ -3,14 +3,13 @@
     <vx-card title="Service">
       <!-- TABLE ACTION COL-2: ADD NEW USERS -->
       <template slot="actions">
-        <project-add-new :customer="customers"/>
+        <service-add-new/>
       </template>
       <vs-table max-items="10" pagination search stripe :data="services">
         <template slot="thead">
           <vs-th sort-key="no">No</vs-th>
           <vs-th sort-key="service">Service</vs-th>
           <vs-th sort-key="description">Description</vs-th>
-          <vs-th sort-key="totalProject">Total Project</vs-th>
           <vs-th sort-key="action">Action</vs-th>
         </template>
 
@@ -25,11 +24,7 @@
             <vs-td :data="data[indextr].description">
               {{ data[indextr].description }}
             </vs-td>
-            <vs-td :data="data[indextr].description">
-              {{ data[indextr].description }}
-            </vs-td>
             <vs-td>
-              <project-edit :projectId="data[indextr].id"/>
               <project-delete :projectId="data[indextr].id"/>
             </vs-td>
           </vs-tr>
@@ -40,7 +35,7 @@
 </template>
 
 <script>
-import ProjectAddNew          from './ProjectAddNew.vue'
+import ServiceAddNew          from './ServiceAddNew.vue'
 import ProjectEdit            from './ProjectEdit.vue'
 import ProjectDelete           from './ProjectDelete.vue'
 
@@ -52,16 +47,16 @@ export default {
     }
   },
   components: {
-    ProjectAddNew,
+    ServiceAddNew,
     ProjectEdit,
     ProjectDelete
   },
   methods: {
     fetchServices () {
-      this.$store.dispatch('service/fetchServices')
+      this.$store.dispatch('service/fetchServices', this.$store.state.AppActiveUser.id)
         .then((response) => {
           this.services = response.data.service
-          console.log(this.services)
+          console.log(response.data)
         })
     }
   },

@@ -72,7 +72,7 @@ export default {
   },
   methods: {
     fetchProjects () {
-      this.$store.dispatch('project/fetchProjects')
+      this.$store.dispatch('project/fetchProjectByCustomer', this.$store.state.AppActiveUser.id)
         .then((response) => {
           this.projects = response.data
         })
