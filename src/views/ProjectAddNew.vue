@@ -1,6 +1,6 @@
 <template>
   <div class="px-6 pb-2 pt-6">
-    <vs-button @click="activePrompt = true" class="w-full" icon="person"
+    <vs-button @click="activePrompt = true" class="w-full" icon="book"
       >Add Project</vs-button
     >
     <vs-prompt
@@ -8,8 +8,7 @@
       accept-text="Add"
       button-cancel="border"
       @cancel="clearFields"
-      @accept="registerUser"
-      @close="clearFields"
+      @accept="createProject"
       :is-valid="validateForm"
       :active.sync="activePrompt"
     >
@@ -45,6 +44,7 @@
                   v-for="(item, index) in customer"
                 />
               </vs-select>
+              <vs-input-number label="Progress" max="100" class="w-full mb-4 mt-5" v-model="project.percent"/>
             </div>
           </div>
         </form>
@@ -66,7 +66,9 @@ export default {
       project: {
         project: '',
         description: '',
-        customer: ''
+        customer: '',
+        percent: 0,
+        service_id: this.$store.state.AppActiveUser.service
       },
       users: []
     }
@@ -81,12 +83,15 @@ export default {
       Object.assign(this.project, {
         project: '',
         description: '',
-        customer: ''
+        customer: '',
+        percent: 0,
+        service_id: this.$store.state.AppActiveUser.service
       })
     },
-    registerUser () {
+    createProject () {
       this.$validator.validateAll().then((result) => {
         if (result) {
+          console.log(this.project)
           this.$store
             .dispatch('project/addProject', Object.assign({}, this.project))
             .then(() => {

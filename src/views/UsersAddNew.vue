@@ -73,7 +73,8 @@ export default {
         name: '',
         email: '',
         password: '',
-        role: 'customer'
+        role: 'customer',
+        service_id: null
       }
     }
   },
@@ -88,7 +89,8 @@ export default {
         name: '',
         email: '',
         password: '',
-        role: 'customer'
+        role: 'customer',
+        service_id: ''
       })
     },
     registerUser () {
