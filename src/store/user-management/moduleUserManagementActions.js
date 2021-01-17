@@ -14,7 +14,7 @@ export default {
     return new Promise((resolve, reject) => {
       axios.post('/api/register', payload)
         .then((response) => {
-          commit('UPDATE_USER', response.data.data)
+          // commit('UPDATE_USER', response.data.data)
           commit('UPDATE_ADMIN', response.data.data)
           resolve(response)
         })
