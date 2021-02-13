@@ -82,5 +82,8 @@
     "tailwindcss": "^1.0.1",
     "vue-template-compiler": "^2.6.10",
     "workbox-webpack-plugin": "^6.0.2"
+  },
+  "babel": {
+    "presets": ["@babel/preset-env"]
   }
 }

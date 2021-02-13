@@ -9,23 +9,11 @@
 
 
 module.exports = {
-  // publicPath: process.env.NODE_ENV === "production" ? "/diamond-vue" : "/"
-  publicPath: '/',
-  transpileDependencies: [
-    'vue-echarts',
-    'resize-detector'
-  ],
   configureWebpack: {
-    optimization: {
-      splitChunks: {
-        chunks: 'all'
+    devServer: {
+      watchOptions: {
+        poll: true
       }
     }
   }
-  // devServer: {
-  //   overlay: {
-  //     warnings: true,
-  //     errors: true
-  //   }
-  // }
 }
