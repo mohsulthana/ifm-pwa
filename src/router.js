@@ -1498,6 +1498,21 @@ router.afterEach(() => {
   }
 })
 
+router.beforeEach((to, from, next) => {
+  let userInfo = ''
+  const token = localStorage.getItem('accessToken')
+  if (token) {
+    userInfo = JSON.parse(atob(token.split('.')[1]))
+  }
+
+  if (to.matched.some(record => record.meta.authRequired)) {
+    if (!userInfo || userInfo === null) {
+      next({ path: '/login' })
+    }
+  }
+  next()
+})
+
 // router.beforeEach((to, from, next) => {
 //   let userInfo = ''
 //   const token = localStorage.getItem('accessToken')
