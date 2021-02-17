@@ -17,7 +17,8 @@ export default {
     state.service.splice(serviceIndex, 1)
   },
   ADD_SERVICE (state, service) {
-    console.log(state)
-    state.service.service.push(service)
+    state.service.push(service)
+    console.log(state.service)
+    console.log(service)
   }
 }

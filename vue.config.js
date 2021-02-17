@@ -9,11 +9,22 @@
 
 
 module.exports = {
+  publicPath: '/',
+  transpileDependencies: [
+    'vue-echarts',
+    'resize-detector'
+  ],
   configureWebpack: {
-    devServer: {
-      watchOptions: {
-        poll: true
+    optimization: {
+      splitChunks: {
+        chunks: 'all'
       }
     }
   }
+  // devServer: {
+  //   overlay: {
+  //     warnings: true,
+  //     errors: true
+  //   }
+  // }
 }

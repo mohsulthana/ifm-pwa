@@ -112,18 +112,18 @@ export default [
 
       /* ADMIN */
       {
-        url: '/projects',
-        name: 'Projects',
-        slug: 'projects',
-        icon: 'BookOpenIcon',
-        i18n: 'Projects'
+        url: '/admin-service',
+        name: 'admin-service',
+        icon: 'ArchiveIcon',
+        slug: 'service',
+        i18n: 'Service'
       },
       {
         url: '/users',
-        name: 'Users',
+        name: 'Customer',
         slug: 'dashboard',
         icon: 'UserIcon',
-        i18n: 'Users'
+        i18n: 'Customer'
       },
       {
         url: '/complains',
@@ -139,6 +139,35 @@ export default [
         slug: 'admin',
         icon: 'UserIcon',
         i18n: 'Admin'
+      },
+      {
+        url: '/customer',
+        name: 'Customer',
+        slug: 'customer',
+        icon: 'UsersIcon',
+        i18n: 'Customer'
+      },
+      {
+        url: '/projects',
+        name: 'Projects',
+        slug: 'projects',
+        icon: 'BookOpenIcon',
+        i18n: 'Projects'
+      },
+      /* WORKER */
+      {
+        url: '/task',
+        name: 'Task',
+        slug: 'task',
+        icon: 'SettingsIcon',
+        i18n: 'Task'
+      },
+      {
+        url: '/download-data',
+        name: 'Download',
+        slug: 'download',
+        icon: 'DownloadIcon',
+        i18n: 'Download'
       }
       // {
       //   url: '/apps/calendar/vue-simple-calendar',

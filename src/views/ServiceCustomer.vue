@@ -5,7 +5,7 @@
       <template slot="actions">
         <service-add-new/>
       </template>
-      <vs-table max-items="10" pagination search stripe :data="services">
+      <vs-table max-items="10" pagination search stripe :data="serviceList">
         <template slot="thead">
           <vs-th sort-key="no">No</vs-th>
           <vs-th sort-key="service">Service</vs-th>
@@ -25,7 +25,7 @@
               {{ data[indextr].description }}
             </vs-td>
             <vs-td>
-              <project-delete :projectId="data[indextr].id"/>
+              <service-delete :serviceId="data[indextr].id"/>
             </vs-td>
           </vs-tr>
         </template>
@@ -37,7 +37,7 @@
 <script>
 import ServiceAddNew          from './ServiceAddNew.vue'
 import ProjectEdit            from './ProjectEdit.vue'
-import ProjectDelete           from './ProjectDelete.vue'
+import ServiceDelete           from './ServiceDelete.vue'
 
 export default {
   name: 'users-table',
@@ -49,15 +49,16 @@ export default {
   components: {
     ServiceAddNew,
     ProjectEdit,
-    ProjectDelete
+    ServiceDelete
+  },
+  computed: {
+    serviceList () {
+      return this.$store.getters['service/fetchServices']
+    }
   },
   methods: {
     fetchServices () {
-      this.$store.dispatch('service/fetchServices', this.$store.state.AppActiveUser.id)
-        .then((response) => {
-          this.services = response.data.service
-          console.log(response.data)
-        })
+      this.$store.dispatch('service/fetchServices')
     }
   },
   created () {

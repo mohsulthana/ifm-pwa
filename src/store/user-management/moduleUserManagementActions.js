@@ -14,7 +14,16 @@ export default {
     return new Promise((resolve, reject) => {
       axios.post('/api/register', payload)
         .then((response) => {
-          // commit('UPDATE_USER', response.data.data)
+          commit('UPDATE_USER', response.data.data)
+          resolve(response)
+        })
+        .catch((error) => { reject(error) })
+    })
+  },
+  createAdmin ({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      axios.post('/api/admin/create', payload)
+        .then((response) => {
           commit('UPDATE_ADMIN', response.data.data)
           resolve(response)
         })
@@ -23,7 +32,7 @@ export default {
   },
   fetchAdmin ({ commit }) {
     return new Promise((resolve, reject) => {
-      axios.get('api/users/findUser/admin')
+      axios.get('api/admin')
         .then((response) => {
           commit('SET_ADMIN', response.data)
           resolve(response)
@@ -31,9 +40,9 @@ export default {
         .catch((error) => { reject(error) })
     })
   },
-  fetchUsers ({ commit }, user) {
+  fetchUsers ({ commit }) {
     return new Promise((resolve, reject) => {
-      axios.get(`api/users/findUser/${user}`)
+      axios.get('api/users')
         .then((response) => {
           commit('SET_USERS', response.data)
           resolve(response)

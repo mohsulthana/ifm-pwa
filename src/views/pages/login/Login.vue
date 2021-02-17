@@ -33,53 +33,208 @@
                   <small>Exklusive entwickelt fur optimiertes Arbeiten</small>
                 </div>
                 <div>
-                  <vs-input
-                    v-validate="'required|email|min:3'"
-                    data-vv-validate-on="blur"
-                    name="email"
-                    icon-no-border
-                    icon="icon icon-user"
-                    icon-pack="feather"
-                    label-placeholder="ID"
-                    v-model="email"
-                    class="w-full"
-                  />
-                  <span class="text-danger text-sm">{{
-                    errors.first("email")
-                  }}</span>
+                  <vs-tabs>
+                    <vs-tab label="Super Admin">
+                      <div class="con-tab-ejemplo">
+                        <vs-input
+                          v-validate="'required|email|min:3'"
+                          data-vv-validate-on="blur"
+                          name="email"
+                          icon-no-border
+                          icon="icon icon-user"
+                          icon-pack="feather"
+                          label-placeholder="Email Super Admin"
+                          v-model="superadmin.email"
+                          class="w-full"
+                        />
+                        <span class="text-danger text-sm">{{
+                          errors.first("email")
+                        }}</span>
 
-                  <vs-input
-                    data-vv-validate-on="blur"
-                    v-validate="'required|min:6|max:10'"
-                    type="password"
-                    name="password"
-                    icon-no-border
-                    icon="icon icon-lock"
-                    icon-pack="feather"
-                    label-placeholder="Password"
-                    v-model="password"
-                    class="w-full mt-6"
-                  />
-                  <span class="text-danger text-sm">{{
-                    errors.first("password")
-                  }}</span>
+                        <vs-input
+                          data-vv-validate-on="blur"
+                          v-validate="'required|min:6|max:10'"
+                          type="password"
+                          name="password"
+                          icon-no-border
+                          icon="icon icon-lock"
+                          icon-pack="feather"
+                          label-placeholder="Password"
+                          v-model="superadmin.password"
+                          class="w-full mt-6"
+                        />
+                        <span class="text-danger text-sm">{{
+                          errors.first("password")
+                        }}</span>
 
-                  <div class="flex flex-wrap justify-between my-5">
-                    <vs-checkbox v-model="checkbox_remember_me" class="mb-3"
-                      >Remember Me</vs-checkbox
-                    >
-                    <router-link to="/pages/forgot-password"
-                      >Forgot Password?</router-link
-                    >
-                  </div>
-                  <div class="flex flex-wrap justify-between mb-3">
-                    <vs-button type="border" @click="registerUser"
-                      >Register</vs-button
-                    >
-                    <vs-button :disabled="!validateForm" @click="loginAPI"
-                      >Login</vs-button
-                    >
-                  </div>
+                        <div class="flex flex-wrap justify-between my-5">
+                          <router-link to="/pages/forgot-password"
+                            >Forgot Password?</router-link
+                          >
+                        </div>
+                        <div class="flex flex-wrap justify-between mb-3">
+                          <vs-button type="border" @click="registerUser"
+                            >Register</vs-button
+                          >
+                          <vs-button
+                            :disabled="!validateForm"
+                            @click="loginSuper"
+                            >Login</vs-button
+                          >
+                        </div>
+                      </div>
+                    </vs-tab>
+                    <vs-tab label="Admin">
+                      <div class="con-tab-ejemplo">
+                        <vs-input
+                          v-validate="'required|email|min:3'"
+                          data-vv-validate-on="blur"
+                          name="email"
+                          icon-no-border
+                          icon="icon icon-user"
+                          icon-pack="feather"
+                          label-placeholder="Email Admin"
+                          v-model="admin.email"
+                          class="w-full"
+                        />
+                        <span class="text-danger text-sm">{{
+                          errors.first("email")
+                        }}</span>
+
+                        <vs-input
+                          data-vv-validate-on="blur"
+                          v-validate="'required|min:6|max:10'"
+                          type="password"
+                          name="password"
+                          icon-no-border
+                          icon="icon icon-lock"
+                          icon-pack="feather"
+                          label-placeholder="Password"
+                          v-model="admin.password"
+                          class="w-full mt-6"
+                        />
+                        <span class="text-danger text-sm">{{
+                          errors.first("password")
+                        }}</span>
+
+                        <div class="flex flex-wrap justify-between my-5">
+                          <router-link to="/pages/forgot-password"
+                            >Forgot Password?</router-link
+                          >
+                        </div>
+                        <div class="flex flex-wrap justify-between mb-3">
+                          <vs-button type="border" @click="registerUser"
+                            >Register</vs-button
+                          >
+                          <vs-button
+                            :disabled="!validateForm"
+                            @click="loginAdmin"
+                            >Login</vs-button
+                          >
+                        </div>
+                      </div>
+                    </vs-tab>
+                    <vs-tab label="Customer">
+                      <div class="con-tab-ejemplo">
+                        <vs-input
+                          v-validate="'required|email|min:3'"
+                          data-vv-validate-on="blur"
+                          name="email"
+                          icon-no-border
+                          icon="icon icon-user"
+                          icon-pack="feather"
+                          label-placeholder="Email Customer"
+                          v-model="customer.email"
+                          class="w-full"
+                        />
+                        <span class="text-danger text-sm">{{
+                          errors.first("email")
+                        }}</span>
+
+                        <vs-input
+                          data-vv-validate-on="blur"
+                          v-validate="'required|min:6|max:10'"
+                          type="password"
+                          name="password"
+                          icon-no-border
+                          icon="icon icon-lock"
+                          icon-pack="feather"
+                          label-placeholder="Password"
+                          v-model="customer.password"
+                          class="w-full mt-6"
+                        />
+                        <span class="text-danger text-sm">{{
+                          errors.first("password")
+                        }}</span>
+
+                        <div class="flex flex-wrap justify-between my-5">
+                          <router-link to="/pages/forgot-password"
+                            >Forgot Password?</router-link
+                          >
+                        </div>
+                        <div class="flex flex-wrap justify-between mb-3">
+                          <vs-button type="border" @click="registerUser"
+                            >Register</vs-button
+                          >
+                          <vs-button
+                            :disabled="!validateForm"
+                            @click="loginCustomer"
+                            >Login</vs-button
+                          >
+                        </div>
+                      </div>
+                    </vs-tab>
+                    <vs-tab label="Worker">
+                      <div class="con-tab-ejemplo">
+                        <vs-input
+                          v-validate="'required|email|min:3'"
+                          data-vv-validate-on="blur"
+                          name="email"
+                          icon-no-border
+                          icon="icon icon-user"
+                          icon-pack="feather"
+                          label-placeholder="Email Worker"
+                          v-model="worker.email"
+                          class="w-full"
+                        />
+                        <span class="text-danger text-sm">{{
+                          errors.first("email")
+                        }}</span>
+
+                        <vs-input
+                          data-vv-validate-on="blur"
+                          v-validate="'required|min:6|max:10'"
+                          type="password"
+                          name="password"
+                          icon-no-border
+                          icon="icon icon-lock"
+                          icon-pack="feather"
+                          label-placeholder="Password"
+                          v-model="worker.password"
+                          class="w-full mt-6"
+                        />
+                        <span class="text-danger text-sm">{{
+                          errors.first("password")
+                        }}</span>
+
+                        <div class="flex flex-wrap justify-between my-5">
+                          <router-link to="/pages/forgot-password"
+                            >Forgot Password?</router-link
+                          >
+                        </div>
+                        <div class="flex flex-wrap justify-between mb-3">
+                          <vs-button type="border" @click="registerUser"
+                            >Register</vs-button
+                          >
+                          <vs-button
+                            :disabled="!validateForm"
+                            @click="loginWorker"
+                            >Login</vs-button
+                          >
+                        </div>
+                      </div>
+                    </vs-tab>
+                  </vs-tabs>
                 </div>
               </div>
             </div>
@@ -95,8 +250,22 @@
 export default {
   data () {
     return {
-      email: 'super@gmail.com',
-      password: '123456',
+      admin: {
+        email: 'admin@gmail.com',
+        password: '123456'
+      },
+      superadmin: {
+        email: 'super@gmail.com',
+        password: '123456'
+      },
+      customer: {
+        email: 'customer@gmail.com',
+        password: '123456'
+      },
+      worker: {
+        email: 'worker@gmail.com',
+        password: '123456'
+      },
       checkbox_remember_me: false
     }
   },
@@ -124,42 +293,109 @@ export default {
       }
       return true
     },
-    loginAPI () {
-
+    loginSuper () {
       // Loading
       this.$vs.loading()
 
       const payload = {
         checkbox_remember_me: this.checkbox_remember_me,
         userDetails: {
-          email: this.email,
-          password: this.password
+          email: this.superadmin.email,
+          password: this.superadmin.password
         }
       }
 
       this.$store
-        .dispatch('auth/loginAPI', payload)
-        .then((response) => {
-          console.log(response)
-          const getrole = response.data.role
-          if (getrole === 'worker') {
-            this.$router.push('/dashboard/worker')
-          } else if (getrole === 'customer') {
-            console.log('aha')
-            this.$router.push('/dashboard/customer')
-          } else if (getrole === 'admin') {
-            this.$router.push('/dashboard/admin')
-          } else if (getrole === 'super') {
-            this.$router.push('/dashboard/super')
-          } else {
-            this.$vs.notify({
-              title: 'Error',
-              text: 'Unknown role',
-              iconPack: 'feather',
-              icon: 'icon-alert-circle',
-              color: 'danger'
-            })
-          }
+        .dispatch('auth/loginSuper', payload)
+        .then(() => {
+          this.$router.push('/dashboard/super')
+          this.$vs.loading.close()
+        })
+        .catch(() => {
+          this.$vs.loading.close()
+          this.$vs.notify({
+            title: 'Error',
+            text: 'Credentials not found',
+            iconPack: 'feather',
+            icon: 'icon-alert-circle',
+            color: 'danger'
+          })
+        })
+    },
+    loginAdmin () {
+      // Loading
+      this.$vs.loading()
+
+      const payload = {
+        checkbox_remember_me: this.checkbox_remember_me,
+        userDetails: {
+          email: this.admin.email,
+          password: this.admin.password
+        }
+      }
+
+      this.$store
+        .dispatch('auth/loginAdmin', payload)
+        .then(() => {
+          this.$router.push('/dashboard/admin')
+          this.$vs.loading.close()
+        })
+        .catch(() => {
+          this.$vs.loading.close()
+          this.$vs.notify({
+            title: 'Error',
+            text: 'Credentials not found',
+            iconPack: 'feather',
+            icon: 'icon-alert-circle',
+            color: 'danger'
+          })
+        })
+    },
+    loginCustomer () {
+      // Loading
+      this.$vs.loading()
+
+      const payload = {
+        checkbox_remember_me: this.checkbox_remember_me,
+        userDetails: {
+          email: this.customer.email,
+          password: this.customer.password
+        }
+      }
+
+      this.$store
+        .dispatch('auth/loginCustomer', payload)
+        .then(() => {
+          this.$router.push('/dashboard/customer')
+          this.$vs.loading.close()
+        })
+        .catch(() => {
+          this.$vs.loading.close()
+          this.$vs.notify({
+            title: 'Error',
+            text: 'Credentials not found',
+            iconPack: 'feather',
+            icon: 'icon-alert-circle',
+            color: 'danger'
+          })
+        })
+    },
+    loginWorker () {
+      // Loading
+      this.$vs.loading()
+
+      const payload = {
+        checkbox_remember_me: this.checkbox_remember_me,
+        userDetails: {
+          email: this.worker.email,
+          password: this.worker.password
+        }
+      }
+
+      this.$store
+        .dispatch('auth/loginWorker', payload)
+        .then(() => {
+          this.$router.push('/dashboard/worker')
           this.$vs.loading.close()
         })
         .catch(() => {

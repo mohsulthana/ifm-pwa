@@ -16,7 +16,7 @@ export default {
     state.admin = admin
   },
   UPDATE_USER (state, user) {
-    state.users.push(user)
+    state.users = user
   },
   UPDATE_ADMIN (state, admin) {
     state.admin.push(admin)

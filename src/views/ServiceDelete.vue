@@ -14,7 +14,7 @@
 <script>
 export default {
   props: {
-    adminId: {
+    serviceId: {
       required: true
     }
   },
@@ -27,13 +27,13 @@ export default {
         type:'confirm',
         color: 'danger',
         title: 'Confirm',
-        text: 'Are you sure to delete this user?',
+        text: 'Are you sure to delete this service?',
         accept: this.acceptAlert,
-        parameters: this.adminId
+        parameters: this.serviceId
       })
     },
     acceptAlert (args) {
-      this.$store.dispatch('user/removeRecord', args)
+      this.$store.dispatch('service/removeRecord', args)
         .then((response) => {
           this.$vs.notify({
             title: 'Success',

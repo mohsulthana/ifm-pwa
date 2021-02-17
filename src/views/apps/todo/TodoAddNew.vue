@@ -47,7 +47,7 @@
                     <div class="vx-col w-full">
                         <vs-input v-validate="'required'" name="title" class="w-full mb-4 mt-5" placeholder="Title" v-model="taskLocal.task" :color="validateForm ? 'success' : 'danger'" />
                         <vs-textarea rows="5" label="Add description" v-model="taskLocal.description" />
-                        <v-select v-model="taskLocal.status" :options="[true, false]" />
+                        <v-select v-model="taskLocal.status" :options="status" />
                     </div>
                 </div>
             </form>
@@ -66,7 +66,7 @@ export default {
         description: '',
         status: ''
       },
-      status: [true, false]
+      status: ['Done', 'On Progress', 'Not Completed']
     }
   },
   computed: {

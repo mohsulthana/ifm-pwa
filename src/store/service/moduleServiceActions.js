@@ -10,9 +10,9 @@
 import axios from '@/axios.js'
 
 export default {
-  fetchServices ({ commit }, userId) {
+  fetchServices ({ commit }) {
     return new Promise((resolve, reject) => {
-      axios.get(`api/service/index/${userId}`)
+      axios.get('api/service')
         .then((response)  => {
           commit('SET_SERVICE', response.data)
           resolve(response)
@@ -22,7 +22,7 @@ export default {
   },
   removeRecord ({ commit }, projectId) {
     return new Promise((resolve, reject) => {
-      axios.delete(`/api/project/delete/${projectId}`)
+      axios.delete(`/api/service/delete/${projectId}`)
         .then((response) => {
           commit('REMOVE_RECORD', projectId)
           resolve(response)
@@ -34,7 +34,6 @@ export default {
     return new Promise((resolve, reject) => {
       axios.post('/api/service/create', {service})
         .then((response) => {
-          console.log(response.data)
           commit('ADD_SERVICE', Object.assign(service, {id: response.data.id}))
           resolve(response)
         })

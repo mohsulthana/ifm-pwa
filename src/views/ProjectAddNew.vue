@@ -80,13 +80,13 @@ export default {
   },
   methods: {
     clearFields () {
-      Object.assign(this.project, {
-        project: '',
-        description: '',
-        customer: '',
-        percent: 0,
-        service_id: this.$store.state.AppActiveUser.service
-      })
+      // Object.assign(this.project, {
+      //   project: '',
+      //   description: '',
+      //   customer: '',
+      //   percent: 0,
+      //   service_id: this.$store.state.AppActiveUser.service
+      // })
     },
     createProject () {
       this.$validator.validateAll().then((result) => {
@@ -101,6 +101,9 @@ export default {
                 icon: 'check_box',
                 color: 'success'
               })
+              setTimeout(() => {
+                location.reload()
+              }, 300)
             })
             .catch((error) => {
               this.$vs.notify({

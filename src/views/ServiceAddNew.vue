@@ -47,8 +47,7 @@ export default {
       activePrompt: false,
       service: {
         service: '',
-        description: '',
-        customer_id: this.$store.state.AppActiveUser.id
+        description: ''
       },
       users: []
     }
@@ -62,8 +61,7 @@ export default {
     clearFields () {
       Object.assign(this.service, {
         service: '',
-        description: '',
-        customer_id: this.$store.state.AppActiveUser.id
+        description: ''
       })
     },
     addNewService () {

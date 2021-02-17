@@ -3,23 +3,27 @@
     <vx-card title="Users">
       <!-- TABLE ACTION COL-2: ADD NEW USERS -->
       <template slot="actions">
-        <admin-add-new :service="services"/>
+        <admin-add-new :service="serviceList"/>
       </template>
       <vs-table max-items="10" pagination search stripe :data="users">
         <template slot="thead">
+          <vs-th sort-key="no">No</vs-th>
           <vs-th sort-key="name">Name</vs-th>
-          <vs-th sort-key="role">Role</vs-th>
+          <vs-th sort-key="about">About</vs-th>
           <vs-th sort-key="email">Email</vs-th>
           <vs-th sort-key="action">Action</vs-th>
         </template>
 
         <template slot-scope="{ data }">
           <vs-tr :key="indextr" v-for="(tr, indextr) in data">
+                        <vs-td :data="data[indextr].service">
+              {{ indextr + 1 }}
+            </vs-td>
             <vs-td :data="data[indextr].name">
               {{ data[indextr].name }}
             </vs-td>
-            <vs-td :data="data[indextr].role">
-              {{ data[indextr].role }}
+            <vs-td :data="data[indextr].about">
+              {{ data[indextr].about }}
             </vs-td>
             <vs-td :data="data[indextr].email">
               {{ data[indextr].email }}
@@ -53,23 +57,24 @@ export default {
     AdminEdit,
     AdminDelete
   },
+  computed: {
+    serviceList () {
+      return this.$store.getters['service/fetchServices']
+    }
+  },
   methods: {
-    fetchUsers () {
+    fetchAdmin () {
       this.$store.dispatch('user/fetchAdmin')
         .then((response) => {
           this.users = response.data
-          console.log(response.data)
         })
     },
     fetchService () {
       this.$store.dispatch('service/fetchServices')
-        .then((response) => {
-          this.services = response.data.service
-        })
     }
   },
   created () {
-    this.fetchUsers()
+    this.fetchAdmin()
     this.fetchService()
   }
 }

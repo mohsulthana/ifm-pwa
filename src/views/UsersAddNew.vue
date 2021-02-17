@@ -73,8 +73,9 @@ export default {
         name: '',
         email: '',
         password: '',
-        role: 'customer',
-        service_id: null
+        about: 'hello',
+        photo: 'sdfsdfsdf',
+        role: 'customer'
       }
     }
   },
@@ -89,8 +90,9 @@ export default {
         name: '',
         email: '',
         password: '',
-        role: 'customer',
-        service_id: ''
+        about: 'hello',
+        photo: 'sdfsdfsdf',
+        role: 'customer'
       })
     },
     registerUser () {

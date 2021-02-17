@@ -300,18 +300,110 @@ export default {
   },
 
   // Login API
-  loginAPI ({ commit }, payload) {
+  // loginAPI ({ commit }, payload) {
+  //   return new Promise((resolve, reject) => {
+  //     axios.post('/api/auth/login', {
+  //       email: payload.userDetails.email,
+  //       password: payload.userDetails.password
+  //     })
+  //       .then((response) => {
+  //         if (response.data.status === 200) {
+  //           const generatedToken = JSON.parse(atob(response.data.token.split('.')[1]))
+  //           if (generatedToken.data.role === 'Worker') {
+  //             router.push('/dashboard/worker')
+  //           }
+  //           localStorage.setItem('accessToken', response.data.token)
+  //           localStorage.setItem('userInfo', JSON.stringify(generatedToken.data))
+
+  //           // Set bearer token in axios
+  //           commit('SET_BEARER', response.data.token)
+  //           commit('UPDATE_USER_INFO', generatedToken.data, { root: true })
+
+  //           resolve(generatedToken)
+  //         }
+  //       })
+  //       .catch((error) => { reject(error) })
+  //   })
+  // },
+
+  loginAdmin ({ commit }, payload) {
     return new Promise((resolve, reject) => {
-      axios.post('/api/auth/login', {
+      axios.post('/api/auth/loginAdmin', {
         email: payload.userDetails.email,
         password: payload.userDetails.password
       })
         .then((response) => {
           if (response.data.status === 200) {
             const generatedToken = JSON.parse(atob(response.data.token.split('.')[1]))
-            if (generatedToken.data.role === 'Worker') {
-              router.push('/dashboard/worker')
-            }
+            localStorage.setItem('accessToken', response.data.token)
+            localStorage.setItem('userInfo', JSON.stringify(generatedToken.data))
+
+            // Set bearer token in axios
+            commit('SET_BEARER', response.data.token)
+            commit('UPDATE_USER_INFO', generatedToken.data, { root: true })
+
+            resolve(generatedToken)
+          }
+        })
+        .catch((error) => { reject(error) })
+    })
+  },
+
+  loginSuper ({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      axios.post('/api/auth/loginSuperAdmin', {
+        email: payload.userDetails.email,
+        password: payload.userDetails.password
+      })
+        .then((response) => {
+          if (response.data.status === 200) {
+            const generatedToken = JSON.parse(atob(response.data.token.split('.')[1]))
+            localStorage.setItem('accessToken', response.data.token)
+            localStorage.setItem('userInfo', JSON.stringify(generatedToken.data))
+
+            // Set bearer token in axios
+            commit('SET_BEARER', response.data.token)
+            commit('UPDATE_USER_INFO', generatedToken.data, { root: true })
+
+            resolve(generatedToken)
+          }
+        })
+        .catch((error) => { reject(error) })
+    })
+  },
+
+  loginCustomer ({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      axios.post('/api/auth/loginCustomer', {
+        email: payload.userDetails.email,
+        password: payload.userDetails.password
+      })
+        .then((response) => {
+          if (response.data.status === 200) {
+            const generatedToken = JSON.parse(atob(response.data.token.split('.')[1]))
+            localStorage.setItem('accessToken', response.data.token)
+            localStorage.setItem('userInfo', JSON.stringify(generatedToken.data))
+
+            // Set bearer token in axios
+            commit('SET_BEARER', response.data.token)
+            commit('UPDATE_USER_INFO', generatedToken.data, { root: true })
+
+            resolve(generatedToken)
+          }
+        })
+        .catch((error) => { reject(error) })
+    })
+  },
+
+  loginWorker ({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      axios.post('/api/auth/loginWorker', {
+        email: payload.userDetails.email,
+        password: payload.userDetails.password
+      })
+        .then((response) => {
+          if (response.data.status === 200) {
+            const generatedToken = JSON.parse(atob(response.data.token.split('.')[1]))
             localStorage.setItem('accessToken', response.data.token)
             localStorage.setItem('userInfo', JSON.stringify(generatedToken.data))
 

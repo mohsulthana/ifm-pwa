@@ -5,7 +5,7 @@
       <template slot="actions">
         <users-add-new/>
       </template>
-      <vs-table max-items="10" pagination search stripe :data="users">
+      <vs-table max-items="10" pagination search stripe :data="listUsers">
         <template slot="thead">
           <vs-th sort-key="no">No</vs-th>
           <vs-th sort-key="name">Name</vs-th>
@@ -56,17 +56,17 @@ export default {
     AdminEdit,
     AdminDelete
   },
-  methods: {
-    fetchUsers () {
-      this.$store.dispatch('user/fetchUsers', 'customer')
-        .then((response) => {
-          console.log(response)
-          this.users = response.data
-          console.log(this.users)
-        })
+  computed: {
+    listUsers() {
+      return this.$store.getters['user/getUsers']
     }
   },
-  created () {
+  methods: {
+    fetchUsers () {
+      this.$store.dispatch('user/fetchUsers')
+    }
+  },
+  mounted () {
     this.fetchUsers()
   }
 }

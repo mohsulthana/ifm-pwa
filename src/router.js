@@ -91,6 +91,15 @@ const router = new Router({
           }
         },
         {
+          path: '/customer',
+          name: 'customer',
+          component: () => import('./views/UsersTable.vue'),
+          meta: {
+            super: true,
+            authRequired: true
+          }
+        },
+        {
           path: '/admin',
           name: 'admin',
           component: () => import('./views/AdminTable.vue'),
@@ -126,7 +135,15 @@ const router = new Router({
             authRequired: true
           }
         },
-
+        {
+          path: '/admin-service',
+          name: 'admin-service',
+          component: () => import('./views/ServiceCustomer.vue'),
+          meta: {
+            super: true,
+            authRequired: true
+          }
+        },
 
         // =============================================================================
         // Application Routes
@@ -177,6 +194,25 @@ const router = new Router({
           meta: {
             worker: true,
             no_scroll: true,
+            authRequired: true
+          }
+        },
+        {
+          path: '/task',
+          name: 'task',
+          component: () => import('./views/apps/todo/Todo.vue'),
+          meta: {
+            worker: true,
+            no_scroll: true,
+            authRequired: true
+          }
+        },
+        {
+          path: '/download-data',
+          name: 'download',
+          component: () => import('./views/Download.vue'),
+          meta: {
+            worker: true,
             authRequired: true
           }
         },
@@ -1462,67 +1498,67 @@ router.afterEach(() => {
   }
 })
 
-router.beforeEach((to, from, next) => {
-  let userInfo = ''
-  const token = localStorage.getItem('accessToken')
-  if (token) {
-    userInfo = JSON.parse(atob(token.split('.')[1]))
-  }
+// router.beforeEach((to, from, next) => {
+//   let userInfo = ''
+//   const token = localStorage.getItem('accessToken')
+//   if (token) {
+//     userInfo = JSON.parse(atob(token.split('.')[1]))
+//   }
 
-  if (to.matched.some(record => record.meta.authRequired)) {
-    if (!userInfo || userInfo === null) {
-      next({ path: '/login' })
-    } else {
-      if (to.matched.some(record => record.meta.worker)) {
-        if (userInfo.data.role === 'worker') {
-          next()
-        } else {
-          next({ path: '/login' })
-        }
-      } else if (to.matched.some(record => record.meta.customer)) {
-        if (userInfo.data.role === 'customer' || userInfo.data.role === 'admin') {
-          next()
-        } else {
-          next({ path: '/login' })
-        }
-      } else if (to.matched.some(record => record.meta.admin)) {
-        if (userInfo.data.role === 'admin') {
-          next()
-        } else {
-          next({ path: '/login' })
-        }
-      } else if (to.matched.some(record => record.meta.super)) {
-        if (userInfo.data.role === 'super') {
-          next()
-        } else {
-          next({ path: '/login' })
-        }
-      } else {
-        next()
-      }
-    }
-  } else {
-    // if (userInfo.data.role === 'worker') {
-    //   router.push({
-    //     path: '/dashboard/worker'
-    //   })
-    // } else if (userInfo.data.role === 'customer') {
-    //   router.push({
-    //     path: '/dashboard/customer'
-    //   })
-    // } else if (userInfo.data.role === 'admin') {
-    //   router.push({
-    //     path: '/dashboard/admin'
-    //   })
-    // } else if (userInfo.data.role === 'super') {
-    //   router.push({
-    //     path: '/dashboard/super'
-    //   })
-    // } else {
-    //   next()
-    // }
-    next()
-  }
-})
+//   if (to.matched.some(record => record.meta.authRequired)) {
+//     if (!userInfo || userInfo === null) {
+//       next({ path: '/login' })
+//     } else {
+//       if (to.matched.some(record => record.meta.worker)) {
+//         if (userInfo.data.role === 'worker') {
+//           next()
+//         } else {
+//           next({ path: '/login' })
+//         }
+//       } else if (to.matched.some(record => record.meta.customer)) {
+//         if (userInfo.data.role === 'customer' || userInfo.data.role === 'admin') {
+//           next()
+//         } else {
+//           next({ path: '/login' })
+//         }
+//       } else if (to.matched.some(record => record.meta.admin)) {
+//         if (userInfo.data.role === 'admin') {
+//           next()
+//         } else {
+//           next({ path: '/login' })
+//         }
+//       } else if (to.matched.some(record => record.meta.super)) {
+//         if (userInfo.data.role === 'super') {
+//           next()
+//         } else {
+//           next({ path: '/login' })
+//         }
+//       } else {
+//         next()
+//       }
+//     }
+//   } else {
+//     // if (userInfo.data.role === 'worker') {
+//     //   router.push({
+//     //     path: '/dashboard/worker'
+//     //   })
+//     // } else if (userInfo.data.role === 'customer') {
+//     //   router.push({
+//     //     path: '/dashboard/customer'
+//     //   })
+//     // } else if (userInfo.data.role === 'admin') {
+//     //   router.push({
+//     //     path: '/dashboard/admin'
+//     //   })
+//     // } else if (userInfo.data.role === 'super') {
+//     //   router.push({
+//     //     path: '/dashboard/super'
+//     //   })
+//     // } else {
+//     //   next()
+//     // }
+//     next()
+//   }
+// })
 
 export default router

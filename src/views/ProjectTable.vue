@@ -5,12 +5,13 @@
       <template slot="actions">
         <project-add-new :customer="customers"/>
       </template>
-      <vs-table max-items="10" pagination search stripe :data="projects">
+      <!-- {{this.$store.state.AppActiveUser}} -->
+      <vs-table max-items="10" pagination search stripe :data="projectList">
         <template slot="thead">
           <vs-th sort-key="no">No</vs-th>
           <vs-th sort-key="project">Project</vs-th>
           <vs-th sort-key="description">Description</vs-th>
-          <vs-th sort-key="customer">Customer</vs-th>
+          <vs-th sort-key="created">Created At</vs-th>
           <vs-th sort-key="action">Action</vs-th>
         </template>
 
@@ -25,8 +26,8 @@
             <vs-td :data="data[indextr].description">
               {{ data[indextr].description }}
             </vs-td>
-            <vs-td :data="data[indextr].name">
-              {{ data[indextr].name }}
+            <vs-td :data="data[indextr].created_date">
+              {{ data[indextr].created_date }}
             </vs-td>
             <vs-td>
               <project-edit :projectId="data[indextr].id"/>
@@ -57,6 +58,11 @@ export default {
     ProjectEdit,
     ProjectDelete
   },
+  computed: {
+    projectList () {
+      return this.$store.getters['project/getProject']
+    }
+  },
   methods: {
     fetchProjects () {
       this.$store.dispatch('project/fetchProjects')
@@ -67,9 +73,7 @@ export default {
     fetchCustomer () {
       this.$store.dispatch('user/fetchUsers', 'customer')
         .then((response) => {
-          console.log(response)
           this.customers = response.data
-          console.log(this.customers)
         })
         .catch((error) => {
           console.error(error)

@@ -47,26 +47,10 @@
                 :color="validateForm ? 'success' : 'danger'"
               />
               <span>{{ errors.first("password") }}</span>
-                            <vs-select
-                class="w-full mb-4 mt-5"
-                label="Role"
-                name="role"
-                v-validate="'required'"
-                v-model="user.role"
-              >
-                <vs-select-item
-                  :key="index"
-                  :value="item.value"
-                  :text="item.text"
-                  v-for="(item, index) in role"
-                />
-              </vs-select>
-              <span>{{ errors.first("role") }}</span>
               <vs-select
                 class="w-full mb-4 mt-5"
                 label="Service"
                 name="service"
-                v-if="this.user.role === 'admin' || this.user.role === ''"
                 v-validate="'required'"
                 v-model="user.service_id"
               >
@@ -107,7 +91,8 @@ export default {
         name: '',
         email: '',
         password: '',
-        role: '',
+        about: 'Lorem ipsum de amat',
+        photo: '',
         service_id: ''
       }
     }
@@ -120,18 +105,20 @@ export default {
   methods: {
     clearFields () {
       Object.assign(this.user, {
-        name: '',
-        email: '',
-        password: '',
-        role: '',
-        service_id: ''
+        // name: '',
+        // email: '',
+        // password: '',
+        // about: '',
+        // photo: '',
+        // service_id: ''
       })
     },
     registerUser () {
       this.$validator.validateAll().then((result) => {
         if (result) {
+          console.log(this.user)
           this.$store
-            .dispatch('user/register', Object.assign({}, this.user))
+            .dispatch('user/createAdmin', Object.assign({}, this.user))
             .then(() => {
               this.$vs.notify({
                 title: 'Success',
@@ -147,9 +134,6 @@ export default {
                 icon: 'error',
                 color: 'danger'
               })
-            })
-            .finally(() => {
-              location.reload()
             })
           this.clearFields()
         }
