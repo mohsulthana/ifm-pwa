@@ -26,6 +26,7 @@
             </vs-td>
             <vs-td>
               <service-delete :serviceId="data[indextr].id"/>
+              <service-edit :serviceId="data[indextr]"/>
             </vs-td>
           </vs-tr>
         </template>
@@ -36,7 +37,7 @@
 
 <script>
 import ServiceAddNew          from './ServiceAddNew.vue'
-import ProjectEdit            from './ProjectEdit.vue'
+import ServiceEdit            from './ServiceEdit.vue'
 import ServiceDelete           from './ServiceDelete.vue'
 
 export default {
@@ -48,7 +49,7 @@ export default {
   },
   components: {
     ServiceAddNew,
-    ProjectEdit,
+    ServiceEdit,
     ServiceDelete
   },
   computed: {

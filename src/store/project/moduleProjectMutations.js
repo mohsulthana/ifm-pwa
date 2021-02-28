@@ -17,7 +17,6 @@ export default {
     state.project.splice(projectIndex, 1)
   },
   ADD_PROJECT (state, project) {
-    console.log(project)
     state.project.push(project)
   }
 }

@@ -20,5 +20,8 @@ export default {
     state.service.push(service)
     console.log(state.service)
     console.log(service)
+  },
+  UPDATE_SERVICE(state, service) {
+    state.service = service
   }
 }

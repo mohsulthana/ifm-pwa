@@ -1,6 +1,7 @@
 <template>
   <div class="px-6 pb-2 pt-6">
     <vs-button
+      disabled
       @click="openConfirm()"
       type="border"
       color="danger"

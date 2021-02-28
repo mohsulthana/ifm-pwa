@@ -22,7 +22,7 @@
         <vs-divider></vs-divider>
 
         <!-- starred -->
-        <!-- <div class="px-6 py-4">
+        <div class="px-6 py-4">
             <h5>Filters</h5>
 
             <template v-for="filter in todoFilters">
@@ -31,21 +31,7 @@
                     <span class="text-lg ml-3">{{ filter.filterName }}</span>
                 </router-link>
             </template>
-
-        </div> -->
-
-        <!-- <vs-divider></vs-divider> -->
-
-        <!-- <div class="px-6 py-4">
-            <h5>Labels</h5>
-            <div class="todo__lables-list">
-                <router-link tag="span" class="todo__label flex items-center mt-6 cursor-pointer" v-for="(tag, index) in taskTags" :key="index" :to="`${baseUrl}/${tag.value}`">
-                    <div class="ml-1 h-3 w-3 rounded-full mr-4" :class="'border-2 border-solid border-' + tag.color" />
-                    <span class="text-lg" :class="{'text-primary': todoFilter == tag.value}">{{ tag.text }}</span>
-                </router-link>
-            </div>
-        </div> -->
-
+        </div>
     </div>
 </template>
 
@@ -55,10 +41,9 @@ export default{
   data () {
     return {
       todoFilters: [
-        { filterName: 'Starred', filter: 'starred', icon: 'StarIcon' },
-        { filterName: 'Important', filter: 'important', icon: 'InfoIcon' },
-        { filterName: 'Completed', filter: 'completed', icon: 'CheckIcon' },
-        { filterName: 'Trashed', filter: 'trashed', icon: 'TrashIcon' }
+        { filterName: 'Not Completed', filter: 'starred', icon: 'StarIcon' },
+        { filterName: 'On Progress', filter: 'important', icon: 'InfoIcon' },
+        { filterName: 'Done', filter: 'completed', icon: 'CheckIcon' }
       ]
     }
   },

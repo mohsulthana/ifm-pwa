@@ -39,5 +39,18 @@ export default {
         })
         .catch((error) => { reject(error) })
     })
+  },
+  updateService ({ commit }, serviceId) {
+    return new Promise((resolve, reject) => {
+      axios.put(`/api/service/update/${serviceId}`)
+        .then((response) => {
+          console.log(response)
+          commit('UPDATE')
+        })
+        .catch((error) => {
+          console.error(error)
+          reject(error)
+        })
+    })
   }
 }
