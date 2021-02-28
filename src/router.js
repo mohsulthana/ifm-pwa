@@ -118,11 +118,29 @@ const router = new Router({
           }
         },
         {
+          path: '/task-admin',
+          name: 'task-admin',
+          component: () => import('./views/TaskTable.vue'),
+          meta: {
+            admin: true,
+            authRequired: true
+          }
+        },
+        {
+          path: '/complains-admin',
+          name: 'complains-admin',
+          component: () => import('./views/ComplainsAdmin.vue'),
+          meta: {
+            admin: true,
+            authRequired: true
+          }
+        },
+        {
           path: '/complains',
           name: 'complains',
           component: () => import('./views/Complains.vue'),
           meta: {
-            admin: true,
+            customer: true,
             authRequired: true
           }
         },
@@ -139,6 +157,15 @@ const router = new Router({
           path: '/admin-service',
           name: 'admin-service',
           component: () => import('./views/ServiceCustomer.vue'),
+          meta: {
+            super: true,
+            authRequired: true
+          }
+        },
+        {
+          path: '/super-worker',
+          name: 'super-worker',
+          component: () => import('./views/WorkerTable.vue'),
           meta: {
             super: true,
             authRequired: true
