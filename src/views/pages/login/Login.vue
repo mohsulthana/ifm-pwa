@@ -312,7 +312,6 @@ export default {
           this.$vs.loading.close()
         })
         .catch(() => {
-          this.$vs.loading.close()
           this.$vs.notify({
             title: 'Error',
             text: 'Credentials not found',
