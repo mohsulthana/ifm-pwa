@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vx-card title="Users">
+    <vx-card title="Admin list">
       <!-- TABLE ACTION COL-2: ADD NEW USERS -->
       <template slot="actions">
         <admin-add-new :service="serviceList"/>
@@ -16,7 +16,7 @@
 
         <template slot-scope="{ data }">
           <vs-tr :key="indextr" v-for="(tr, indextr) in data">
-                        <vs-td :data="data[indextr].service">
+             <vs-td :data="data[indextr].service">
               {{ indextr + 1 }}
             </vs-td>
             <vs-td :data="data[indextr].name">

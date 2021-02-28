@@ -9,5 +9,6 @@
 
 export default {
   users: [],
-  admin: []
+  admin: [],
+  worker: []
 }

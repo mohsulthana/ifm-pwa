@@ -14,8 +14,8 @@
                 <statistics-card-line
                   v-if="subscribersGained.analyticsData"
                   icon="UsersIcon"
-                  :statistic="subscribersGained.analyticsData.subscribers | k_formatter"
-                  statisticTitle="Subscribers Gained"
+                  :statistic="totalUser | k_formatter"
+                  statisticTitle="Customers"
                   :chartData="subscribersGained.series"
                   type="area" />
             </div>
@@ -24,8 +24,8 @@
                 <statistics-card-line
                   v-if="revenueGenerated.analyticsData"
                   icon="DollarSignIcon"
-                  :statistic="revenueGenerated.analyticsData.revenue | k_formatter"
-                  statisticTitle="Revenue Generated"
+                  :statistic="totalTask | k_formatter"
+                  statisticTitle="Tasks"
                   :chartData="revenueGenerated.series"
                   color="success"
                   type="area" />
@@ -35,8 +35,8 @@
                 <statistics-card-line
                   v-if="quarterlySales.analyticsData"
                   icon="ShoppingCartIcon"
-                  :statistic="quarterlySales.analyticsData.sales"
-                  statisticTitle="Quarterly Sales"
+                  :statistic="totalWorker | k_formatter"
+                  statisticTitle="Workers"
                   :chartData="quarterlySales.series"
                   color="danger"
                   type="area" />
@@ -45,8 +45,8 @@
                 <statistics-card-line
                   v-if="ordersRecevied.analyticsData"
                   icon="ShoppingBagIcon"
-                  :statistic="ordersRecevied.analyticsData.orders | k_formatter"
-                  statisticTitle="Orders Received"
+                  :statistic="totalComplain | k_formatter"
+                  statisticTitle="Complaints"
                   :chartData="ordersRecevied.series"
                   color="warning"
                   type="area" />
@@ -54,7 +54,6 @@
         </div>
 
         <div class="vx-row">
-
             <!-- LINE CHART -->
             <div class="vx-col w-full md:w-2/3 mb-base">
                 <vx-card title="Revenue">
@@ -233,6 +232,7 @@ import VueApexCharts from 'vue-apexcharts'
 import StatisticsCardLine from '@/components/statistics-cards/StatisticsCardLine.vue'
 import analyticsData from './ui-elements/card/analyticsData.js'
 import ChangeTimeDurationDropdown from '@/components/ChangeTimeDurationDropdown.vue'
+import axios from  'axios'
 
 export default{
   components: {
@@ -263,7 +263,28 @@ export default{
       settings: { // perfectscrollbar settings
         maxScrollbarLength: 60,
         wheelSpeed: .60
-      }
+      },
+      totalUser: '',
+      totalTask: '',
+      totalComplain: '',
+      totalWorker: ''
+    }
+  },
+  methods: {
+    fetchDatas () {
+      //   Fetch user, project, complain
+    //   const baseURL = 'https://api.ifm-service.de'
+      const baseURL = 'http://localhost:8080/'
+
+      axios.all([axios.get(`${baseURL}/api/users`),  axios.get(`${baseURL}/api/task`), axios.get(`${baseURL}/api/complain`), axios.get(`${baseURL}/api/worker`)]).then(axios.spread((...responses) => {
+        this.totalUser = responses[0].data.length
+        this.totalTask = responses[1].data.length
+        this.totalComplain = responses[2].data.length
+        this.totalWorker = responses[3].data.length
+        // use/access the results
+      })).catch(errors => {
+        console.error(errors)
+      })
     }
   },
   computed: {
@@ -274,6 +295,7 @@ export default{
     scroll_el.scrollTop = this.$refs.chatLog.scrollHeight
   },
   created () {
+    this.fetchDatas()
     // Subscribers gained - Statistics
     this.$http.get('/api/card/card-statistics/subscribers')
       .then((response) => { this.subscribersGained = response.data })

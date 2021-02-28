@@ -15,11 +15,21 @@ export default {
   SET_ADMIN (state, admin) {
     state.admin = admin
   },
+  SET_WORKER (state, worker) {
+    state.worker = worker
+  },
   UPDATE_USER (state, user) {
     state.users = user
   },
   UPDATE_ADMIN (state, admin) {
     state.admin.push(admin)
+  },
+  UPDATE_WORKER (state, worker) {
+    state.worker.push(worker)
+  },
+  REMOVE_WORKER (state, workerId) {
+    const workerIndex = state.worker.findIndex((u) => u.id === workerId)
+    state.worker.splice(workerIndex, 1)
   },
   REMOVE_RECORD (state, itemId) {
     const userIndex = state.users.findIndex((u) => u.id === itemId)

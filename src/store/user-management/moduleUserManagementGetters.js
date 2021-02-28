@@ -12,7 +12,8 @@ const getters = {
   getAdmin: state => (id) => {
     return state.admin.find(item => item.id === id)
   },
-  getUsers: state => state.users
+  getUsers: state => state.users,
+  getWorkers: state => state.workers
 }
 
 export default getters

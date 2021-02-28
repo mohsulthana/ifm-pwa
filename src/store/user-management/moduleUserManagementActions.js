@@ -30,6 +30,27 @@ export default {
         .catch((error) => { reject(error) })
     })
   },
+  createWorker ({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      axios.post('/api/worker/create', payload)
+        .then((response) => {
+          commit('UPDATE_WORKER', response.data.data)
+          resolve(response)
+        })
+        .catch((error) => { reject(error) })
+    })
+  },
+  deleteWorker ({ commit }, payload) {
+    console.log(payload)
+    return new Promise((resolve, reject) => {
+      axios.delete(`/api/worker/delete/${payload}`)
+        .then((response) => {
+          commit('REMOVE_WORKER', response.data.data)
+          resolve(response)
+        })
+        .catch((error) => { reject(error) })
+    })
+  },
   fetchAdmin ({ commit }) {
     return new Promise((resolve, reject) => {
       axios.get('api/admin')
@@ -54,6 +75,16 @@ export default {
     return new Promise((resolve, reject) => {
       axios.get(`/api/user-management/users/${userId}`)
         .then((response) => {
+          resolve(response)
+        })
+        .catch((error) => { reject(error) })
+    })
+  },
+  fetchWorkers ({ commit }) {
+    return new Promise((resolve, reject) => {
+      axios.get('api/worker')
+        .then((response) => {
+          commit('SET_WORKER', response.data)
           resolve(response)
         })
         .catch((error) => { reject(error) })

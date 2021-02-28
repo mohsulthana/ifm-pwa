@@ -116,7 +116,6 @@ export default {
     registerUser () {
       this.$validator.validateAll().then((result) => {
         if (result) {
-          console.log(this.user)
           this.$store
             .dispatch('user/createAdmin', Object.assign({}, this.user))
             .then(() => {
