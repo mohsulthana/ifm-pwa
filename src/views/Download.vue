@@ -1,5 +1,9 @@
 <template>
-  <h1>In progress</h1>
+  <div>
+    <vx-card title="Download Data">
+
+    </vx-card>
+  </div>
 </template>
 
 <script>
