@@ -9,6 +9,7 @@
 
 
 export default {
-  fetchServices: state => state.service
+  fetchServices: state => state.service,
+  fetchSingleService: state => (id) => state.service.find((element) => element.id == id)
   // getTodosBySection: state => (sectionId) => state.todoArray.filter((task) => task.sectionId == sectionId),
 }

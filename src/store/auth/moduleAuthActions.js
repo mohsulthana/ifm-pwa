@@ -366,9 +366,13 @@ export default {
             commit('UPDATE_USER_INFO', generatedToken.data, { root: true })
 
             resolve(generatedToken)
+          } else if (response.data.status === 401) {
+            console.log('aha')
           }
         })
-        .catch((error) => { reject(error) })
+        .catch((error) => {
+          console.error(error)
+        })
     })
   },
 
