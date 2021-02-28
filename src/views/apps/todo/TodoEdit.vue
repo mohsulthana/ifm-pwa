@@ -10,8 +10,8 @@
 
 <template>
     <vs-prompt
-        title="Update Task"
-        accept-text= "Update"
+        title="Edit Task"
+        accept-text= "Submit"
         cancel-text = "Remove"
         button-cancel = "border"
         @cancel="removeTodo"
@@ -23,7 +23,7 @@
             <form>
                 <div class="vx-row">
                     <div class="vx-col w-1/6 self-center">
-                        <vs-checkbox v-model="taskLocal.status" class="w-8"></vs-checkbox>
+                        <vs-checkbox v-model="taskLocal.isCompleted" class="w-8"></vs-checkbox>
                     </div>
 
                     <div class="vx-col ml-auto flex">
@@ -54,8 +54,8 @@
 
                 <div class="vx-row">
                     <div class="vx-col w-full">
-                        <vs-input v-validate="'required'" name="title" class="w-full mb-4 mt-5" placeholder="Title" v-model="taskLocal.task" />
-                        <vs-textarea rows="5" label="Add description" v-model="taskLocal.description" />
+                        <vs-input v-validate="'required'" name="title" class="w-full mb-4 mt-5" placeholder="Title" v-model="taskLocal.title" />
+                        <vs-textarea rows="5" label="Add description" v-model="taskLocal.desc" />
                     </div>
                 </div>
 
@@ -72,7 +72,6 @@ export default {
       required: true
     },
     taskId: {
-      type: Number,
       required: true
     }
   },
@@ -99,7 +98,7 @@ export default {
   },
   methods: {
     removeTodo () {
-      this.$store.dispatch('todo/deleteTask', Object.assign({}, this.taskLocal))
+      this.$store.dispatch('todo/updateTask', Object.assign({}, this.taskLocal, {isTrashed: true}))
         .then(() => {
           // Fetch Tasks
           this.$store.dispatch('todo/fetchTasks', { filter: this.$route.params.filter })
@@ -110,7 +109,7 @@ export default {
       this.taskLocal = Object.assign({}, this.$store.getters['todo/getTask'](this.taskId))
     },
     submitTodo () {
-      this.$store.dispatch('todo/updateTask', JSON.parse(JSON.stringify(this.taskLocal)))
+      this.$store.dispatch('todo/updateTask', this.taskLocal)
     }
   }
 }

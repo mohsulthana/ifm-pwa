@@ -9,51 +9,56 @@
 
 
 <template>
-    <div class="px-6 pb-2 pt-6">
+  <div class="px-6 pb-2 pt-6">
     <vs-button @click="activePrompt = true" class="w-full">Add Task</vs-button>
     <vs-prompt
-        title="Add Task"
-        accept-text= "Add Task"
-        button-cancel = "border"
-        @cancel="clearFields"
-        @accept="addTodo"
-        @close="clearFields"
-        :is-valid="validateForm"
-        :active.sync="activePrompt">
-        <div>
-            <form>
-                <div class="vx-row">
-
-                    <div class="vx-col ml-auto flex">
-                        <feather-icon icon="InfoIcon" class="cursor-pointer" :svgClasses="[{'text-success stroke-current': taskLocal.isImportant}, 'w-5', 'h-5 mr-4']" @click.prevent="taskLocal.isImportant = !taskLocal.isImportant"></feather-icon>
-
-                        <feather-icon icon="StarIcon" class="cursor-pointer" :svgClasses="[{'text-warning stroke-current': taskLocal.isStarred}, 'w-5', 'h-5 mr-4']" @click.prevent="taskLocal.isStarred = !taskLocal.isStarred"></feather-icon>
-
-                        <vs-dropdown class="cursor-pointer flex" vs-custom-content>
-
-                            <feather-icon icon="TagIcon" svgClasses="h-5 w-5" @click.prevent></feather-icon>
-                            <!-- <vs-button radius color="success" type="flat" iconPack="feather" icon="icon-tag" @click.prevent></vs-button> -->
-
-                            <vs-dropdown-menu style="z-index: 200001">
-                                    <vs-dropdown-item @click.stop v-for="(tag, index) in taskTags" :key="index">
-                                        <vs-checkbox :vs-value="tag.value" v-model="taskLocal.tags">{{ tag.text }}</vs-checkbox>
-                                    </vs-dropdown-item>
-                            </vs-dropdown-menu>
-                        </vs-dropdown>
-                    </div>
-                </div>
-
-                <div class="vx-row">
-                    <div class="vx-col w-full">
-                        <vs-input v-validate="'required'" name="title" class="w-full mb-4 mt-5" placeholder="Title" v-model="taskLocal.task" :color="validateForm ? 'success' : 'danger'" />
-                        <vs-textarea rows="5" label="Add description" v-model="taskLocal.description" />
-                        <v-select v-model="taskLocal.status" :options="status" />
-                    </div>
-                </div>
-            </form>
-        </div>
+      title="Add Task"
+      accept-text="Add Task"
+      button-cancel="border"
+      @cancel="clearFields"
+      @accept="addTodo"
+      @close="clearFields"
+      :is-valid="validateForm"
+      :active.sync="activePrompt"
+    >
+      <div>
+        <form>
+          <div class="vx-row">
+            <div class="vx-col w-full">
+              <vs-input
+                v-validate="'required'"
+                name="title"
+                class="w-full mb-4 mt-5"
+                placeholder="Title"
+                v-model="taskLocal.task"
+                :color="validateForm ? 'success' : 'danger'"
+              />
+              <vs-textarea
+                rows="5"
+                label="Add description"
+                v-model="taskLocal.description"
+              />
+              <vs-select
+                multiple
+                autocomplete
+                class="w-full mb-4 mt-5"
+                label="Worker"
+                v-model="taskLocal.worker_id"
+              >
+                <vs-select-item
+                  :value="item.worker_id"
+                  :text="item.name"
+                  v-for="(item, index) in worker"
+                  :key="index"
+                />
+              </vs-select>
+              <vs-upload limit="1" class="w-full mb-4 mt-5" action="https://jsonplaceholder.typicode.com/posts/" @on-success="successUpload" />
+            </div>
+          </div>
+        </form>
+      </div>
     </vs-prompt>
-    </div>
+  </div>
 </template>
 
 <script>
@@ -61,12 +66,18 @@ export default {
   data () {
     return {
       activePrompt: false,
+      status: [
+        { text: 'Done', value: 'Done' },
+        { text: 'On Progress', value: 'On Progress' },
+        { text: 'Not Completed', value: 'Not Completed' }
+      ],
       taskLocal: {
         task: '',
         description: '',
-        status: ''
+        status: 'Not Completed',
+        worker_id: []
       },
-      status: ['Done', 'On Progress', 'Not Completed']
+      worker: []
     }
   },
   computed: {
@@ -80,25 +91,40 @@ export default {
   methods: {
     clearFields () {
       Object.assign(this.taskLocal, {
-        task: '',
-        description: '',
-        status: ''
+        // task: '',
+        // description: '',
+        // status: ''
       })
     },
     addTodo () {
-      this.$validator.validateAll().then(result => {
+      this.$validator.validateAll().then((result) => {
         if (result) {
-          this.$store.dispatch('todo/addTask', Object.assign({}, this.taskLocal))
-            .then((resp) => {
-              console.log(resp)
-            })
-            .catch((err) => {
-              console.log(err)
-            })
+          const worker = this.taskLocal.worker_id
+          for (let i = 0; i < worker.length; i++) {
+            const element = worker[i]
+            const data = {
+              task: this.taskLocal.task,
+              description: this.taskLocal.description,
+              status: 'Not Completed',
+              worker_id: element
+            }
+            this.$store.dispatch(
+              'todo/addTask',
+              Object.assign({}, data)
+            )
+          }
           this.clearFields()
         }
       })
+    },
+    fetchWorker () {
+      this.$store.dispatch('user/fetchWorkers').then((response) => {
+        this.worker = response.data
+      })
     }
+  },
+  created () {
+    this.fetchWorker()
   }
 }
 </script>

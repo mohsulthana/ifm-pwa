@@ -13,18 +13,30 @@ export default {
   setTodoSearchQuery ({ commit }, query) {
     commit('SET_TODO_SEARCH_QUERY', query)
   },
-  fetchTasks ({ commit }) {
+  fetchTasks ({ commit }, payload) {
+    console.log(payload)
     return new Promise((resolve, reject) => {
       axios.get('api/task')
         .then((response)  => {
-          console.log(response)
           commit('SET_TASKS', response.data)
           resolve(response)
         })
         .catch((error) => { reject(error) })
     })
   },
-
+  fetchTaskForWorker ({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      axios.get(`api/task/getTaskForWorker/${payload}`)
+        .then((response) => {
+          console.log(response)
+          commit('SET_TASKS', response.data)
+        })
+        .catch((error) => {
+          console.error(error)
+          reject(error)
+        })
+    })
+  },
   fetchTags ({ commit }) {
     return new Promise((resolve, reject) => {
       axios.get('/api/apps/todo/tags')
@@ -35,7 +47,6 @@ export default {
         .catch((error) => { reject(error) })
     })
   },
-
   addTask ({ commit }, task) {
     return new Promise((resolve, reject) => {
       axios.post('/api/task/create', {task})
@@ -48,7 +59,7 @@ export default {
   },
   deleteTask ({ commit }, task) {
     return new Promise((resolve, reject) => {
-      axios.post(`/api/task/delete/${task.id}`, {task})
+      axios.post(`/api/task/delete/${task}`, {task})
         .then((response) => {
           commit('DELETE_TASK', response.data.task)
           resolve(response)
@@ -65,5 +76,8 @@ export default {
         })
         .catch((error) => { reject(error) })
     })
+  },
+  updateStatus ({ commit }) {
+    console.log(commit)
   }
 }

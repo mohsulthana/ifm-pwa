@@ -9,5 +9,6 @@
 
 
 export default {
-  getTask: state => id => state.tasks.find((task) => console.log(task))
+  getTask: state => id => state.tasks.find((task) => task.id === id),
+  getTasks: state => state.tasks
 }

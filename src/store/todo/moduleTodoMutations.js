@@ -27,7 +27,8 @@ export default {
     state.tasks.push(task)
   },
   DELETE_TASK (state, task) {
-    Object.assign(state.tasks, task)
+    const taskIndex = state.tasks.findIndex((u) => u.id === task)
+    state.tasks.splice(taskIndex, 1)
   },
   UPDATE_TASK (state, task) {
     const taskIndex = state.tasks.findIndex((t) => t.id === task.id)

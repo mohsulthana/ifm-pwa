@@ -9,12 +9,15 @@
 
 
 <template>
-    <div @click="displayPrompt" class="px-4 py-4 list-item-component">
+    <div class="px-4 py-4 list-item-component">
+      <!-- <div class="vx-row">
+        {{this.$store.getters['todo/getTasks']}}
+      </div> -->
         <div class="vx-row">
             <div class="vx-col w-full sm:w-5/6 flex sm:items-center sm:flex-row flex-col">
                 <div class="flex items-center">
-                    <vs-checkbox v-model="status" class="w-8 m-0 vs-checkbox-small" @click.stop />
-                    <h6 class="todo-title" :class="{'line-through': taskLocal.status}">{{ taskLocal.task }}</h6>
+                    <vs-checkbox  class="w-8 m-0 vs-checkbox-small" @click.stop />
+                    <h6 class="todo-title" @click="displayPrompt" :class="{'line-through': taskLocal.status === 'Done'}">{{ taskLocal.task }}</h6>
                 </div>
                 <div class="todo-tags sm:ml-2 sm:my-0 my-2 flex">
                     <vs-chip v-for="(tag, index) in taskLocal.tags" :key="index">
@@ -23,48 +26,38 @@
                     </vs-chip>
                 </div>
             </div>
+
+            <div class="vx-col w-full sm:w-1/6 ml-auto flex sm:justify-end">
+              <task-action :taskStatus="taskLocal.status" />
+              <task-delete :taskId="taskLocal.id" />
+            </div>
         </div>
         <div class="vx-row" v-if="taskLocal.description">
             <div class="vx-col w-full">
-                <p class="mt-2 truncate" :class="{'line-through': taskLocal.status}">{{ taskLocal.description }}</p>
+                <p class="mt-2 truncate" :class="{'line-through': taskLocal.status === 'Done'}">{{ taskLocal.description }}</p>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import TaskDelete from './TodoDelete'
+import TaskAction from './TaskAction'
+
 export default{
   props: {
     taskId: {
+      type: Number,
       required: true
     }
   },
+  components: {
+    TaskDelete,
+    TaskAction
+  },
   data () {
     return {
-      status: '',
       taskLocal: this.$store.getters['todo/getTask'](this.taskId)
-    }
-  },
-  computed: {
-    isCompleted: {
-      get () {
-        return this.taskLocal.isCompleted
-      },
-      set (value) {
-        this.$store.dispatch('todo/updateTask', Object.assign({}, this.taskLocal, {isCompleted: value}))
-          .then((response) => {
-            this.taskLocal.isCompleted = response.data.isCompleted
-          })
-          .catch((error) => { console.error(error) })
-      }
-    },
-    todoLabelColor () {
-      return (label) => {
-        const tags = this.$store.state.todo.taskTags
-        return tags.find((tag) => {
-          return tag.value === label
-        }).color
-      }
     }
   },
   methods: {
