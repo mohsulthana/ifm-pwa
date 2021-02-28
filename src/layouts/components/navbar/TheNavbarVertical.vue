@@ -29,12 +29,11 @@
 
         <!-- <cart-drop-down /> -->
 
-        <notification-drop-down />
+        <!-- <notification-drop-down /> -->
 
         <!-- <profile-drop-down /> -->
-
-        <vs-button  @click="logout" type="line">Logout</vs-button>
-
+        <vs-button  @click="logout" type="flat">Logout</vs-button>
+        <h5 class="primary">{{ this.$store.state.AppActiveUser.name.toUpperCase() }}</h5><vs-avatar size="small" />
       </vs-navbar>
     </div>
   </div>
