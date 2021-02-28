@@ -106,6 +106,13 @@ export default [
         slug: 'service',
         i18n: 'Service'
       },
+      {
+        url: '/complains',
+        name: 'Complains',
+        slug: 'complains',
+        icon: 'PenToolIcon',
+        i18n: 'Complains'
+      },
       /**
        * Worker
        */
@@ -126,11 +133,18 @@ export default [
         i18n: 'Customer'
       },
       {
-        url: '/complains',
+        url: '/complains-admin',
         name: 'Complains',
-        slug: 'complains',
+        slug: 'complains-admin',
         icon: 'PenToolIcon',
         i18n: 'Complains'
+      },
+      {
+        url: '/task-admin',
+        name: 'Task',
+        slug: 'task-admin',
+        icon: 'SettingsIcon',
+        i18n: 'Task'
       },
       /* SUPER */
       {
@@ -154,6 +168,13 @@ export default [
         icon: 'BookOpenIcon',
         i18n: 'Projects'
       },
+      {
+        url: '/super-worker',
+        name: 'super-worker',
+        slug: 'worker',
+        icon: 'ToolIcon',
+        i18n: 'Workers'
+      },
       /* WORKER */
       {
         url: '/task',
@@ -161,13 +182,6 @@ export default [
         slug: 'task',
         icon: 'SettingsIcon',
         i18n: 'Task'
-      },
-      {
-        url: '/download-data',
-        name: 'Download',
-        slug: 'download',
-        icon: 'DownloadIcon',
-        i18n: 'Download'
       }
       // {
       //   url: '/apps/calendar/vue-simple-calendar',
