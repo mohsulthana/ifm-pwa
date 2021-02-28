@@ -2,10 +2,7 @@
   <div>
     <vx-card title="Complains">
       <!-- TABLE ACTION COL-2: ADD NEW USERS -->
-      <template slot="actions">
-        <complain-add-new/>
-      </template>
-            <vs-table max-items="10" pagination search stripe :data="complains">
+      <vs-table max-items="10" pagination search stripe :data="complains">
         <template slot="thead">
           <vs-th sort-key="no">No</vs-th>
           <vs-th sort-key="complain">Complain</vs-th>
@@ -30,7 +27,8 @@
               {{ data[indextr].project }}
             </vs-td>
             <vs-td>
-              <complain-delete :complainId="data[indextr].id"/>
+              <project-edit :projectId="data[indextr].id"/>
+              <project-delete :projectId="data[indextr].id"/>
             </vs-td>
           </vs-tr>
         </template>
@@ -40,8 +38,9 @@
 </template>
 
 <script>
-import ComplainAddNew          from './ComplainAddNew.vue'
-import ComplainDelete           from './ComplainDelete.vue'
+import ProjectAddNew          from './ProjectAddNew.vue'
+import ProjectEdit            from './ProjectEdit.vue'
+import ProjectDelete           from './ProjectDelete.vue'
 
 export default {
   name: 'users-table',
@@ -50,24 +49,20 @@ export default {
       complains: []
     }
   },
-  computed: {
-    complainList () {
-      return this.$store.getters['complain/getComplains']
-    }
-  },
   components: {
-    ComplainAddNew,
-    ComplainDelete
+    ProjectAddNew,
+    ProjectEdit,
+    ProjectDelete
   },
   methods: {
     fetchComplain () {
-      this.$store.dispatch('complain/fetchComplainsByUser', this.$store.state.AppActiveUser.id)
+      this.$store.dispatch('complain/fetchComplains')
         .then((response) => {
           this.complains = response.data
         })
     }
   },
-  mounted () {
+  created () {
     this.fetchComplain()
   }
 }

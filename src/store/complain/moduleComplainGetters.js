@@ -9,6 +9,6 @@
 
 
 export default {
-  getTask: state => id => state.tasks.find((task) => task.id === id)
+  getComplains: state => state.complains
   // getTodosBySection: state => (sectionId) => state.todoArray.filter((task) => task.sectionId == sectionId),
 }
