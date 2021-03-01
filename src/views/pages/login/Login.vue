@@ -19,7 +19,7 @@
           <div class="vx-row no-gutter justify-center items-center">
             <div class="vx-col hidden lg:block lg:w-1/2">
               <img
-                src="@/assets/images/pages/login.png"
+                src="@/assets/images/pages/login-ifm.png"
                 alt="login"
                 class="mx-auto"
               />
