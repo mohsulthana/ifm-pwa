@@ -9,7 +9,8 @@
 
 
 export default {
-  getTask: state => id => state.tasks.find((task) => task.id === id),
-  getProject: state => state.project
+  getProject: state => (id) => state.project.find((project) => project.id == id),
+  getProjects: state => state.project,
+  getSingleProject: state => state.singleProject
   // getTodosBySection: state => (sectionId) => state.todoArray.filter((task) => task.sectionId == sectionId),
 }

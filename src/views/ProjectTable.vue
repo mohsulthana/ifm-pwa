@@ -12,11 +12,12 @@
           <vs-th sort-key="project">Project</vs-th>
           <vs-th sort-key="description">Description</vs-th>
           <vs-th sort-key="created">Created At</vs-th>
-          <vs-th sort-key="action">Action</vs-th>
+          <!-- <vs-th sort-key="action">Action</vs-th> -->
         </template>
 
         <template slot-scope="{ data }">
-          <vs-tr :key="indextr" v-for="(tr, indextr) in data">
+          <router-link :to="{path: '/project-detail/' + data[indextr].id}" :key="indextr" v-for="(tr, indextr) in data" tag="tr">
+          <!-- <vs-tr :key="indextr" v-for="(tr, indextr) in data"> -->
             <vs-td :data="data[indextr].project">
               {{ indextr + 1 }}
             </vs-td>
@@ -29,11 +30,12 @@
             <vs-td :data="data[indextr].created_date">
               {{ data[indextr].created_date }}
             </vs-td>
-            <vs-td>
+            <!-- <vs-td>
               <project-edit :projectId="data[indextr].id"/>
               <project-delete :projectId="data[indextr].id"/>
-            </vs-td>
-          </vs-tr>
+            </vs-td> -->
+          <!-- </vs-tr> -->
+          </router-link>
         </template>
       </vs-table>
     </vx-card>
@@ -60,7 +62,7 @@ export default {
   },
   computed: {
     projectList () {
-      return this.$store.getters['project/getProject']
+      return this.$store.getters['project/getProjects']
     }
   },
   methods: {
@@ -88,4 +90,10 @@ export default {
 </script>
 
 <style>
+tr:hover {
+  background: #F8F8F8;
+  cursor: pointer;
+  color: #0158A3;
+  transform: translateY(-4px);
+}
 </style>

@@ -16,8 +16,7 @@
         <div class="vx-row">
             <div class="vx-col w-full sm:w-5/6 flex sm:items-center sm:flex-row flex-col">
                 <div class="flex items-center">
-                    <vs-checkbox  class="w-8 m-0 vs-checkbox-small" @click.stop />
-                    <h6 class="todo-title" @click="displayPrompt" :class="{'line-through': taskLocal.status === 'Done'}">{{ taskLocal.task }}</h6>
+                    <router-link tag="h6" class="todo-title" @click="displayPrompt" :to="{path: `/task-detail/${taskLocal.id}`}" :class="{'line-through': taskLocal.status === 'Done'}">{{ taskLocal.task }}</router-link>
                 </div>
                 <div class="todo-tags sm:ml-2 sm:my-0 my-2 flex">
                     <vs-chip v-for="(tag, index) in taskLocal.tags" :key="index">
@@ -61,33 +60,6 @@ export default{
     }
   },
   methods: {
-    toggleIsImportant () {
-      this.$store.dispatch('todo/updateTask', Object.assign({}, this.taskLocal, {isImportant: !this.taskLocal.isImportant}))
-        .then((response) => {
-          this.taskLocal.isImportant = response.data.isImportant
-        })
-        .catch((error) => { console.error(error) })
-    },
-    toggleIsStarred () {
-      this.$store.dispatch('todo/updateTask', Object.assign({}, this.taskLocal, {isStarred: !this.taskLocal.isStarred}))
-        .then((response) => {
-          this.taskLocal.isStarred = response.data.isStarred
-        })
-        .catch((error) => { console.error(error) })
-    },
-    moveToTrash () {
-
-      this.$store.dispatch('todo/updateTask', Object.assign({}, this.taskLocal, {isTrashed: true}))
-        .then((response) => {
-          // console.log(response.data);
-          this.taskLocal.isTrashed = response.data.isTrashed
-          this.$el.style.display = 'none'   // Hides element from DOM
-        })
-        .catch((error) => { console.error(error) })
-
-      // Un-comment below line if you want to fetch task after task is deleted
-      // this.$store.dispatch("todo/fetchTasks", {filter: this.$route.params.filter})
-    },
     displayPrompt () {
       this.$emit('showDisplayPrompt', this.taskId)
     }

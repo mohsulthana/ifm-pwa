@@ -139,13 +139,13 @@ export default [
         icon: 'PenToolIcon',
         i18n: 'Complains'
       },
-      {
-        url: '/task-admin',
-        name: 'Task',
-        slug: 'task-admin',
-        icon: 'SettingsIcon',
-        i18n: 'Task'
-      },
+      // {
+      //   url: '/task-admin',
+      //   name: 'Task',
+      //   slug: 'task-admin',
+      //   icon: 'SettingsIcon',
+      //   i18n: 'Task'
+      // },
       /* SUPER */
       {
         url: '/admin',

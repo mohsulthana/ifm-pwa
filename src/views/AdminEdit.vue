@@ -65,7 +65,7 @@ export default {
   computed: {
     validateForm () {
       return !this.errors.any()
-    },
+    }
   },
   methods: {
     clearFields () {

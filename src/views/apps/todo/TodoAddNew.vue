@@ -52,7 +52,6 @@
                   :key="index"
                 />
               </vs-select>
-              <vs-upload limit="1" class="w-full mb-4 mt-5" action="https://jsonplaceholder.typicode.com/posts/" @on-success="successUpload" />
             </div>
           </div>
         </form>
@@ -63,6 +62,11 @@
 
 <script>
 export default {
+  props: {
+    projectId: {
+      required: true
+    }
+  },
   data () {
     return {
       activePrompt: false,
@@ -106,13 +110,20 @@ export default {
               task: this.taskLocal.task,
               description: this.taskLocal.description,
               status: 'Not Completed',
-              worker_id: element
+              worker_id: element,
+              project_id: this.projectId
             }
             this.$store.dispatch(
               'todo/addTask',
               Object.assign({}, data)
             )
           }
+          this.$vs.notify({
+            title: 'Success',
+            text: 'New task(s) successfully added!',
+            icon: 'check_box',
+            color: 'success'
+          })
           this.clearFields()
         }
       })

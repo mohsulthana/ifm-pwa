@@ -1,7 +1,6 @@
 <template>
   <div class="px-6 pb-2 pt-6">
     <vs-button
-      disabled
       @click="activePrompt = true"
       type="border"
       icon="edit"
@@ -10,13 +9,12 @@
       >Edit</vs-button
     >
     <vs-prompt
-      title="Update Admin"
+      :title="`Update project ${project.project}`"
       accept-text="Update"
       button-cancel="border"
       @cancel="clearFields"
-      @accept="registerUser"
+      @accept="updateProject"
       @close="clearFields"
-      :is-valid="validateForm"
       :active.sync="activePrompt"
     >
       <div>
@@ -26,21 +24,33 @@
               <vs-input
                 v-validate="'required'"
                 name="name"
+                v-model="project.project"
                 class="w-full mb-4 mt-5"
-                placeholder="User Name"
-                v-model="user.name"
+                placeholder="Project name"
                 :color="validateForm ? 'success' : 'danger'"
               />
               <span>{{ errors.first('name') }}</span>
              <vs-input
-                v-validate="'required|email'"
-                name="email"
+                v-validate="'required'"
+                name="description"
+                v-model="project.description"
                 class="w-full mb-4 mt-5"
-                placeholder="User mail"
-                v-model="user.email"
+                placeholder="Project Description"
                 :color="validateForm ? 'success' : 'danger'"
               />
               <span>{{ errors.first('email') }}</span>
+               <!-- <vs-select
+                class="w-full mb-4 mt-5"
+                label="Customer"
+                v-model="project.customer"
+              >
+                <vs-select-item
+                  :key="index"
+                  :value="item.user_id"
+                  :text="item.name"
+                  v-for="(item, index) in customer"
+                />
+              </vs-select> -->
             </div>
           </div>
         </form>
@@ -59,7 +69,7 @@ export default {
   data  () {
     return {
       activePrompt: false,
-      user: Object.assign({}, this.$store.getters['user/getAdmin'](this.projectId))
+      project: Object.assign({}, this.$store.getters['project/getProject'](7))
     }
   },
   computed: {
@@ -73,23 +83,29 @@ export default {
       //   name: '',
       //   email: '',
       //   password: '',
-      //   role: 'admin'
+      //   role: 'admin
       // })
     },
-    registerUser () {
+    updateProject () {
       this.$validator.validateAll().then((result) => {
         if (result) {
+          const data = {
+            id: this.projectId,
+            project: this.project.project,
+            description: this.project.description
+          }
           this.$store
-            .dispatch('user/register', Object.assign({}, this.user))
+            .dispatch('project/updateProject', Object.assign({}, data))
             .then(() => {
               this.$vs.notify({
                 title: 'Success',
-                text: 'Admin successfully registered!',
+                text: 'Project successfully updated!',
                 icon: 'check_box',
                 color: 'success'
               })
             })
             .catch((error) => {
+              console.log(error)
               this.$vs.notify({
                 title: 'Error',
                 text: error.data.message,

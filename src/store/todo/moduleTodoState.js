@@ -9,6 +9,7 @@
 
 
 export default {
+  task: [],
   tasks: [],
   taskTags: [],
   todoSearchQuery: '',

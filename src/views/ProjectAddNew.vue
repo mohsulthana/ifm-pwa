@@ -44,7 +44,18 @@
                   v-for="(item, index) in customer"
                 />
               </vs-select>
-              <vs-input-number label="Progress" max="100" class="w-full mb-4 mt-5" v-model="project.percent"/>
+              <vs-upload
+                limit="1"
+                @on-success="successUpload"
+                @change="connvertImage"
+                show-upload-button
+              />
+              <vs-input-number
+                label="Progress"
+                max="100"
+                class="w-full mb-4 mt-5"
+                v-model="project.percent"
+              />
             </div>
           </div>
         </form>
@@ -68,6 +79,7 @@ export default {
         description: '',
         customer: '',
         percent: 0,
+        qr_code: '',
         service_id: this.$store.state.AppActiveUser.service
       },
       users: []
@@ -79,6 +91,16 @@ export default {
     }
   },
   methods: {
+    connvertImage (event, target) {
+      const self = this
+
+      const reader = new FileReader()
+
+      reader.readAsDataURL(target[0])
+      reader.onload = function (event) {
+        self.project.qr_code = event.target.result
+      }
+    },
     clearFields () {
       // Object.assign(this.project, {
       //   project: '',
@@ -91,7 +113,6 @@ export default {
     createProject () {
       this.$validator.validateAll().then((result) => {
         if (result) {
-          console.log(this.project)
           this.$store
             .dispatch('project/addProject', Object.assign({}, this.project))
             .then(() => {

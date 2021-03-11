@@ -18,5 +18,16 @@ export default {
   },
   ADD_PROJECT (state, project) {
     state.project.push(project)
+  },
+  SET_SINGLE_PROJECT (state, project) {
+    state.singleProject = project
+  },
+  UPDATE_PROJECT (state, payload) {
+    console.log(payload.project)
+    console.log(state.project)
+    const projectIndex = state.project.findIndex((u) => u.id === payload.id)
+    console.log(projectIndex)
+    state.project[projectIndex] = payload.project
+    console.log(state.project)
   }
 }

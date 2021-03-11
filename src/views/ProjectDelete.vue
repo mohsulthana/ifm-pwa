@@ -41,6 +41,7 @@ export default {
             icon: 'check_box',
             color: 'success'
           })
+          this.$router.push('/projects')
         })
         .catch((error) => {
           this.$vs.notify({

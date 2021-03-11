@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 /*=========================================================================================
   File Name: moduleTodoGetters.js
   Description: Todo Module Getters
@@ -9,6 +10,9 @@
 
 
 export default {
-  getTask: state => id => state.tasks.find((task) => task.id === id),
-  getTasks: state => state.tasks
+  getTask: state => (id) => {
+    return state.tasks.find((task) => task.id == id)
+  },
+  getTasks: state => state.tasks,
+  getSingleTask: state => state.task
 }

@@ -97,13 +97,7 @@ export default {
     }
   },
   computed: {
-    todo ()         { return this.$store.state.todo.todoArray              },
-    todoFilter ()   { return this.$route.params.filter                     },
     taskList ()     { return this.$store.getters['todo/getTasks']      },
-    searchQuery:   {
-      get ()        { return this.$store.state.todo.todoSearchQuery        },
-      set (val)     { this.$store.dispatch('todo/setTodoSearchQuery', val) }
-    },
     scrollbarTag () { return this.$store.getters.scrollbarTag              },
     windowWidth ()  { return this.$store.state.windowWidth                 }
   },
@@ -150,12 +144,6 @@ export default {
   },
   beforeUpdate () {
     this.currFilter = this.$route.params.filter
-  },
-  beforeDestroy () {
-    this.$store.unregisterModule('todo')
-  },
-  mounted () {
-    this.$store.dispatch('todo/setTodoSearchQuery', '')
   }
 }
 

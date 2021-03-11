@@ -15,6 +15,7 @@ import state from './state'
 import getters from './getters'
 import mutations from './mutations'
 import actions from './actions'
+import VuexPersistence from 'vuex-persist'
 
 Vue.use(Vuex)
 
@@ -29,6 +30,9 @@ import moduleUsers from './user-management/moduleUserManagement.js'
 import moduleAuth from './auth/moduleAuth.js'
 import moduleECommerce from './eCommerce/moduleECommerce.js'
 
+const vuexLocal = new VuexPersistence({
+  storage: window.localStorage
+})
 
 export default new Vuex.Store({
   getters,
@@ -46,5 +50,6 @@ export default new Vuex.Store({
     auth: moduleAuth,
     eCommerce: moduleECommerce
   },
-  strict: process.env.NODE_ENV !== 'production'
+  strict: process.env.NODE_ENV !== 'production',
+  plugins: [vuexLocal.plugin]
 })

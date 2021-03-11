@@ -118,6 +118,15 @@ const router = new Router({
           }
         },
         {
+          path: '/project-detail/:id',
+          name: 'project-detail',
+          component: () => import('./views/ProjectDetail.vue'),
+          meta: {
+            admin: true,
+            authRequired: true
+          }
+        },
+        {
           path: '/task-admin',
           name: 'task-admin',
           component: () => import('./views/TaskTable.vue'),
@@ -218,6 +227,16 @@ const router = new Router({
           path: '/apps/calendar/vue-simple-calendar',
           name: 'calendar-simple-calendar',
           component: () => import('./views/apps/calendar/SimpleCalendar.vue'),
+          meta: {
+            worker: true,
+            no_scroll: true,
+            authRequired: true
+          }
+        },
+        {
+          path: '/task-detail/:id',
+          name: 'task-detail',
+          component: () => import('./views/apps/todo/TaskDetail.vue'),
           meta: {
             worker: true,
             no_scroll: true,

@@ -9,5 +9,6 @@
 
 
 export default {
-  project: []
+  project: [],
+  singleProject: []
 }

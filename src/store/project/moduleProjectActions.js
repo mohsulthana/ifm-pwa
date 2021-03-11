@@ -20,15 +20,24 @@ export default {
         .catch((error) => { reject(error) })
     })
   },
-  fetchProjectByCustomer ({ commit }, customerId) {
-    return new Promise((resolve, reject) => {
-      axios.delete(`/api/project/projectByCustomer/${customerId}`)
-        .then((response) => {
-          commit('SET_PROJECT', response.data)
-          resolve(response)
-        })
-        .catch((error) => { reject(error) })
-    })
+  // fetchProjectByCustomer ({ commit }, customerId) {
+  //   return new Promise((resolve, reject) => {
+  //     axios.delete(`/api/project/projectByCustomer/${customerId}`)
+  //       .then((response) => {
+  //         commit('SET_PROJECT', response.data)
+  //         resolve(response)
+  //       })
+  //       .catch((error) => { reject(error) })
+  //   })
+  // },
+  fetchSingleProject ({ commit }, projectId) {
+    axios.get(`api/project/show/${projectId}`)
+      .then((response) => {
+        commit('SET_SINGLE_PROJECT', response.data)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   },
   removeRecord ({ commit }, projectId) {
     return new Promise((resolve, reject) => {
@@ -45,6 +54,17 @@ export default {
       axios.post('/api/project/create', {project})
         .then((response) => {
           commit('ADD_PROJECT', Object.assign(project, {id: response.data.id}))
+          resolve(response)
+        })
+        .catch((error) => { reject(error) })
+    })
+  },
+  updateProject ({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/api/project/update/${payload.id}`, payload)
+        .then((response) => {
+          console.log(response)
+          commit('UPDATE_PROJECT', Object.assign({}, {id: response.data.project.id, project: response.data.project}))
           resolve(response)
         })
         .catch((error) => { reject(error) })

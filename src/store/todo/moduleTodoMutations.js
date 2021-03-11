@@ -20,8 +20,8 @@ export default {
   SET_TASKS (state, tasks) {
     state.tasks = tasks
   },
-  SET_TAGS (state, tags) {
-    state.taskTags = tags
+  SET_SINGLE_TASK (state, task) {
+    state.task = task
   },
   ADD_TASK (state, task) {
     state.tasks.push(task)
@@ -33,5 +33,13 @@ export default {
   UPDATE_TASK (state, task) {
     const taskIndex = state.tasks.findIndex((t) => t.id === task.id)
     Object.assign(state.tasks[taskIndex], task)
+  },
+  UPDATE_PHOTO_BEFORE (state, photo) {
+    state.task.before_work = photo
+    state.task.status = 'On Progress'
+  },
+  UPDATE_PHOTO_AFTER (state, photo) {
+    state.task.after_work = photo
+    state.task.status = 'Done'
   }
 }
