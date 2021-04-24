@@ -16,6 +16,12 @@ import Vuesax from 'vuesax'
 import 'material-icons/iconfont/material-icons.css' //Material Icons
 import 'vuesax/dist/vuesax.css' // Vuesax
 import vSelect from 'vue-select'
+
+// Color picker
+import Verte from 'verte'
+import 'verte/dist/verte.css'
+Vue.component('verte', Verte)
+
 Vue.component('v-select', vSelect)
 Vue.use(Vuesax)
 

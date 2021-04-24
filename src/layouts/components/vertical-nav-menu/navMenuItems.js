@@ -113,10 +113,6 @@ export default [
         icon: 'PenToolIcon',
         i18n: 'Complains'
       },
-      /**
-       * Worker
-       */
-
       /* ADMIN */
       {
         url: '/admin-service',
@@ -139,13 +135,6 @@ export default [
         icon: 'PenToolIcon',
         i18n: 'Complains'
       },
-      // {
-      //   url: '/task-admin',
-      //   name: 'Task',
-      //   slug: 'task-admin',
-      //   icon: 'SettingsIcon',
-      //   i18n: 'Task'
-      // },
       /* SUPER */
       {
         url: '/admin',
@@ -176,11 +165,11 @@ export default [
         i18n: 'Fachkraft'
       },
       {
-        url: '/create-tags',
-        name: 'create-tags',
-        slug: 'worker',
-        icon: 'ToolIcon',
-        i18n: 'Fachkraft'
+        url: '/settings',
+        name: 'settings',
+        slug: 'settings',
+        icon: 'SettingsIcon',
+        i18n: 'Settings'
       },
       /* WORKER */
       {
