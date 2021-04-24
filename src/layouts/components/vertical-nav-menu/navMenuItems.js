@@ -152,7 +152,7 @@ export default [
         name: 'Admin',
         slug: 'admin',
         icon: 'UserIcon',
-        i18n: 'Admin'
+        i18n: 'Fachbereichsleiter'
       },
       {
         url: '/customer',
@@ -173,7 +173,14 @@ export default [
         name: 'super-worker',
         slug: 'worker',
         icon: 'ToolIcon',
-        i18n: 'Workers'
+        i18n: 'Fachkraft'
+      },
+      {
+        url: '/create-tags',
+        name: 'create-tags',
+        slug: 'worker',
+        icon: 'ToolIcon',
+        i18n: 'Fachkraft'
       },
       /* WORKER */
       {
