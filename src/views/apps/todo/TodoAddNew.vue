@@ -38,20 +38,30 @@
                 label="Add description"
                 v-model="taskLocal.description"
               />
-              <vs-select
-                multiple
-                autocomplete
-                class="w-full mb-4 mt-5"
-                label="Worker"
-                v-model="taskLocal.worker_id"
-              >
-                <vs-select-item
-                  :value="item.worker_id"
-                  :text="item.name"
-                  v-for="(item, index) in worker"
-                  :key="index"
-                />
-              </vs-select>
+              <div v-if="!qrCodeActive">
+                <vs-button
+                  @click="generateQRCode()"
+                  class="w-full"
+                  >Generate QR Code</vs-button
+                >
+              </div>
+              <div v-else class="my-5">
+                <qr-code ref="qrCode" :text="qr_code"></qr-code>
+                <vs-select
+                  multiple
+                  autocomplete
+                  class="w-full mb-4 mt-5"
+                  label="Worker"
+                  v-model="taskLocal.worker_id"
+                >
+                  <vs-select-item
+                    :value="item.worker_id"
+                    :text="item.name"
+                    v-for="(item, index) in worker"
+                    :key="index"
+                  />
+                </vs-select>
+              </div>
             </div>
           </div>
         </form>
@@ -69,6 +79,8 @@ export default {
   },
   data () {
     return {
+      qr_code: 'sdfsdf',
+      qrCodeActive: false,
       activePrompt: false,
       status: [
         { text: 'Done', value: 'Done' },
@@ -100,6 +112,11 @@ export default {
         // status: ''
       })
     },
+    generateQRCode () {
+      this.qrCodeActive = true
+      // LINK: http://domain.com/update-status/{On Progress}
+
+    },
     addTodo () {
       this.$validator.validateAll().then((result) => {
         if (result) {
@@ -113,10 +130,7 @@ export default {
               worker_id: element,
               project_id: this.projectId
             }
-            this.$store.dispatch(
-              'todo/addTask',
-              Object.assign({}, data)
-            )
+            this.$store.dispatch('todo/addTask', Object.assign({}, data))
           }
           this.$vs.notify({
             title: 'Success',

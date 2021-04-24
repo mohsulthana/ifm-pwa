@@ -331,8 +331,8 @@ export default{
   methods: {
     fetchDatas () {
       //   Fetch user, project, complain
-      const baseURL = 'https://api.ifm-service.de'
-      //   const baseURL = 'http://localhost:8080/'
+    //   const baseURL = 'https://api.ifm-service.de'
+        const baseURL = 'http://localhost:8080/'
 
       axios.all([axios.get(`${baseURL}/api/users`),  axios.get(`${baseURL}/api/project`), axios.get(`${baseURL}/api/complain`)]).then(axios.spread((...responses) => {
         this.totalUser = responses[0].data.length

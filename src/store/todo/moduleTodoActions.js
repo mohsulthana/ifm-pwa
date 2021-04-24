@@ -94,10 +94,12 @@ export default {
     return new Promise((resolve, reject) => {
       axios.put(`/api/task/updateAfterWork/${payload.id}`, payload)
         .then((response) => {
+          console.log(response)
           commit('UPDATE_PHOTO_AFTER', response.data.photo.after_work)
           resolve(response)
         })
         .catch((error) => {
+          console.error(error)
           reject(error)
         })
     })

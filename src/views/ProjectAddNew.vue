@@ -50,12 +50,6 @@
                 @change="connvertImage"
                 show-upload-button
               />
-              <vs-input-number
-                label="Progress"
-                max="100"
-                class="w-full mb-4 mt-5"
-                v-model="project.percent"
-              />
             </div>
           </div>
         </form>

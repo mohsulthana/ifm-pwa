@@ -25,24 +25,55 @@
       color="#7367F0"
       gradient-color-secondary="#0158A3"
       title="Upload photo before work"
-      accept-text="Update"
+      accept-text="Start"
       cancel-text="Cancel"
-      button-cancel="border"
+      :is-valid="validateForm"
       @accept="updateBeforeWork"
       :active.sync="activePrompt"
     >
       <div>
         <form>
-          <div class="vx-row">
-            <div class="vx-col w-full">
+          <small>Please scan below image before you do your work</small>
+          <vs-row
+            vs-align="flex-start"
+            vs-type="flex"
+            vs-justify="center"
+            vs-w="12"
+          >
+            <vs-col
+              vs-type="flex"
+              vs-justify="center"
+              vs-align="center"
+              vs-w="2"
+            >
+              <img :key="task.id" :src="task.qr_code" :height="200" />
+            </vs-col>
+          </vs-row>
+          <vs-divider class="m-1" />
+          <vs-row
+            vs-align="flex-center"
+            vs-type="flex"
+            vs-justify="center"
+            vs-w="12"
+          >
+            <vs-col
+              vs-type="flex"
+              vs-justify="center"
+              vs-align="center"
+              vs-w="12"
+            >
               <vs-upload
                 limit="1"
                 @on-success="successUpload"
                 @change="connvertImage"
                 show-upload-button
               />
-            </div>
-          </div>
+            </vs-col>
+            <vs-checkbox v-model="photoBefore"
+              >I have scanned QR code above</vs-checkbox
+            >
+              <span>{{ errors.first('photoBefore') }}</span>
+          </vs-row>
         </form>
       </div>
     </vs-prompt>
@@ -58,6 +89,7 @@ export default {
   },
   data () {
     return {
+      photoBefore: false,
       activePrompt: false,
       project: {
         id: this.task.id,
@@ -66,17 +98,27 @@ export default {
       }
     }
   },
+  computed: {
+    validateForm () {
+      return !this.errors.any() && this.photoBefore === true
+    }
+  },
   methods: {
     updateBeforeWork () {
-      this.$store.dispatch('todo/updatePhotoBeforeWork', this.project)
-        .then(() => {
-          this.$vs.notify({
-            title: 'Success',
-            text: 'Photo submitted!',
-            icon: 'check_box',
-            color: 'success'
-          })
-        })
+      this.$validator.validateAll().then((result) => {
+        if (result) {
+          this.$store
+            .dispatch('todo/updatePhotoBeforeWork', this.project)
+            .then(() => {
+              this.$vs.notify({
+                title: 'Success',
+                text: 'Photo submitted!',
+                icon: 'check_box',
+                color: 'success'
+              })
+            })
+        }
+      })
     },
     successUpload () {
       alert('success')

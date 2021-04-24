@@ -73,9 +73,9 @@
                           >
                         </div>
                         <div class="flex flex-wrap justify-between mb-3">
-                          <vs-button type="border" @click="registerUser"
+                          <!-- <vs-button type="border" @click="registerUser"
                             >Register</vs-button
-                          >
+                          > -->
                           <vs-button
                             :disabled="!validateForm"
                             @click="loginSuper"
@@ -84,7 +84,7 @@
                         </div>
                       </div>
                     </vs-tab>
-                    <vs-tab label="Admin">
+                    <vs-tab label="Fachbereichsleiter">
                       <div class="con-tab-ejemplo">
                         <vs-input
                           v-validate="'required|email|min:3'"
@@ -93,7 +93,7 @@
                           icon-no-border
                           icon="icon icon-user"
                           icon-pack="feather"
-                          label-placeholder="Email Admin"
+                          label-placeholder="Email Fachbereichsleiter"
                           v-model="admin.email"
                           class="w-full"
                         />
@@ -123,9 +123,9 @@
                           >
                         </div>
                         <div class="flex flex-wrap justify-between mb-3">
-                          <vs-button type="border" @click="registerUser"
+                          <!-- <vs-button type="border" @click="registerUser"
                             >Register</vs-button
-                          >
+                          > -->
                           <vs-button
                             :disabled="!validateForm"
                             @click="loginAdmin"
@@ -173,9 +173,9 @@
                           >
                         </div>
                         <div class="flex flex-wrap justify-between mb-3">
-                          <vs-button type="border" @click="registerUser"
+                          <!-- <vs-button type="border" @click="registerUser"
                             >Register</vs-button
-                          >
+                          > -->
                           <vs-button
                             :disabled="!validateForm"
                             @click="loginCustomer"
@@ -184,7 +184,7 @@
                         </div>
                       </div>
                     </vs-tab>
-                    <vs-tab label="Worker">
+                    <vs-tab label="Fachkraft">
                       <div class="con-tab-ejemplo">
                         <vs-input
                           v-validate="'required|email|min:3'"
@@ -193,7 +193,7 @@
                           icon-no-border
                           icon="icon icon-user"
                           icon-pack="feather"
-                          label-placeholder="Email Worker"
+                          label-placeholder="Email Fachkraft"
                           v-model="worker.email"
                           class="w-full"
                         />
@@ -223,9 +223,9 @@
                           >
                         </div>
                         <div class="flex flex-wrap justify-between mb-3">
-                          <vs-button type="border" @click="registerUser"
+                          <!-- <vs-button type="border" @click="registerUser"
                             >Register</vs-button
-                          >
+                          > -->
                           <vs-button
                             :disabled="!validateForm"
                             @click="loginWorker"

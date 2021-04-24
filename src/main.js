@@ -35,6 +35,9 @@ import './fake-db/index.js'
 // Theme Configurations
 import '../themeConfig.js'
 
+// QR Code
+import VueQRCodeComponent from 'vue-qrcode-component'
+Vue.component('qr-code', VueQRCodeComponent)
 
 // Firebase
 import '@/firebase/firebaseConfig'

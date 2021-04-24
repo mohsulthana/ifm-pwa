@@ -25,24 +25,55 @@
       color="#7367F0"
       gradient-color-secondary="#0158A3"
       title="Upload photo after work"
-      accept-text="Update"
+      accept-text="Finish"
       cancel-text="Cancel"
-      button-cancel="border"
+      :is-valid="validateForm"
       @accept="updateAfterWork"
       :active.sync="activePrompt"
     >
       <div>
         <form>
-          <div class="vx-row">
-            <div class="vx-col w-full">
+          <small>Please scan below image after you did your work</small>
+          <vs-row
+            vs-align="flex-start"
+            vs-type="flex"
+            vs-justify="center"
+            vs-w="12"
+          >
+            <vs-col
+              vs-type="flex"
+              vs-justify="center"
+              vs-align="center"
+              vs-w="2"
+            >
+              <img :key="task.id" :src="task.qr_code" :height="200" />
+            </vs-col>
+          </vs-row>
+          <vs-divider class="m-1" />
+          <vs-row
+            vs-align="flex-center"
+            vs-type="flex"
+            vs-justify="center"
+            vs-w="12"
+          >
+            <vs-col
+              vs-type="flex"
+              vs-justify="center"
+              vs-align="center"
+              vs-w="12"
+            >
               <vs-upload
                 limit="1"
                 @on-success="successUpload"
                 @change="connvertImage"
                 show-upload-button
               />
-            </div>
-          </div>
+            </vs-col>
+            <vs-checkbox v-model="photoAfter"
+              >I have scanned QR code above</vs-checkbox
+            >
+              <span>{{ errors.first('photoAfter') }}</span>
+          </vs-row>
         </form>
       </div>
     </vs-prompt>
@@ -58,6 +89,7 @@ export default {
   },
   data () {
     return {
+      photoAfter: false,
       activePrompt: false,
       project: {
         id: this.task.id,
@@ -66,17 +98,26 @@ export default {
       }
     }
   },
+  computed: {
+    validateForm () {
+      return !this.errors.any() && this.photoAfter === true
+    }
+  },
   methods: {
     updateAfterWork () {
-      this.$store.dispatch('todo/updatePhotoAfterWork', this.project)
-        .then(() => {
-          this.$vs.notify({
-            title: 'Success',
-            text: 'Photo submitted!',
-            icon: 'check_box',
-            color: 'success'
-          })
-        })
+      this.$validator.validateAll().then((result) => {
+        if (result) {
+          this.$store.dispatch('todo/updatePhotoAfterWork', this.project)
+            .then(() => {
+              this.$vs.notify({
+                title: 'Success',
+                text: 'Photo submitted!',
+                icon: 'check_box',
+                color: 'success'
+              })
+            })
+        }
+      })
     },
     successUpload () {
       alert('success')
