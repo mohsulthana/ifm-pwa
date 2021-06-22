@@ -1,6 +1,6 @@
 <template>
-  <div class="px-6 pb-2 pt-6">
-    <vs-button @click="activePrompt = true" class="w-full" icon="archive"
+  <div >
+    <vs-button @click="activePrompt = true" class="w-full" icon="add"
       >Add Service</vs-button
     >
     <vs-prompt

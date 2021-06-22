@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vx-card title="Workers">
+    <vx-card title="Fachkraft">
       <!-- TABLE ACTION COL-2: ADD NEW USERS -->
       <template slot="actions">
         <worker-add-new :service="serviceList" />

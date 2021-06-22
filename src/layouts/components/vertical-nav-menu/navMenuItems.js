@@ -110,7 +110,7 @@ export default [
         url: '/complains',
         name: 'Complains',
         slug: 'complains',
-        icon: 'PenToolIcon',
+        icon: 'AlertTriangleIcon',
         i18n: 'Complains'
       },
       /* ADMIN */
@@ -126,13 +126,13 @@ export default [
         name: 'Customer',
         slug: 'dashboard',
         icon: 'UserIcon',
-        i18n: 'Customer'
+        i18n: 'Kunde'
       },
       {
         url: '/complains-admin',
         name: 'Complains',
         slug: 'complains-admin',
-        icon: 'PenToolIcon',
+        icon: 'AlertTriangleIcon',
         i18n: 'Complains'
       },
       /* SUPER */
@@ -148,36 +148,50 @@ export default [
         name: 'Customer',
         slug: 'customer',
         icon: 'UsersIcon',
-        i18n: 'Customer'
+        i18n: 'Kunde'
       },
       {
         url: '/projects',
         name: 'Projects',
         slug: 'projects',
-        icon: 'BookOpenIcon',
+        icon: 'FolderIcon',
         i18n: 'Projects'
       },
       {
-        url: '/super-worker',
-        name: 'super-worker',
+        url: '/fachkraft',
+        name: 'fachkraft',
         slug: 'worker',
         icon: 'ToolIcon',
         i18n: 'Fachkraft'
+      },
+      {
+        url: '/reasons',
+        name: 'reasons',
+        slug: 'reasons',
+        icon: 'BookmarkIcon',
+        i18n: 'Reasons'
       },
       {
         url: '/settings',
         name: 'settings',
         slug: 'settings',
         icon: 'SettingsIcon',
-        i18n: 'Settings'
+        i18n: 'Extra'
       },
       /* WORKER */
+      // {
+      //   url: '/task',
+      //   name: 'Task',
+      //   slug: 'task',
+      //   icon: 'SettingsIcon',
+      //   i18n: 'Task'
+      // },
       {
-        url: '/task',
-        name: 'Task',
-        slug: 'task',
-        icon: 'SettingsIcon',
-        i18n: 'Task'
+        url: '/project-folder',
+        name: 'project-folder',
+        slug: 'project-folder',
+        icon: 'FolderIcon',
+        i18n: 'ProjectFolder'
       }
       // {
       //   url: '/apps/calendar/vue-simple-calendar',

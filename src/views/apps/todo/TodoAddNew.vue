@@ -9,8 +9,8 @@
 
 
 <template>
-  <div class="px-6 pb-2 pt-6">
-    <vs-button @click="activePrompt = true" class="w-full">Add Task</vs-button>
+  <div >
+    <vs-button @click="activePrompt = true" class="w-full" icon="add">Add Task</vs-button>
     <vs-prompt
       title="Add Task"
       accept-text="Add Task"
@@ -38,7 +38,7 @@
                 label="Add description"
                 v-model="taskLocal.description"
               />
-              <div v-if="!qrCodeActive">
+              <!-- <div v-if="!qrCodeActive">
                 <vs-button
                   @click="generateQRCode()"
                   class="w-full"
@@ -47,21 +47,7 @@
               </div>
               <div v-else class="my-5">
                 <qr-code ref="qrCode" :text="qr_code"></qr-code>
-                <vs-select
-                  multiple
-                  autocomplete
-                  class="w-full mb-4 mt-5"
-                  label="Worker"
-                  v-model="taskLocal.worker_id"
-                >
-                  <vs-select-item
-                    :value="item.worker_id"
-                    :text="item.name"
-                    v-for="(item, index) in worker"
-                    :key="index"
-                  />
-                </vs-select>
-              </div>
+              </div> -->
             </div>
           </div>
         </form>
@@ -114,42 +100,34 @@ export default {
     },
     generateQRCode () {
       this.qrCodeActive = true
-      // LINK: http://domain.com/update-status/{On Progress}
+      // LINK: http://domain.com/update-status/:id
 
     },
     addTodo () {
       this.$validator.validateAll().then((result) => {
         if (result) {
-          const worker = this.taskLocal.worker_id
-          for (let i = 0; i < worker.length; i++) {
-            const element = worker[i]
-            const data = {
-              task: this.taskLocal.task,
-              description: this.taskLocal.description,
-              status: 'Not Completed',
-              worker_id: element,
-              project_id: this.projectId
-            }
-            this.$store.dispatch('todo/addTask', Object.assign({}, data))
+          const data = {
+            task: this.taskLocal.task,
+            description: this.taskLocal.description,
+            status: 'Not Completed',
+            project_id: this.projectId
           }
-          this.$vs.notify({
-            title: 'Success',
-            text: 'New task(s) successfully added!',
-            icon: 'check_box',
-            color: 'success'
-          })
+          this.$store.dispatch('todo/addTask', Object.assign({}, data))
+            .then(() => {
+              this.$vs.notify({
+                title: 'Success',
+                text: 'New task successfully added!',
+                icon: 'check_box',
+                color: 'success'
+              })
+            })
+            .catch((error) => {
+              console.log(error)
+            })
           this.clearFields()
         }
       })
-    },
-    fetchWorker () {
-      this.$store.dispatch('user/fetchWorkers').then((response) => {
-        this.worker = response.data
-      })
     }
-  },
-  created () {
-    this.fetchWorker()
   }
 }
 </script>

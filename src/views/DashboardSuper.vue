@@ -13,9 +13,9 @@
             <div class="vx-col w-full sm:w-1/2 md:w-1/2 lg:w-1/4 xl:w-1/4 mb-base">
                 <statistics-card-line
                   v-if="subscribersGained.analyticsData"
-                  icon="UsersIcon"
+                  icon="UserIcon"
                   :statistic="totalUser | k_formatter"
-                  statisticTitle="Customers"
+                  statisticTitle="Kunde"
                   :chartData="subscribersGained.series"
                   type="area" />
             </div>
@@ -23,7 +23,7 @@
             <div class="vx-col w-full sm:w-1/2 md:w-1/2 lg:w-1/4 xl:w-1/4 mb-base">
                 <statistics-card-line
                   v-if="revenueGenerated.analyticsData"
-                  icon="DollarSignIcon"
+                  icon="BriefcaseIcon"
                   :statistic="totalTask | k_formatter"
                   statisticTitle="Tasks"
                   :chartData="revenueGenerated.series"
@@ -34,9 +34,9 @@
             <div class="vx-col w-full sm:w-1/2 md:w-1/2 lg:w-1/4 xl:w-1/4 mb-base">
                 <statistics-card-line
                   v-if="quarterlySales.analyticsData"
-                  icon="ShoppingCartIcon"
+                  icon="ToolIcon"
                   :statistic="totalWorker | k_formatter"
-                  statisticTitle="Workers"
+                  statisticTitle="Fachkraft"
                   :chartData="quarterlySales.series"
                   color="danger"
                   type="area" />
@@ -44,7 +44,7 @@
             <div class="vx-col w-full sm:w-1/2 md:w-1/2 lg:w-1/4 xl:w-1/4 mb-base">
                 <statistics-card-line
                   v-if="ordersRecevied.analyticsData"
-                  icon="ShoppingBagIcon"
+                  icon="AlertTriangleIcon"
                   :statistic="totalComplain | k_formatter"
                   statisticTitle="Complaints"
                   :chartData="ordersRecevied.series"
@@ -102,10 +102,9 @@ export default{
   methods: {
     fetchDatas () {
       //   Fetch user, project, complain
-      // const baseURL = 'https://api.ifm-service.de'
-        const baseURL = 'http://localhost:8080/'
+      const baseURL = process.env.VUE_APP_BASE_URL
 
-      axios.all([axios.get(`${baseURL}/api/users`),  axios.get(`${baseURL}/api/task`), axios.get(`${baseURL}/api/complain`), axios.get(`${baseURL}/api/worker`)]).then(axios.spread((...responses) => {
+      axios.all([axios.get(`${baseURL}/api/users`),  axios.get(`${baseURL}/api/task/getAllTasks`), axios.get(`${baseURL}/api/complain`), axios.get(`${baseURL}/api/worker`)]).then(axios.spread((...responses) => {
         this.totalUser = responses[0].data.length
         this.totalTask = responses[1].data.length
         this.totalComplain = responses[2].data.length

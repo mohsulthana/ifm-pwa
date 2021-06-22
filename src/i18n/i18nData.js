@@ -1,6 +1,15 @@
 // en, de, fr, pt
 export default {
   en: {
+    Extra: 'Extra',
+    Reasons: 'Reasons',
+    Service: 'Service',
+    Complains: 'Complains',
+    Kunde: 'Customer',
+    ProjectFolder: 'Project Folder',
+    Projects: 'Projects',
+    Fachkraft: 'Worker',
+    Fachbereichsleiter: 'Admin',
     Dashboard: 'Dashboard',
     eCommerce: 'eCommerce',
     Apps: 'Apps',
@@ -140,6 +149,7 @@ export default {
     FullCalendar: 'Calendrier completVollständiger Kalender',
     SimpleCalendar: 'Einfacher Kalender',
     Shop: 'Geschäft',
+    Kunde: 'Customer',
     ItemDetails: 'Artikeldetails',
     Cart: 'Wagen',
     WishList: 'Wunschzettel',

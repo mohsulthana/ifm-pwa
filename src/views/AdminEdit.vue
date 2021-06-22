@@ -1,10 +1,11 @@
 <template>
-  <div class="px-6 pb-2 pt-6">
+  <span >
     <vs-button
       disabled
       @click="activePrompt = true"
       type="border"
-      icon="edit"
+      icon-pack="feather"
+      icon="icon-edit"
       color="primary"
       size="small"
       >Edit</vs-button
@@ -46,7 +47,7 @@
         </form>
       </div>
     </vs-prompt>
-  </div>
+  </span>
 </template>
 
 <script>

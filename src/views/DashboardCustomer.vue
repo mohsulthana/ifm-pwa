@@ -13,19 +13,18 @@
       <!-- CARD 9: DISPATCHED ORDERS -->
       <div class="vx-col w-full">
         <vx-card title="Overview for Projects">
-          <div slot="no-body" class="mt-4">
-            <vs-table :data="projects" class="table-dark-inverted">
+          <div class="mt-4">
+            <vs-table v-model="selected" @selected="rowSelected" stripe :data="projects" class="table-dark-inverted">
               <template slot="thead">
-                <vs-th>PROJECT NO.</vs-th>
+                <vs-th>PROJECT ID.</vs-th>
                 <vs-th>PROJECT NAME</vs-th>
                 <vs-th>DESCRIPTION</vs-th>
                 <vs-th>CUSTOMER</vs-th>
-                <vs-th>PROGRESS</vs-th>
                 <vs-th>CREATED ON</vs-th>
               </template>
 
               <template slot-scope="{data}">
-                <vs-tr :key="indextr" v-for="(tr, indextr) in data">
+                <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
                   <vs-td :data="data[indextr].orderNo">
                     <span>#{{data[indextr].id}}</span>
                   </vs-td>
@@ -39,21 +38,15 @@
                     <span>{{data[indextr].name}}</span>
                   </vs-td>
                   <vs-td :data="data[indextr].orderNo">
-                    <span>{{data[indextr].distance}}</span>
-                    <vs-progress :percent="data[indextr].percent" :color="data[indextr].statusColor"></vs-progress>
-                  </vs-td>
-                  <vs-td :data="data[indextr].orderNo">
                     <span>{{data[indextr].created_date}}</span>
                   </vs-td>
                 </vs-tr>
               </template>
             </vs-table>
           </div>
-
         </vx-card>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -62,7 +55,8 @@
 export default {
   data () {
     return {
-      projects: []
+      projects: [],
+      selected: []
     }
   },
   components: {
@@ -71,6 +65,10 @@ export default {
     this.fetchProjects()
   },
   methods: {
+    rowSelected (tr) {
+      const id = tr.id
+      return this.$router.push({ name: 'project-report', params: { id }})
+    },
     fetchProjects () {
       this.$store.dispatch('project/fetchProjectByCustomer', this.$store.state.AppActiveUser.id)
         .then((response) => {

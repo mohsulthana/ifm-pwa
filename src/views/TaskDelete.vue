@@ -1,5 +1,5 @@
 <template>
-  <div class="px-6 pb-2 pt-6">
+  <div >
     <vs-button
       @click="openConfirm()"
       type="border"

@@ -64,6 +64,15 @@ const router = new Router({
           }
         },
         {
+          path: '/project-report/:id',
+          name: 'project-report',
+          component: () => import('./views/ProjectReport.vue'),
+          meta: {
+            customer: true,
+            authRequired: true
+          }
+        },
+        {
           path: '/dashboard/super',
           name: 'dashboard-super',
           component: () => import('./views/DashboardSuper.vue'),
@@ -172,9 +181,18 @@ const router = new Router({
           }
         },
         {
-          path: '/super-worker',
-          name: 'super-worker',
+          path: '/fachkraft',
+          name: 'fachkraft',
           component: () => import('./views/WorkerTable.vue'),
+          meta: {
+            super: true,
+            authRequired: true
+          }
+        },
+        {
+          path: '/reasons',
+          name: 'reasons',
+          component: () => import('./views/reason/ReasonTable.vue'),
           meta: {
             super: true,
             authRequired: true
@@ -262,9 +280,19 @@ const router = new Router({
           }
         },
         {
-          path: '/task',
+          path: '/task/:id',
           name: 'task',
           component: () => import('./views/apps/todo/Todo.vue'),
+          meta: {
+            worker: true,
+            no_scroll: true,
+            authRequired: true
+          }
+        },
+        {
+          path: '/project-folder',
+          name: 'project-folder',
+          component: () => import('./views/pages/ProjectFolder.vue'),
           meta: {
             worker: true,
             no_scroll: true,
@@ -1559,6 +1587,9 @@ router.afterEach(() => {
   const appLoading = document.getElementById('loading-bg')
   if (appLoading) {
     appLoading.style.display = 'none'
+    appLoading.style.zIndex = '1000'
+    appLoading.style.opacity = '0.8'
+    appLoading.style.transition = 'width 3s linear'
   }
 })
 

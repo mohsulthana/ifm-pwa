@@ -1,5 +1,5 @@
 <template>
-  <div class="px-3 pb-2">
+  <span class="px-3 pb-2">
     <vs-button
       icon="delete"
       color="danger"
@@ -7,8 +7,8 @@
       class="cursor-pointer"
       svgClasses="w-5 h-5"
       @click="openConfirm"
-    >Delete</vs-button>
-  </div>
+    ></vs-button>
+  </span>
 </template>
 
 <script>

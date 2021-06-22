@@ -74,4 +74,7 @@ export default {
 </script>
 
 <style>
+.includeIcon {
+  display: inline-flex !important;
+}
 </style>

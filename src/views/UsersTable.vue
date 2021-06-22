@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vx-card title="Users">
+    <vx-card title="Kunde">
       <!-- TABLE ACTION COL-2: ADD NEW USERS -->
       <template slot="actions">
         <users-add-new/>
@@ -57,7 +57,7 @@ export default {
     AdminDelete
   },
   computed: {
-    listUsers() {
+    listUsers () {
       return this.$store.getters['user/getUsers']
     }
   },
@@ -73,4 +73,7 @@ export default {
 </script>
 
 <style>
+.includeIcon {
+  display: inline-flex !important;
+}
 </style>

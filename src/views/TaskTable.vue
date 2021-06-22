@@ -65,7 +65,7 @@ export default {
   },
   methods: {
     fetchTasks () {
-      this.$store.dispatch('todo/fetchTasks')
+      this.$store.dispatch('todo/getTasksByProject')
         .then((response) => {
           this.tasks = response.data
         })

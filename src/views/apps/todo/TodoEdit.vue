@@ -101,7 +101,7 @@ export default {
       this.$store.dispatch('todo/updateTask', Object.assign({}, this.taskLocal, {isTrashed: true}))
         .then(() => {
           // Fetch Tasks
-          this.$store.dispatch('todo/fetchTasks', { filter: this.$route.params.filter })
+          this.$store.dispatch('todo/getTasksByProject', { filter: this.$route.params.filter })
         })
         .catch((error) => { console.error(error) })
     },

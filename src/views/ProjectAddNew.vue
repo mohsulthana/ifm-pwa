@@ -1,6 +1,10 @@
 <template>
-  <div class="px-6 pb-2 pt-6">
-    <vs-button @click="activePrompt = true" class="w-full" icon="book"
+  <div>
+    <vs-button
+      @click="activePrompt = true"
+      class="w-full"
+      icon="icon-plus"
+      icon-pack="feather"
       >Add Project</vs-button
     >
     <vs-prompt
@@ -12,6 +16,51 @@
       :is-valid="validateForm"
       :active.sync="activePrompt"
     >
+      <div class="calendar__label-container flex">
+        <vs-chip
+          v-if="projectTag != null"
+          class="text-white"
+          :style="{ background: projectTag.col }"
+          >{{ projectTag.val }}</vs-chip
+        >
+
+        <vs-dropdown
+          vs-custom-content
+          vs-trigger-click
+          class="ml-auto my-2 cursor-pointer"
+        >
+          <feather-icon
+            icon="TagIcon"
+            svgClasses="h-5 w-5"
+            class="cursor-pointer"
+            @click.prevent
+          ></feather-icon>
+
+          <vs-dropdown-menu style="z-index: 200001">
+            <vs-dropdown-item
+              v-for="(label, index) in tags"
+              :key="index"
+              @click="
+                changeProjectTag(label.tag_name, label.tag_color, label.id)
+              "
+            >
+              <div
+                class="h-3 w-3 inline-block rounded-full mr-2"
+                :style="{ background: label.tag_color }"
+              ></div>
+              <span>{{ label.tag_name }}</span>
+            </vs-dropdown-item>
+
+            <vs-dropdown-item>
+              <div
+                @click="projectTag = null"
+                class="h-3 w-3 mr-1 inline-block rounded-full mr-2 bg-primary"
+              ></div>
+              <span>None</span>
+            </vs-dropdown-item>
+          </vs-dropdown-menu>
+        </vs-dropdown>
+      </div>
       <div>
         <form>
           <div class="vx-row">
@@ -44,9 +93,24 @@
                   v-for="(item, index) in customer"
                 />
               </vs-select>
+              <flat-pickr class="mt-5 w-1/2" :config="configFromdateTimePicker" v-model="fromDate" placeholder="From Date" @on-change="onFromChange" />
+              <flat-pickr class="mt-5 w-1/2" :config="configTodateTimePicker" v-model="toDate" placeholder="To Date" @on-change="onToChange" />
+              <vs-select
+                multiple
+                autocomplete
+                class="w-full mb-4 mt-5"
+                label="Worker"
+                v-model="project.worker_id"
+              >
+                <vs-select-item
+                  :value="item.worker_id"
+                  :text="item.name"
+                  v-for="(item, index) in worker"
+                  :key="index"
+                />
+              </vs-select>
               <vs-upload
                 limit="1"
-                @on-success="successUpload"
                 @change="connvertImage"
                 show-upload-button
               />
@@ -59,6 +123,10 @@
 </template>
 
 <script>
+import axios from '@/axios'
+import flatPickr from 'vue-flatpickr-component'
+import 'flatpickr/dist/flatpickr.css'
+
 export default {
   props: {
     customer: {
@@ -67,17 +135,31 @@ export default {
   },
   data () {
     return {
+      worker: [],
+      projectTag: null,
       activePrompt: false,
+      tags: [],
       project: {
         project: '',
         description: '',
         customer: '',
-        percent: 0,
-        qr_code: '',
-        service_id: this.$store.state.AppActiveUser.service
+        image: '',
+        worker_id: []
       },
-      users: []
+      users: [],
+      fromDate: null,
+      toDate: null,
+      configFromdateTimePicker: {
+        minDate: new Date(),
+        maxDate: null
+      },
+      configTodateTimePicker: {
+        minDate: null
+      }
     }
+  },
+  components: {
+    flatPickr
   },
   computed: {
     validateForm () {
@@ -85,6 +167,12 @@ export default {
     }
   },
   methods: {
+    onFromChange (selectedDates, dateStr) {
+      this.$set(this.configTodateTimePicker, 'minDate', dateStr)
+    },
+    onToChange (selectedDates, dateStr) {
+      this.$set(this.configFromdateTimePicker, 'maxDate', dateStr)
+    },
     connvertImage (event, target) {
       const self = this
 
@@ -92,7 +180,7 @@ export default {
 
       reader.readAsDataURL(target[0])
       reader.onload = function (event) {
-        self.project.qr_code = event.target.result
+        self.project.image = event.target.result
       }
     },
     clearFields () {
@@ -107,20 +195,42 @@ export default {
     createProject () {
       this.$validator.validateAll().then((result) => {
         if (result) {
+          const project = {
+            project: this.project.project,
+            description: this.project.description,
+            customer: this.project.customer,
+            image: this.project.image,
+            service_id: this.$store.state.AppActiveUser.service,
+            tag: this.projectTag === null ? null : this.projectTag.id,
+            start_date: this.fromDate,
+            end_date: this.toDate,
+            service: this.$store.state.AppActiveUser.service
+          }
           this.$store
-            .dispatch('project/addProject', Object.assign({}, this.project))
-            .then(() => {
+            .dispatch('project/addProject', Object.assign({}, project))
+            .then((response) => {
+              const project_id = response.data.id
+              const worker = this.project.worker_id
+              for (let i = 0; i < worker.length; i++) {
+                const element = worker[i]
+                const project = {
+                  project_id,
+                  worker_id: element
+                }
+                this.$store.dispatch(
+                  'project/createProjectWorker',
+                  Object.assign({}, project)
+                )
+              }
               this.$vs.notify({
                 title: 'Success',
                 text: 'Project successfully created!',
                 icon: 'check_box',
                 color: 'success'
               })
-              setTimeout(() => {
-                location.reload()
-              }, 300)
             })
             .catch((error) => {
+              console.log(error)
               this.$vs.notify({
                 title: 'Error',
                 text: error.data.message,
@@ -131,7 +241,36 @@ export default {
           this.clearFields()
         }
       })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    fetchTags () {
+      axios
+        .get('api/tag')
+        .then((response) => {
+          this.tags = response.data
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    changeProjectTag (label, color, tagId) {
+      this.projectTag = {
+        val: label,
+        col: color,
+        id: tagId
+      }
+    },
+    fetchWorker () {
+      this.$store.dispatch('user/fetchWorkers').then((response) => {
+        this.worker = response.data
+      })
     }
+  },
+  mounted () {
+    this.fetchWorker()
+    this.fetchTags()
   }
 }
 </script>

@@ -13,9 +13,9 @@
             <div class="vx-col w-full sm:w-1/2 md:w-1/2 lg:w-1/3 xl:w-1/3 mb-base">
                 <statistics-card-line
                   v-if="subscribersGained.analyticsData"
-                  icon="UsersIcon"
+                  icon="UserIcon"
                   :statistic="totalUser | k_formatter"
-                  statisticTitle="Total Users"
+                  statisticTitle="Kunde"
                   :chartData="subscribersGained.series"
                   type="area" />
             </div>
@@ -23,7 +23,7 @@
              <div class="vx-col w-full sm:w-1/2 md:w-1/2 lg:w-1/3 xl:w-1/3 mb-base">
                 <statistics-card-line
                   v-if="revenueGenerated.analyticsData"
-                  icon="BookOpenIcon"
+                  icon="FolderIcon"
                   :statistic="totalProject | k_formatter"
                   statisticTitle="Total Projects"
                   :chartData="revenueGenerated.series"
@@ -34,7 +34,7 @@
             <div class="vx-col w-full sm:w-1/2 md:w-1/2 lg:w-1/3 xl:w-1/3 mb-base">
                 <statistics-card-line
                   v-if="quarterlySales.analyticsData"
-                  icon="PenToolIcon"
+                  icon="AlertTriangleIcon"
                   :statistic="totalComplain | k_formatter"
                   statisticTitle="Total Complains"
                   :chartData="quarterlySales.series"
@@ -331,8 +331,7 @@ export default{
   methods: {
     fetchDatas () {
       //   Fetch user, project, complain
-    //   const baseURL = 'https://api.ifm-service.de'
-        const baseURL = 'http://localhost:8080/'
+      const baseURL = process.env.VUE_APP_BASE_URL
 
       axios.all([axios.get(`${baseURL}/api/users`),  axios.get(`${baseURL}/api/project`), axios.get(`${baseURL}/api/complain`)]).then(axios.spread((...responses) => {
         this.totalUser = responses[0].data.length

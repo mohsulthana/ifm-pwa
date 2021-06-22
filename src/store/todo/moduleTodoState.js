@@ -11,6 +11,7 @@
 export default {
   task: [],
   tasks: [],
+  events: [],
   taskTags: [],
   todoSearchQuery: '',
   todoFilter: null

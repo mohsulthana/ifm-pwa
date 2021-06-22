@@ -1,6 +1,6 @@
 <template>
-  <div class="px-6 pb-2 pt-6">
-    <vs-button @click="activePrompt = true" class="w-full" icon="book"
+  <div >
+    <vs-button @click="activePrompt = true" class="w-full" icon="add"
       >Add Complain</vs-button
     >
     <vs-prompt
@@ -71,7 +71,7 @@ export default {
       })
     },
     fetchProjects () {
-      this.$store.dispatch('project/fetchProjects').then((response) => {
+      this.$store.dispatch('project/fetchProjectByCustomer', this.$store.state.AppActiveUser.id).then((response) => {
         this.projects = response.data
       })
     },

@@ -7,15 +7,24 @@
         <tag-setting />
       </div>
     </vs-tab>
+
+    <!-- ADMIN -->
+        <!-- <vs-tab icon-pack="feather" icon="icon-user" :label="!isSmallerScreen ? 'Fachbereichsleiter' : ''">
+      <div class="tab-general md:ml-4 md:mt-0 mt-4 ml-0">
+        <table-admin />
+      </div>
+    </vs-tab> -->
   </vs-tabs>
 </template>
 
 <script>
 import TagSetting from '../../tags/TagSetting.vue'
+import TableAdmin from '../../../views/AdminTable'
 
 export default {
   components: {
-    TagSetting
+    TagSetting,
+    TableAdmin
   },
   data () {
     return {

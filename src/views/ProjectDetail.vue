@@ -9,7 +9,7 @@
         <!-- Avatar Col -->
         <div class="vx-col" id="avatar-col">
           <div class="img-container mb-4">
-            <img :src="project.qr_code" class="rounded" height="250" />
+            <img :src="project.image" class="ml-5 img-fluid rounded" height="250" />
           </div>
         </div>
         <!-- Information - Col 1 -->
@@ -23,20 +23,18 @@
               <td class="font-semibold">Description</td>
               <td>{{ project.description }}</td>
             </tr>
+            <tr>
+              <td class="font-semibold">Start Date</td>
+              <td>{{ project.start_date }}</td>
+            </tr>
+            <tr>
+              <td class="font-semibold">End Date</td>
+              <td>{{ project.end_date }}</td>
+            </tr>
           </table>
         </div>
-        <!-- /Information - Col 1 -->
-        <!-- {{project}} -->
         <div class="vx-col flex-1" id="account-info-col-1">
           <table>
-            <tr>
-              <td class="font-semibold">Created Date</td>
-              <td>{{ project.created_date }}</td>
-            </tr>
-            <tr>
-              <td class="font-semibold">Updated Date</td>
-              <td>{{ project.updated_date }}</td>
-            </tr>
           </table>
         </div>
         <div class="vx-col w-full flex" id="account-manage-buttons">
@@ -45,7 +43,10 @@
         </div>
       </div>
     </vx-card>
-    <vx-card title="Tasks available" class="mb-base">
+    <vx-card v-if="task == ''" title="No Tasks available" class="mb-base">
+      <p class="text-warning">To create more task, press button above</p>
+    </vx-card>
+    <vx-card v-else title="Tasks available" class="mb-base">
       <vs-list>
         <vs-list-item
           v-for="(value, index) in task"
@@ -53,9 +54,11 @@
           :title="value.task"
           :subtitle="value.status"
         >
-          <vs-button icon-pack="feather" icon="icon-edit" color="primary"
+          <todo-modal :taskId="value.id" />
+          <todo-delete :taskId="value.id" />
+          <!-- <vs-button icon-pack="feather" disabled icon="icon-edit" color="primary"
             >Edit</vs-button
-          >
+          > -->
         </vs-list-item>
       </vs-list>
     </vx-card>
@@ -66,6 +69,8 @@
 import ProjectEdit from './ProjectEdit.vue'
 import ProjectDelete from './ProjectDelete.vue'
 import TodoAddNew from './apps/todo/TodoAddNew.vue'
+import TodoModal from './apps/todo/TodoModal.vue'
+import TodoDelete from './apps/todo/TodoDelete.vue'
 
 export default {
   data () {
@@ -81,10 +86,12 @@ export default {
   components: {
     TodoAddNew,
     ProjectEdit,
-    ProjectDelete
+    ProjectDelete,
+    TodoModal,
+    TodoDelete
   },
   created () {
-    this.$store.dispatch('todo/fetchTasks', this.id)
+    this.$store.dispatch('todo/getTasksByProject', this.id)
     this.fetchSingleProject()
   },
   computed: {

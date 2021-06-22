@@ -11,7 +11,7 @@
 <template>
   <div>
     <vs-button
-      :disabled="task.status === 'Done' || task.status === 'Not Completed'"
+      :disabled="task.status === 'Done' || task.status === 'Not Completed' || task.status === 'Cancelled'"
       class="mt-4 mr-2 shadow-lg"
       type="border"
       color="#7367F0"
@@ -22,7 +22,6 @@
     <vs-prompt
       class="mt-4 mr-2 shadow-lg"
       type="border"
-      color="#7367F0"
       gradient-color-secondary="#0158A3"
       title="Upload photo after work"
       accept-text="Finish"
@@ -33,24 +32,94 @@
     >
       <div>
         <form>
-          <small>Please scan below image after you did your work</small>
+          <small>You need to scan this task QR Code to get the token. Please input your token to verify your work after you scan the QR Code</small>
           <vs-row
             vs-align="flex-start"
             vs-type="flex"
             vs-justify="center"
             vs-w="12"
           >
+            <!-- <div v-if="isCameraOpen && !isLoading" class="camera-shoot">
+              <vs-button
+                @click="takePhoto"
+                icon-pack="feather"
+                icon="icon-camera"
+              >
+              </vs-button>
+            </div> -->
+            <!-- <vs-col
+              vs-type="flex"
+              vs-justify="center"
+              vs-align="center"
+              vs-w="12"
+            >
+              <div v-show="isCameraOpen && isLoading" class="camera-loading">
+                <ul class="loader-circle">
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                </ul>
+              </div>
+
+              <div
+                v-if="isCameraOpen"
+                v-show="!isLoading"
+                class="camera-box"
+                :class="{ flash: isShotPhoto }"
+              >
+                <div
+                  class="camera-shutter"
+                  :class="{ flash: isShotPhoto }"
+                ></div>
+
+                <video
+                  v-show="!isPhotoTaken"
+                  ref="camera"
+                  width="'auto'"
+                  :height="300.5"
+                  autoplay
+                ></video>
+
+                <canvas
+                  v-show="isPhotoTaken"
+                  id="photoTaken"
+                  ref="canvas"
+                  :width="300"
+                  :height="300.5"
+                ></canvas>
+              </div>
+            </vs-col> -->
             <vs-col
               vs-type="flex"
               vs-justify="center"
               vs-align="center"
-              vs-w="2"
+              vs-w="12"
             >
-              <img :key="task.id" :src="task.qr_code" :height="200" />
+              <vs-input
+                v-validate="'required'"
+                name="token"
+                :danger="wrongToken"
+                class="w-full my-4"
+                placeholder="Token code"
+                v-model="token"
+                :color="validateForm ? 'success' : 'danger'"
+              />
+              <vs-button
+                @click="verifyToken()"
+                icon-pack="feather"
+                icon="icon-check"
+                color="primary"
+                class="my-4"
+                :class="{ wrongToken: 'mb-5'}"
+              >Verify</vs-button>
             </vs-col>
           </vs-row>
-          <vs-divider class="m-1" />
+
+          <div v-if="wrongToken" class="text-left text-danger">Invalid token</div>
+          <div v-if="isTokenValid" class="text-success">Token is valid</div>
+
           <vs-row
+            v-if="isTokenValid"
             vs-align="flex-center"
             vs-type="flex"
             vs-justify="center"
@@ -64,15 +133,13 @@
             >
               <vs-upload
                 limit="1"
+                @on-delete="uploadDeleted"
                 @on-success="successUpload"
                 @change="connvertImage"
                 show-upload-button
               />
             </vs-col>
-            <vs-checkbox v-model="photoAfter"
-              >I have scanned QR code above</vs-checkbox
-            >
-              <span>{{ errors.first('photoAfter') }}</span>
+            <small>Upload your work with button above</small>
           </vs-row>
         </form>
       </div>
@@ -91,6 +158,13 @@ export default {
     return {
       photoAfter: false,
       activePrompt: false,
+      wrongToken: false,
+      isCameraOpen: false,
+      isPhotoTaken: false,
+      isShotPhoto: false,
+      isLoading: false,
+      token: '',
+      isTokenValid: false,
       project: {
         id: this.task.id,
         after_work: '',
@@ -100,7 +174,7 @@ export default {
   },
   computed: {
     validateForm () {
-      return !this.errors.any() && this.photoAfter === true
+      return !this.errors.any() && this.project.after_work.length > 0 && this.isTokenValid === true
     }
   },
   methods: {
@@ -121,6 +195,21 @@ export default {
     },
     successUpload () {
       alert('success')
+    },
+    uploadDeleted () {
+      this.project.after_work = ''
+    },
+    verifyToken () {
+      const token = { token: this.token, id: this.task.id }
+      this.$store.dispatch('todo/verifyToken', Object.assign({}, token))
+        .then(() => {
+          this.isTokenValid = true
+          this.wrongToken = false
+        })
+        .catch(() => {
+          this.wrongToken = true
+          this.isTokenValid = false
+        })
     },
     connvertImage (event, target) {
       const self = this

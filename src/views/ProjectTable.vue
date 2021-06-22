@@ -1,18 +1,16 @@
 <template>
   <div>
-    <vx-card title="Project">
+    <vx-card title="Project folder">
       <!-- TABLE ACTION COL-2: ADD NEW USERS -->
       <template slot="actions">
         <project-add-new :customer="customers"/>
       </template>
-      <!-- {{this.$store.state.AppActiveUser}} -->
       <vs-table max-items="10" pagination search stripe :data="projectList">
         <template slot="thead">
           <vs-th sort-key="no">No</vs-th>
           <vs-th sort-key="project">Project</vs-th>
           <vs-th sort-key="description">Description</vs-th>
-          <vs-th sort-key="created">Created At</vs-th>
-          <!-- <vs-th sort-key="action">Action</vs-th> -->
+          <vs-th sort-key="tag">Tag</vs-th>
         </template>
 
         <template slot-scope="{ data }">
@@ -27,13 +25,16 @@
             <vs-td :data="data[indextr].description">
               {{ data[indextr].description }}
             </vs-td>
-            <vs-td :data="data[indextr].created_date">
-              {{ data[indextr].created_date }}
+            <vs-td :data="data[indextr].tag" v-if="data[indextr].tag != null">
+              <div
+                class="h-3 w-3 inline-block rounded-full mr-2"
+                :style="{background: data[indextr].tag_color}"
+              ></div>
+              <span>{{ data[indextr].tag_name }}</span>
             </vs-td>
-            <!-- <vs-td>
-              <project-edit :projectId="data[indextr].id"/>
-              <project-delete :projectId="data[indextr].id"/>
-            </vs-td> -->
+            <vs-td :data="data[indextr].tag" v-else>
+                          No tag
+            </vs-td>
           <!-- </vs-tr> -->
           </router-link>
         </template>

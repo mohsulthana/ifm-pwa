@@ -68,9 +68,9 @@
                         }}</span>
 
                         <div class="flex flex-wrap justify-between my-5">
-                          <router-link to="/pages/forgot-password"
+                          <!-- <router-link to="/pages/forgot-password"
                             >Forgot Password?</router-link
-                          >
+                          > -->
                         </div>
                         <div class="flex flex-wrap justify-between mb-3">
                           <!-- <vs-button type="border" @click="registerUser"
@@ -118,9 +118,9 @@
                         }}</span>
 
                         <div class="flex flex-wrap justify-between my-5">
-                          <router-link to="/pages/forgot-password"
+                          <!-- <router-link to="/pages/forgot-password"
                             >Forgot Password?</router-link
-                          >
+                          > -->
                         </div>
                         <div class="flex flex-wrap justify-between mb-3">
                           <!-- <vs-button type="border" @click="registerUser"
@@ -134,7 +134,7 @@
                         </div>
                       </div>
                     </vs-tab>
-                    <vs-tab label="Customer">
+                    <vs-tab label="Kunde">
                       <div class="con-tab-ejemplo">
                         <vs-input
                           v-validate="'required|email|min:3'"
@@ -143,7 +143,7 @@
                           icon-no-border
                           icon="icon icon-user"
                           icon-pack="feather"
-                          label-placeholder="Email Customer"
+                          label-placeholder="Email Kunde"
                           v-model="customer.email"
                           class="w-full"
                         />
@@ -168,9 +168,9 @@
                         }}</span>
 
                         <div class="flex flex-wrap justify-between my-5">
-                          <router-link to="/pages/forgot-password"
+                          <!-- <router-link to="/pages/forgot-password"
                             >Forgot Password?</router-link
-                          >
+                          > -->
                         </div>
                         <div class="flex flex-wrap justify-between mb-3">
                           <!-- <vs-button type="border" @click="registerUser"
@@ -218,9 +218,9 @@
                         }}</span>
 
                         <div class="flex flex-wrap justify-between my-5">
-                          <router-link to="/pages/forgot-password"
+                          <!-- <router-link to="/pages/forgot-password"
                             >Forgot Password?</router-link
-                          >
+                          > -->
                         </div>
                         <div class="flex flex-wrap justify-between mb-3">
                           <!-- <vs-button type="border" @click="registerUser"
@@ -251,20 +251,20 @@ export default {
   data () {
     return {
       admin: {
-        email: 'admin@gmail.com',
-        password: '123456'
+        email: '',
+        password: ''
       },
       superadmin: {
-        email: 'super@gmail.com',
-        password: '123456'
+        email: '',
+        password: ''
       },
       customer: {
-        email: 'customer@gmail.com',
-        password: '123456'
+        email: '',
+        password: ''
       },
       worker: {
-        email: 'worker@gmail.com',
-        password: '123456'
+        email: '',
+        password: ''
       },
       checkbox_remember_me: false
     }
@@ -279,7 +279,6 @@ export default {
       // If user is already logged in notify
       if (this.$store.state.auth.isUserLoggedIn()) {
         // Close animation if passed as payload
-        // this.$vs.loading.close()
 
         this.$vs.notify({
           title: 'Login Attempt',
@@ -294,8 +293,6 @@ export default {
       return true
     },
     loginSuper () {
-      // Loading
-      this.$vs.loading()
 
       const payload = {
         checkbox_remember_me: this.checkbox_remember_me,
@@ -309,7 +306,6 @@ export default {
         .dispatch('auth/loginSuper', payload)
         .then(() => {
           this.$router.push('/dashboard/super')
-          this.$vs.loading.close()
         })
         .catch(() => {
           this.$vs.notify({
@@ -322,8 +318,6 @@ export default {
         })
     },
     loginAdmin () {
-      // Loading
-      this.$vs.loading()
 
       const payload = {
         checkbox_remember_me: this.checkbox_remember_me,
@@ -337,10 +331,8 @@ export default {
         .dispatch('auth/loginAdmin', payload)
         .then(() => {
           this.$router.push('/dashboard/admin')
-          this.$vs.loading.close()
         })
         .catch(() => {
-          this.$vs.loading.close()
           this.$vs.notify({
             title: 'Error',
             text: 'Credentials not found',
@@ -351,8 +343,6 @@ export default {
         })
     },
     loginCustomer () {
-      // Loading
-      this.$vs.loading()
 
       const payload = {
         checkbox_remember_me: this.checkbox_remember_me,
@@ -366,10 +356,8 @@ export default {
         .dispatch('auth/loginCustomer', payload)
         .then(() => {
           this.$router.push('/dashboard/customer')
-          this.$vs.loading.close()
         })
         .catch(() => {
-          this.$vs.loading.close()
           this.$vs.notify({
             title: 'Error',
             text: 'Credentials not found',
@@ -380,8 +368,6 @@ export default {
         })
     },
     loginWorker () {
-      // Loading
-      this.$vs.loading()
 
       const payload = {
         checkbox_remember_me: this.checkbox_remember_me,
@@ -395,10 +381,8 @@ export default {
         .dispatch('auth/loginWorker', payload)
         .then(() => {
           this.$router.push('/dashboard/worker')
-          this.$vs.loading.close()
         })
         .catch(() => {
-          this.$vs.loading.close()
           this.$vs.notify({
             title: 'Error',
             text: 'Credentials not found',

@@ -1,15 +1,16 @@
 <template>
-  <div class="px-6 pb-2 pt-6">
+  <span>
     <vs-button
       disabled
       @click="openConfirm()"
       type="border"
       color="danger"
-      icon="delete"
+      icon="icon-trash"
+      icon-pack="feather"
       size="small"
       >Delete</vs-button
     >
-  </div>
+  </span>
 </template>
 
 <script>

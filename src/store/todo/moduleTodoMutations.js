@@ -24,9 +24,11 @@ export default {
     state.task = task
   },
   ADD_TASK (state, task) {
-    state.tasks.push(task)
+
+    state.tasks.push(task.data[0])
   },
   DELETE_TASK (state, task) {
+    console.log(task)
     const taskIndex = state.tasks.findIndex((u) => u.id === task)
     state.tasks.splice(taskIndex, 1)
   },
@@ -41,5 +43,8 @@ export default {
   UPDATE_PHOTO_AFTER (state, photo) {
     state.task.after_work = photo
     state.task.status = 'Done'
+  },
+  ADD_TASK_EVENTS (state, events) {
+    state.events = events
   }
 }

@@ -9,7 +9,21 @@
 
 <template>
   <div id="item-detail-page">
-    <vx-card :title="`Task ${task.task}`">
+      <vs-button color="primary" type="border" @click="$router.go(-1)" class="mb-5" icon="icon-chevron-left" icon-pack="feather">Back</vs-button>
+
+    <vx-card :title="`${task.task}`">
+      <template slot="actions">
+        <cancel-task  v-if="task.status == 'On Progress' || task.status == 'Not Completed'" />
+                    <vs-button
+                    v-else
+      type="flat"
+      color="success"
+      icon="icon-flag"
+      icon-pack="feather"
+      >{{ task.status }}</vs-button
+    >
+      </template>
+
       <template slot="no-body">
         <div class="item-content">
           <!-- Item Main Info -->
@@ -19,6 +33,7 @@
                 class="vx-col md:w-2/5 w-full flex items-center justify-center"
               >
                 <div class="product-img-container w-3/5 mx-auto mb-10 md:mb-0">
+                  <span>Image Before Work</span>
                   <img
                     v-if="task.before_work === ''"
                     src="https://icon2.cleanpng.com/20180605/ijl/kisspng-computer-icons-image-file-formats-no-image-5b16ff0d2414b5.0787389815282337411478.jpg"
@@ -31,10 +46,9 @@
                     alt="Before work"
                     class="responsive"
                   />
-                  <span>Image Before Work</span>
                 </div>
                 <div class="product-img-container w-3/5 mx-auto mb-10 md:mb-0">
-
+                  <span>Image After Work</span>
                   <img
                     v-if="task.after_work === ''"
                     src="https://icon2.cleanpng.com/20180605/ijl/kisspng-computer-icons-image-file-formats-no-image-5b16ff0d2414b5.0787389815282337411478.jpg"
@@ -47,7 +61,6 @@
                     alt="After work"
                     class="responsive"
                   />
-                  <span>Image After Work</span>
                 </div>
               </div>
 
@@ -56,7 +69,7 @@
                 <h3>{{ task.task }}</h3>
 
                 <p class="my-2">
-                  <span class="mr-2">Status {{ task.status }}</span>
+                  <span class="mr-2 text-danger" v-if="task.status == 'Not Completed'">{{ task.status }}</span>
                   <!-- <span>{{ item_data.brand }}</span> -->
                 </p>
                 <vs-divider />
@@ -127,9 +140,11 @@ import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import StarRating from 'vue-star-rating'
 import TaskBeforeWork from './TaskUpdateBeforeWork'
 import TaskAfterWork from './TaskUpdateAfterWork'
+import CancelTask from './CancelTask'
 
 export default {
   components: {
+    CancelTask,
     swiper,
     swiperSlide,
     StarRating,

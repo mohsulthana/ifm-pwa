@@ -1,5 +1,5 @@
 <template>
-  <div class="px-6 pb-2 pt-6">
+  <span >
     <vs-button
       disabled
       @click="activePrompt = true"
@@ -46,7 +46,7 @@
         </form>
       </div>
     </vs-prompt>
-  </div>
+  </span>
 </template>
 
 <script>

@@ -25,8 +25,8 @@
               {{ data[indextr].description }}
             </vs-td>
             <vs-td>
-              <service-delete :serviceId="data[indextr].id"/>
               <service-edit :serviceId="data[indextr]"/>
+              <service-delete :serviceId="data[indextr].id"/>
             </vs-td>
           </vs-tr>
         </template>
@@ -69,4 +69,7 @@ export default {
 </script>
 
 <style>
+.includeIcon {
+  display: inline-flex !important;
+}
 </style>

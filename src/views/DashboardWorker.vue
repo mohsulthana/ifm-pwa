@@ -9,7 +9,8 @@
 
 <template>
   <div id="simple-calendar-app">
-        <div class="vx-card no-scroll-content">
+    <!-- {{simpleCalendarEvents}} -->
+    <div class="vx-card no-scroll-content">
       <calendar-view
         ref="calendar"
         :displayPeriodUom="calendarView"
@@ -22,34 +23,43 @@
         class="theme-default"
         @click-date="openAddNewEvent"
         @click-event="openEditEvent"
-        @drop-on-date="eventDragged">
-
+        @drop-on-date="eventDragged"
+      >
         <div slot="header" class="mb-4">
-
           <div class="vx-row no-gutter">
-
             <!-- Month Name -->
             <div class="vx-col w-1/3 items-center sm:flex hidden">
               <!-- Add new event button -->
-              <vs-button icon-pack="feather" icon="icon-plus" @click="promptAddNewEvent(new Date())">Add</vs-button>
+              <vs-button
+                icon-pack="feather"
+                icon="icon-plus"
+                @click="promptAddNewEvent(new Date())"
+                >Add</vs-button
+              >
             </div>
 
             <!-- Current Month -->
-            <div class="vx-col sm:w-1/3 w-full sm:my-0 my-3 flex sm:justify-end justify-center order-last">
+            <div
+              class="vx-col sm:w-1/3 w-full sm:my-0 my-3 flex sm:justify-end justify-center order-last"
+            >
               <div class="flex items-center">
                 <feather-icon
                   :icon="$vs.rtl ? 'ChevronRightIcon' : 'ChevronLeftIcon'"
                   @click="updateMonth(-1)"
                   svgClasses="w-5 h-5 m-1"
-                  class="cursor-pointer bg-primary text-white rounded-full" />
+                  class="cursor-pointer bg-primary text-white rounded-full"
+                />
 
-                <span class="mx-3 text-xl font-medium whitespace-no-wrap">{{ showDate | month }}</span>
+                <span class="mx-3 text-xl font-medium whitespace-no-wrap">{{
+                  showDate | month
+                }}</span>
 
                 <feather-icon
                   :icon="$vs.rtl ? 'ChevronLeftIcon' : 'ChevronRightIcon'"
                   @click="updateMonth(1)"
                   svgClasses="w-5 h-5 m-1"
-                  class="cursor-pointer bg-primary text-white rounded-full" />
+                  class="cursor-pointer bg-primary text-white rounded-full"
+                />
               </div>
             </div>
 
@@ -60,19 +70,26 @@
                   :key="String(view.val) + 'filled'"
                   type="filled"
                   class="p-3 md:px-8 md:py-3"
-                  :class="{'border-l-0 rounded-l-none': index, 'rounded-r-none': calendarViewTypes.length !== index+1}"
+                  :class="{
+                    'border-l-0 rounded-l-none': index,
+                    'rounded-r-none': calendarViewTypes.length !== index + 1,
+                  }"
                   @click="calendarView = view.val"
-                  >{{ view.label }}</vs-button>
+                  >{{ view.label }}</vs-button
+                >
                 <vs-button
                   v-else
                   :key="String(view.val) + 'border'"
                   type="border"
                   class="p-3 md:px-8 md:py-3"
-                  :class="{'border-l-0 rounded-l-none': index, 'rounded-r-none': calendarViewTypes.length !== index+1}"
+                  :class="{
+                    'border-l-0 rounded-l-none': index,
+                    'rounded-r-none': calendarViewTypes.length !== index + 1,
+                  }"
                   @click="calendarView = view.val"
-                  >{{ view.label }}</vs-button>
+                  >{{ view.label }}</vs-button
+                >
               </template>
-
             </div>
           </div>
 
@@ -80,14 +97,23 @@
             <div class="vx-col w-full flex">
               <!-- Labels -->
               <div class="flex flex-wrap sm:justify-start justify-center">
-                  <div v-for="(label, index) in calendarLabels" :key="index" class="flex items-center mr-4 mb-2">
-                      <div class="h-3 w-3 inline-block rounded-full mr-2" :class="'bg-' + label.color"></div>
-                      <span>{{ label.text }}</span>
-                  </div>
-                  <div class="flex items-center mr-4 mb-2">
-                      <div class="h-3 w-3 inline-block rounded-full mr-2 bg-primary"></div>
-                      <span>None</span>
-                  </div>
+                <div
+                  v-for="(label, index) in calendarLabels"
+                  :key="index"
+                  class="flex items-center mr-4 mb-2"
+                >
+                  <div
+                    class="h-3 w-3 inline-block rounded-full mr-2"
+                    :class="'bg-' + label.color"
+                  ></div>
+                  <span>{{ label.text }}</span>
+                </div>
+                <div class="flex items-center mr-4 mb-2">
+                  <div
+                    class="h-3 w-3 inline-block rounded-full mr-2 bg-primary"
+                  ></div>
+                  <span>None</span>
+                </div>
               </div>
             </div>
           </div>
@@ -97,95 +123,169 @@
 
     <!-- ADD EVENT -->
     <vs-prompt
-        class="calendar-event-dialog"
-        title="Add Event"
-        accept-text= "Add Event"
-        @accept="addEvent"
-        :is-valid="validForm"
-        :active.sync="activePromptAddEvent">
+      class="calendar-event-dialog"
+      title="Add Event"
+      accept-text="Add Event"
+      @accept="addEvent"
+      :is-valid="validForm"
+      :active.sync="activePromptAddEvent"
+    >
+      <div class="calendar__label-container flex">
+        <vs-chip
+          v-if="labelLocal != 'none'"
+          class="text-white"
+          :class="'bg-' + labelColor(labelLocal)"
+          >{{ labelLocal }}</vs-chip
+        >
 
-        <div class="calendar__label-container flex">
+        <vs-dropdown
+          vs-custom-content
+          vs-trigger-click
+          class="ml-auto my-2 cursor-pointer"
+        >
+          <feather-icon
+            icon="TagIcon"
+            svgClasses="h-5 w-5"
+            class="cursor-pointer"
+            @click.prevent
+          ></feather-icon>
 
-            <vs-chip v-if="labelLocal != 'none'" class="text-white" :class="'bg-' + labelColor(labelLocal)">{{ labelLocal }}</vs-chip>
+          <vs-dropdown-menu style="z-index: 200001">
+            <vs-dropdown-item
+              v-for="(label, index) in calendarLabels"
+              :key="index"
+              @click="labelLocal = label.value"
+            >
+              <div
+                class="h-3 w-3 inline-block rounded-full mr-2"
+                :class="'bg-' + label.color"
+              ></div>
+              <span>{{ label.text }}</span>
+            </vs-dropdown-item>
 
-            <vs-dropdown vs-custom-content vs-trigger-click class="ml-auto my-2 cursor-pointer">
+            <vs-dropdown-item @click="labelLocal = 'none'">
+              <div
+                class="h-3 w-3 mr-1 inline-block rounded-full mr-2 bg-primary"
+              ></div>
+              <span>None</span>
+            </vs-dropdown-item>
+          </vs-dropdown-menu>
+        </vs-dropdown>
+      </div>
 
-                <feather-icon icon="TagIcon" svgClasses="h-5 w-5" class="cursor-pointer" @click.prevent></feather-icon>
-
-                <vs-dropdown-menu style="z-index: 200001">
-                        <vs-dropdown-item v-for="(label, index) in calendarLabels" :key="index" @click="labelLocal = label.value">
-                            <div class="h-3 w-3 inline-block rounded-full mr-2" :class="'bg-' + label.color"></div>
-                            <span>{{ label.text }}</span>
-                        </vs-dropdown-item>
-
-                        <vs-dropdown-item @click="labelLocal = 'none'">
-                            <div class="h-3 w-3 mr-1 inline-block rounded-full mr-2 bg-primary"></div>
-                            <span>None</span>
-                        </vs-dropdown-item>
-                </vs-dropdown-menu>
-            </vs-dropdown>
-
-        </div>
-
-        <vs-input name="event-name" v-validate="'required'" class="w-full" label-placeholder="Event Title" v-model="title"></vs-input>
-        <div class="my-4">
-            <small class="date-label">Start Date</small>
-            <datepicker :language="$vs.rtl ? langHe : langEn" name="start-date" v-model="startDate" :disabled="disabledFrom"></datepicker>
-        </div>
-        <div class="my-4">
-            <small class="date-label">End Date</small>
-            <datepicker :language="$vs.rtl ? langHe : langEn" :disabledDates="disabledDatesTo" name="end-date" v-model="endDate"></datepicker>
-        </div>
-        <vs-input name="event-url" v-validate="'url'" class="w-full mt-6" label-placeholder="Event URL" v-model="url" :color="!errors.has('event-url') ? 'success' : 'danger'"></vs-input>
-
+      <vs-input
+        name="event-name"
+        v-validate="'required'"
+        class="w-full"
+        label-placeholder="Event Title"
+        v-model="title"
+      ></vs-input>
+      <div class="my-4">
+        <small class="date-label">Start Date</small>
+        <datepicker
+          :language="$vs.rtl ? langHe : langEn"
+          name="start-date"
+          v-model="startDate"
+          :disabled="disabledFrom"
+        ></datepicker>
+      </div>
+      <div class="my-4">
+        <small class="date-label">End Date</small>
+        <datepicker
+          :language="$vs.rtl ? langHe : langEn"
+          :disabledDates="disabledDatesTo"
+          name="end-date"
+          v-model="endDate"
+        ></datepicker>
+      </div>
+      <vs-input
+        name="event-url"
+        v-validate="'url'"
+        class="w-full mt-6"
+        label-placeholder="Event URL"
+        v-model="url"
+        :color="!errors.has('event-url') ? 'success' : 'danger'"
+      ></vs-input>
     </vs-prompt>
 
     <!-- EDIT EVENT -->
     <vs-prompt
-        class="calendar-event-dialog"
-        title="Edit Event"
-        accept-text= "Submit"
-        cancel-text = "Remove"
-        button-cancel = "border"
-        @cancel="removeEvent"
-        @accept="editEvent"
-        :is-valid="validForm"
-        :active.sync="activePromptEditEvent">
+      class="calendar-event-dialog"
+      title="View Task"
+      :is-valid="validForm"
+      :active.sync="activePromptEditEvent"
+    >
+      <div class="calendar__label-container flex">
+        <vs-chip
+          v-if="labelLocal != 'none'"
+          class="text-white"
+          :class="'bg-' + labelColor(labelLocal)"
+          >{{ labelLocal }}</vs-chip
+        >
 
-        <div class="calendar__label-container flex">
+        <vs-dropdown vs-custom-content class="ml-auto my-2 cursor-pointer">
+          <feather-icon
+            icon="TagIcon"
+            svgClasses="h-5 w-5"
+            @click.prevent
+          ></feather-icon>
 
-            <vs-chip v-if="labelLocal != 'none'" class="text-white" :class="'bg-' + labelColor(labelLocal)">{{ labelLocal }}</vs-chip>
+          <vs-dropdown-menu style="z-index: 200001">
+            <vs-dropdown-item
+              v-for="(label, index) in calendarLabels"
+              :key="index"
+              @click="labelLocal = label.value"
+            >
+              <div
+                class="h-3 w-3 inline-block rounded-full mr-2"
+                :class="'bg-' + label.color"
+              ></div>
+              <span>{{ label.text }}</span>
+            </vs-dropdown-item>
 
-            <vs-dropdown vs-custom-content class="ml-auto my-2 cursor-pointer">
+            <vs-dropdown-item @click="labelLocal = 'none'">
+              <div
+                class="h-3 w-3 mr-1 inline-block rounded-full mr-2 bg-primary"
+              ></div>
+              <span>None</span>
+            </vs-dropdown-item>
+          </vs-dropdown-menu>
+        </vs-dropdown>
+      </div>
 
-                <feather-icon icon="TagIcon" svgClasses="h-5 w-5" @click.prevent></feather-icon>
-
-                <vs-dropdown-menu style="z-index: 200001">
-                        <vs-dropdown-item v-for="(label, index) in calendarLabels" :key="index" @click="labelLocal = label.value">
-                            <div class="h-3 w-3 inline-block rounded-full mr-2" :class="'bg-' + label.color"></div>
-                            <span>{{ label.text }}</span>
-                        </vs-dropdown-item>
-
-                        <vs-dropdown-item @click="labelLocal = 'none'">
-                            <div class="h-3 w-3 mr-1 inline-block rounded-full mr-2 bg-primary"></div>
-                            <span>None</span>
-                        </vs-dropdown-item>
-                </vs-dropdown-menu>
-            </vs-dropdown>
-
-        </div>
-
-        <vs-input name="event-name" v-validate="'required'" class="w-full" label-placeholder="Event Title" v-model="title"></vs-input>
-        <div class="my-4">
-            <small class="date-label">Start Date</small>
-            <datepicker :language="$vs.rtl ? langHe : langEn" :disabledDates="disabledDatesFrom" name="start-date" v-model="startDate"></datepicker>
-        </div>
-        <div class="my-4">
-            <small class="date-label">End Date</small>
-            <datepicker :language="$vs.rtl ? langHe : langEn" :disabledDates="disabledDatesTo" name="end-date" v-model="endDate"></datepicker>
-        </div>
-        <vs-input name="event-url" v-validate="'url'" class="w-full mt-6" label-placeholder="Event URL" v-model="url" :color="!errors.has('event-url') ? 'success' : 'danger'"></vs-input>
-
+      <vs-input
+        name="event-name"
+        v-validate="'required'"
+        class="w-full"
+        label-placeholder="Event Title"
+        v-model="title"
+      ></vs-input>
+      <div class="my-4">
+        <small class="date-label">Start Date</small>
+        <datepicker
+          :language="$vs.rtl ? langHe : langEn"
+          :disabledDates="disabledDatesFrom"
+          name="start-date"
+          v-model="startDate"
+        ></datepicker>
+      </div>
+      <div class="my-4">
+        <small class="date-label">End Date</small>
+        <datepicker
+          :language="$vs.rtl ? langHe : langEn"
+          :disabledDates="disabledDatesTo"
+          name="end-date"
+          v-model="endDate"
+        ></datepicker>
+      </div>
+      <!-- <vs-input
+        name="event-url"
+        v-validate="'url'"
+        class="w-full mt-6"
+        label-placeholder="Event URL"
+        v-model="url"
+        :color="!errors.has('event-url') ? 'success' : 'danger'"
+      ></vs-input> -->
     </vs-prompt>
   </div>
 </template>
@@ -198,7 +298,9 @@ require('vue-simple-calendar/static/css/default.css')
 
 import Datepicker from 'vuejs-datepicker'
 import { en, he } from 'vuejs-datepicker/src/locale'
+import axios from '@/axios.js'
 
+//[ { "id": 1, "title": "My Event", "startDate": "2021-04-30T18:27:59.361Z", "endDate": "2021-05-01T18:27:59.361Z", "url": "", "classes": "event-success", "label": "business" } ]
 export default {
   components: {
     CalendarView,
@@ -207,6 +309,7 @@ export default {
   },
   data () {
     return {
+      simpleCalendarEvents: [],
       showDate: new Date(),
       disabledFrom: false,
       id: 0,
@@ -241,11 +344,17 @@ export default {
     }
   },
   computed: {
-    simpleCalendarEvents () {
-      return this.$store.state.calendar.events
-    },
+    // simpleCalendarEvents () {
+    //   return this.$store.state.calendar.events
+    // },
     validForm () {
-      return this.title !== '' && this.startDate !== '' && this.endDate !== '' && Date.parse(this.endDate) - Date.parse(this.startDate) >= 0 && !this.errors.has('event-url')
+      return (
+        this.title !== '' &&
+        this.startDate !== '' &&
+        this.endDate !== '' &&
+        Date.parse(this.endDate) - Date.parse(this.startDate) >= 0 &&
+        !this.errors.has('event-url')
+      )
     },
     disabledDatesTo () {
       return { to: new Date(this.startDate) }
@@ -258,10 +367,10 @@ export default {
     },
     labelColor () {
       return (label) => {
-        if      (label === 'business') return 'success'
-        else if (label === 'work')     return 'warning'
+        if (label === 'business') return 'success'
+        else if (label === 'work') return 'warning'
         else if (label === 'personal') return 'danger'
-        else if (label === 'none')     return 'primary'
+        else if (label === 'none') return 'primary'
       }
     },
     windowWidth () {
@@ -269,9 +378,33 @@ export default {
     }
   },
   methods: {
+    taskEvents () {
+      const worker_id = this.$store.state.AppActiveUser.id
+      this.$store.dispatch('todo/getTasks', worker_id)
+        .then((response) => {
+          response.data.forEach((element) => {
+            this.simpleCalendarEvents.push({
+              id: element.id,
+              title: element.task,
+              startDate: element.start_date,
+              endDate: element.end_date,
+              classes: 'event-success'
+            })
+          })
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
     addEvent () {
-      const obj = { title: this.title, startDate: this.startDate, endDate: this.endDate, label: this.labelLocal, url: this.url }
-      obj.classes = `event-${  this.labelColor(this.labelLocal)}`
+      const obj = {
+        title: this.title,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        label: this.labelLocal,
+        url: this.url
+      }
+      obj.classes = `event-${this.labelColor(this.labelLocal)}`
       this.$store.dispatch('calendar/addEvent', obj)
     },
     updateMonth (val) {
@@ -297,28 +430,37 @@ export default {
       this.addNewEventDialog(date)
     },
     openEditEvent (event) {
-      const e = this.$store.getters['calendar/getEvent'](event.id)
+      const e = this.$store.getters['todo/getEvent'](event.id)
+      console.log(e)
       this.id = e.id
-      this.title = e.title
-      this.startDate = e.startDate
-      this.endDate = e.endDate
-      this.url = e.url
-      this.labelLocal = e.label
+      this.title = e.task
+      this.startDate = e.start_date
+      this.endDate = e.end_date
+      // this.url = e.url
+      // this.labelLocal = e.label
       this.activePromptEditEvent = true
     },
     editEvent () {
-      const obj = { id: this.id, title: this.title, startDate: this.startDate, endDate: this.endDate, label: this.labelLocal, url: this.url }
-      obj.classes = `event-${  this.labelColor(this.labelLocal)}`
+      const obj = {
+        id: this.id,
+        title: this.title,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        label: this.labelLocal,
+        url: this.url
+      }
+      obj.classes = `event-${this.labelColor(this.labelLocal)}`
       this.$store.dispatch('calendar/editEvent', obj)
     },
     removeEvent () {
       this.$store.dispatch('calendar/removeEvent', this.id)
     },
     eventDragged (event, date) {
-      this.$store.dispatch('calendar/eventDragged', {event, date})
+      this.$store.dispatch('calendar/eventDragged', { event, date })
     }
   },
   created () {
+    this.taskEvents()
     this.$store.registerModule('calendar', moduleCalendar)
     this.$store.dispatch('calendar/fetchEvents')
     this.$store.dispatch('calendar/fetchEventLabels')

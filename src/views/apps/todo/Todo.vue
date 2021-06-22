@@ -11,7 +11,7 @@
 <template>
     <div id="todo-app" class="border border-solid d-theme-border-grey-light rounded relative overflow-hidden">
         <vs-sidebar class="items-no-padding" parent="#todo-app" :click-not-close="clickNotClose" :hidden-background="clickNotClose" v-model="isSidebarActive">
-          <div class="px-6 pb-2 pt-6">
+          <div >
             <vs-button color="primary" class="w-full mt-5" type="filled" :to="{ path: '/download-data'}" icon="input">Download Data</vs-button>
           </div>
 
@@ -32,25 +32,30 @@
             </div>
 
             <!-- TODO LIST -->
-            <component :is="scrollbarTag" class="todo-content-scroll-area" :settings="settings" ref="taskListPS" :key="$vs.rtl">
+          <div v-if="taskList.length > 0">
+            <VuePerfectScrollbar class="todo-content-scroll-area-container" :settings="settings" ref="taskListPS" :key="$vs.rtl">
+              <component :is="scrollbarTag" class="todo-content-scroll-area" :settings="settings" ref="taskListPS" :key="$vs.rtl">
+                  <transition-group class="todo-list" name="list-enter-up" tag="ul" appear>
+                      <li
+                        class="cursor-pointer todo_todo-item"
+                        v-for="(task, index) in taskList"
+                        :key="String(currFilter) + String(task.id)"
+                        :style="[{transitionDelay: (index * 0.1) + 's'}]">
+                        <todo-task :taskId="task.id" @showDisplayPrompt="showDisplayPrompt($event)" :key="String(task.title) + String(task.desc)" />
+                          <!--
+                          Note: Remove "todo-task" component's key just concat lastUpdated field in li key list.
+                          e.g. <li class="..." v-for="..." :key="String(currFilter) + String(task.id) + String(task.lastUpdated)" .. >
+                          -->
+                      </li>
+                  </transition-group>
+              </component>
+              </VuePerfectScrollbar>
+          </div>
 
-                <transition-group class="todo-list" name="list-enter-up" tag="ul" appear>
-                    <li
-                      class="cursor-pointer todo_todo-item"
-                      v-for="(task, index) in taskList"
-                      :key="String(currFilter) + String(task.id)"
-                      :style="[{transitionDelay: (index * 0.1) + 's'}]">
-
-                      <todo-task :taskId="task.id" @showDisplayPrompt="showDisplayPrompt($event)" :key="String(task.title) + String(task.desc)" />
-                        <!--
-                        Note: Remove "todo-task" component's key just concat lastUpdated field in li key list.
-                        e.g. <li class="..." v-for="..." :key="String(currFilter) + String(task.id) + String(task.lastUpdated)" .. >
-                        -->
-                    </li>
-                </transition-group>
-            </component>
+            <div class="text-center" v-else>
+              <h5 class="mt-5">No task available for this project</h5>
+            </div>
             <!-- /TODO LIST -->
-
         </div>
 
         <!-- EDIT TODO DIALOG -->
@@ -89,7 +94,7 @@ export default {
 
       // Fetch Tasks
       const filter = this.$route.params.filter
-      this.$store.dispatch('todo/fetchTasks', { filter })
+      this.$store.dispatch('todo/getTasksByProject', { filter })
       this.$store.commit('todo/UPDATE_TODO_FILTER', filter)
     },
     windowWidth () {
@@ -129,14 +134,13 @@ export default {
     VuePerfectScrollbar
   },
   created () {
-    this.$store.registerModule('todo', moduleTodo)
     this.setSidebarWidth()
 
     const filter = this.$route.params.filter
 
     // Fetch Tasks
-    console.log(this.$store.state.AppActiveUser)
-    this.$store.dispatch('todo/fetchTaskForWorker', this.$store.state.AppActiveUser.id)
+    const params = this.$route.params.id
+    this.$store.dispatch('todo/fetchTaskForWorker', params)
     this.$store.commit('todo/UPDATE_TODO_FILTER', filter)
 
     // Fetch Tags
@@ -152,4 +156,10 @@ export default {
 
 <style lang="scss">
 @import "@/assets/scss/vuexy/apps/todo.scss";
+.todo-content-scroll-area-container {
+  position: relative;
+  margin: auto;
+  width: 1200px;
+  height: 1200px;
+}
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vx-card title="Admin list">
+    <vx-card title="Fachbereichsleiter">
       <!-- TABLE ACTION COL-2: ADD NEW USERS -->
       <template slot="actions">
         <admin-add-new :service="serviceList"/>
@@ -81,4 +81,7 @@ export default {
 </script>
 
 <style>
+.includeIcon {
+  display: inline-flex !important;
+}
 </style>

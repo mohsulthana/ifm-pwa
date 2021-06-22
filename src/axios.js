@@ -1,34 +1,33 @@
-// axios
 import axios from 'axios'
-// import store from './store/index'
 
-const baseURL = 'http://localhost:8080'
-// const baseURL = 'https://api.ifm-service.de'
+// const baseURL = process.env.VUE_APP_BASE_URL
+const baseURL = 'https://api.ifm-service.de'
 
 const instance = axios.create({
   baseURL,
-  // You can add your headers here
   headers: { 'Content-Type': 'application/json' }
 })
 
 const appLoading = document.getElementById('loading-bg')
-// if (appLoading) {
-//   appLoading.style.display = 'none'
-// }
 
 instance.interceptors.request.use(function (config) {
   appLoading.style.display = 'block'
+  appLoading.style.transition = 'all 2s'
   return config
 }, function (error) {
+  appLoading.style.display = 'block'
+  appLoading.style.transition = 'all 2s'
   return Promise.reject(error)
 })
 
 // Add a response interceptor
 instance.interceptors.response.use(function (response) {
-  console.log(response)
   appLoading.style.display = 'none'
+  appLoading.style.transition = 'all 2s'
   return response
 }, function (error) {
+  appLoading.style.display = 'none'
+  appLoading.style.transition = 'all 2s'
   return Promise.reject(error)
 })
 

@@ -13,10 +13,23 @@ export default {
   setTodoSearchQuery ({ commit }, query) {
     commit('SET_TODO_SEARCH_QUERY', query)
   },
-  fetchTasks ({ commit }, payload) {
+  getTasks ({ commit }, worker_id) {
     return new Promise((resolve, reject) => {
-      axios.get(`api/task/getTasks/${payload}`)
+      axios.post('api/task', worker_id)
+        .then((response) => {
+          commit('ADD_TASK_EVENTS', response.data)
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error.response)
+        })
+    })
+  },
+  getTasksByProject ({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      axios.get(`api/task/getTasksByProject/${payload}`)
         .then((response)  => {
+          console.log(response)
           commit('SET_TASKS', response.data)
           resolve(response)
         })
@@ -43,7 +56,6 @@ export default {
           commit('SET_TASKS', response.data)
         })
         .catch((error) => {
-          console.error(error)
           reject(error)
         })
     })
@@ -52,16 +64,18 @@ export default {
     return new Promise((resolve, reject) => {
       axios.post('/api/task/create', {task})
         .then((response) => {
-          commit('ADD_TASK', Object.assign(task, {id: response.data.id}))
+          resolve(response.data)
+          commit('ADD_TASK', response.data)
         })
         .catch((error) => { reject(error) })
     })
   },
-  deleteTask ({ commit }, task) {
+  deleteTask ({ commit }, taskId) {
     return new Promise((resolve, reject) => {
-      axios.post(`/api/task/delete/${task}`, {task})
+      axios.post(`/api/task/delete/${taskId}`)
         .then((response) => {
-          commit('DELETE_TASK', response.data.task)
+          console.log(response)
+          commit('DELETE_TASK', taskId)
           resolve(response)
         })
         .catch((error) => { reject(error) })
@@ -94,13 +108,25 @@ export default {
     return new Promise((resolve, reject) => {
       axios.put(`/api/task/updateAfterWork/${payload.id}`, payload)
         .then((response) => {
-          console.log(response)
           commit('UPDATE_PHOTO_AFTER', response.data.photo.after_work)
           resolve(response)
         })
         .catch((error) => {
           console.error(error)
           reject(error)
+        })
+    })
+  },
+  // eslint-disable-next-line no-unused-vars
+  verifyToken ({ commit }, payload) {
+    console.log(payload)
+    return new Promise((resolve, reject) => {
+      axios.post('/api/task/verifyToken', payload)
+        .then((response) => {
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error.response)
         })
     })
   }

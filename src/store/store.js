@@ -23,8 +23,8 @@ import moduleTodo from './todo/moduleTodo.js'
 import moduleProject from './project/moduleProject.js'
 import moduleService from './service/moduleService.js'
 import moduleComplain from './complain/moduleComplain.js'
-// import moduleCalendar from './calendar/moduleCalendar.js'
-// import moduleChat from './chat/moduleChat.js'
+import moduleTag from './tag/moduleTag.js'
+import moduleReason from './reason/moduleReason.js'
 // import moduleEmail from './email/moduleEmail.js'
 import moduleUsers from './user-management/moduleUserManagement.js'
 import moduleAuth from './auth/moduleAuth.js'
@@ -44,8 +44,8 @@ export default new Vuex.Store({
     project: moduleProject,
     service: moduleService,
     complain: moduleComplain,
-    // chat: moduleChat,
-    // email: moduleEmail,
+    tag: moduleTag,
+    reason: moduleReason,
     user: moduleUsers,
     auth: moduleAuth,
     eCommerce: moduleECommerce

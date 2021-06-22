@@ -14,5 +14,6 @@ export default {
     return state.tasks.find((task) => task.id == id)
   },
   getTasks: state => state.tasks,
-  getSingleTask: state => state.task
+  getSingleTask: state => state.task,
+  getEvent: state => (eventId) => state.events.find((event) => event.id === eventId)
 }
