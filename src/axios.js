@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-// const baseURL = process.env.VUE_APP_BASE_URL
-const baseURL = 'https://api.ifm-service.de'
+const baseURL = process.env.VUE_APP_BASE_URL
+// const baseURL = 'https://api.ifm-service.de'
 
 const instance = axios.create({
   baseURL,
