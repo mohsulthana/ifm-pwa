@@ -52,8 +52,8 @@ export default {
     return new Promise((resolve, reject) => {
       axios.get(`api/task/getTaskForWorker/${payload}`)
         .then((response) => {
-          console.log(response)
           commit('SET_TASKS', response.data)
+          resolve(response)
         })
         .catch((error) => {
           reject(error)

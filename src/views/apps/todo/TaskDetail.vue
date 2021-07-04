@@ -9,19 +9,39 @@
 
 <template>
   <div id="item-detail-page">
-      <vs-button color="primary" type="border" @click="$router.go(-1)" class="mb-5" icon="icon-chevron-left" icon-pack="feather">Back</vs-button>
+    <vs-button
+      color="primary"
+      type="border"
+      @click="$router.go(-1)"
+      class="mb-5"
+      icon="icon-chevron-left"
+      icon-pack="feather"
+      >Back</vs-button
+    >
+    <!-- <vs-button
+      color="primary"
+      type="border"
+      :key="nextTask.id"
+      @click="$router.push({ path: `/task-detail/${nextTask.id}` })"
+      class="mb-5"
+      icon="icon-chevron-right"
+      icon-pack="feather"
+      >Next Task</vs-button
+    > -->
 
     <vx-card :title="`${task.task}`">
       <template slot="actions">
-        <cancel-task  v-if="task.status == 'On Progress' || task.status == 'Not Completed'" />
-                    <vs-button
-                    v-else
-      type="flat"
-      color="success"
-      icon="icon-flag"
-      icon-pack="feather"
-      >{{ task.status }}</vs-button
-    >
+        <cancel-task
+          v-if="task.status == 'On Progress' || task.status == 'Not Completed'"
+        />
+        <vs-button
+          v-else
+          type="flat"
+          color="success"
+          icon="icon-flag"
+          icon-pack="feather"
+          >{{ task.status }}</vs-button
+        >
       </template>
 
       <template slot="no-body">
@@ -69,61 +89,19 @@
                 <h3>{{ task.task }}</h3>
 
                 <p class="my-2">
-                  <span class="mr-2 text-danger" v-if="task.status == 'Not Completed'">{{ task.status }}</span>
+                  <span
+                    class="mr-2 text-danger"
+                    v-if="task.status == 'Not Completed'"
+                    >{{ task.status }}</span
+                  >
                   <!-- <span>{{ item_data.brand }}</span> -->
                 </p>
                 <vs-divider />
                 <h6>Description</h6>
                 <p>{{ task.description }}</p>
-
-                <!-- <vs-list class="product-sales-meta-list px-0 pt-4"> -->
-
-                <!-- <div class="vx-row">
-                  <div class="vx-col w-full">
-                    <span class="text-xl font-medium">Color</span>
-                    <div class="flex flex-wrap items-center mt-2">
-                      <div
-                        :class="{'border-transparent': opt_color != color}"
-                        class="color-radio rounded-full mx-1 border-2 border-solid cursor-pointer relative"
-                        :style="itemColor({color: color, style: ['borderColor']})"
-                        v-for="color in available_item_colors"
-                        :key="color"
-                        @click="opt_color=color">
-                          <div class="h-6 w-6 rounded-full absolute" :style="itemColor({color: color, style: ['backgroundColor']})"></div>
-                        </div>
-                    </div>
-                  </div>
-                </div> -->
               </div>
             </div>
           </div>
-
-          <!-- Product Feature/Meta Row -->
-          <!-- <div class="py-24 mb-16 mt-10 text-center item-features">
-            <div class="vx-row">
-              <div class="vx-col md:w-1/3 w-full">
-                <div class="w-64 mx-auto mb-16 md:mb-0">
-                  <feather-icon icon="AwardIcon" svgClasses="h-12 w-12 text-primary stroke-current" class="block mb-4" />
-                  <span class="font-semibold text-lg">100% Original</span>
-                  <p class="mt-2">Chocolate bar candy canes ice cream toffee cookie halvah.</p>
-                </div>
-              </div>
-              <div class="vx-col md:w-1/3 w-full">
-                <div class="w-64 mx-auto mb-16 md:mb-0">
-                  <feather-icon icon="ClockIcon" svgClasses="h-12 w-12 text-primary stroke-current" class="block mb-4" />
-                  <span class="font-semibold text-lg">10 Day Replacement</span>
-                  <p class="mt-2">Marshmallow biscuit donut dragée fruitcake wafer.</p>
-                </div>
-              </div>
-              <div class="vx-col md:w-1/3 w-full">
-                <div class="w-64 mx-auto">
-                  <feather-icon icon="ShieldIcon" svgClasses="h-12 w-12 text-primary stroke-current" class="block mb-4" />
-                  <span class="font-semibold text-lg">1 Year Warranty</span>
-                  <p class="mt-2">Cotton candy gingerbread cake I love sugar sweet.</p>
-                </div>
-              </div>
-            </div>
-          </div> -->
         </div>
       </template>
       <div class="flex justify-end flex-wrap">
@@ -157,12 +135,32 @@ export default {
     }
   },
   computed: {
+    nextTask () {
+      const filtered = this.allTasks.filter(
+        (element) => element.status === 'Not Completed'
+      )
+      return filtered[1]
+    },
+    allTasks () {
+      return this.$store.getters['todo/getTasks']
+    },
     task () {
       return this.$store.getters['todo/getSingleTask']
+    },
+    taskList () {
+      const list = this.$store.getters['todo/getTasks']
+      return list.find((element) => element.status === 'Not Completed')
     }
   },
   mounted () {
     this.$store.dispatch('todo/fetchSingleTask', this.$route.params.id)
+  },
+  watch: {
+    $route (to, from) {
+      if (to !== from) {
+        location.reload()
+      }
+    }
   }
 }
 </script>

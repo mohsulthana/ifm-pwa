@@ -28,27 +28,27 @@
                 <feather-icon class="md:inline-flex lg:hidden ml-4 mr-4 cursor-pointer" icon="MenuIcon" @click.stop="toggleTodoSidebar(true)" />
 
                 <!-- SEARCH BAR -->
-                <vs-input icon-no-border size="large" icon-pack="feather" icon="icon-search" placeholder="Search..." v-model="searchQuery" class="vs-input-no-border vs-input-no-shdow-focus w-full" />
+                <vs-input icon-no-border size="large" icon-pack="feather" icon="icon-search" placeholder="Search..." class="vs-input-no-border vs-input-no-shdow-focus w-full" />
             </div>
 
             <!-- TODO LIST -->
           <div v-if="taskList.length > 0">
-            <VuePerfectScrollbar class="todo-content-scroll-area-container" :settings="settings" ref="taskListPS" :key="$vs.rtl">
-              <component :is="scrollbarTag" class="todo-content-scroll-area" :settings="settings" ref="taskListPS" :key="$vs.rtl">
+            <VuePerfectScrollbar class="scroll-area" v-once :settings="settings" :key="$vs.rtl">
+              <!-- <component :is="scrollbarTag" class="scroll-area" :settings="settings" ref="taskListPS" :key="$vs.rtl"> -->
                   <transition-group class="todo-list" name="list-enter-up" tag="ul" appear>
                       <li
                         class="cursor-pointer todo_todo-item"
                         v-for="(task, index) in taskList"
-                        :key="String(currFilter) + String(task.id)"
+                        :key="index"
                         :style="[{transitionDelay: (index * 0.1) + 's'}]">
-                        <todo-task :taskId="task.id" @showDisplayPrompt="showDisplayPrompt($event)" :key="String(task.title) + String(task.desc)" />
+                        <todo-task :task="taskList" :taskId="task.id" :key="String(task.title) + String(task.desc)" />
                           <!--
                           Note: Remove "todo-task" component's key just concat lastUpdated field in li key list.
                           e.g. <li class="..." v-for="..." :key="String(currFilter) + String(task.id) + String(task.lastUpdated)" .. >
                           -->
                       </li>
                   </transition-group>
-              </component>
+              <!-- </component> -->
               </VuePerfectScrollbar>
           </div>
 
@@ -64,7 +64,6 @@
 </template>
 
 <script>
-import moduleTodo          from '@/store/todo/moduleTodo.js'
 import TodoAddNew          from './TodoAddNew.vue'
 import TodoTask            from './TodoTask.vue'
 import TodoFilters         from './TodoFilters.vue'
@@ -74,6 +73,7 @@ import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 export default {
   data () {
     return {
+      taskList: [],
       currFilter           : '',
       clickNotClose        : true,
       displayPrompt        : false,
@@ -102,11 +102,13 @@ export default {
     }
   },
   computed: {
-    taskList ()     { return this.$store.getters['todo/getTasks']      },
     scrollbarTag () { return this.$store.getters.scrollbarTag              },
     windowWidth ()  { return this.$store.state.windowWidth                 }
   },
   methods: {
+    firstTask () {
+      return this.taskList.find(element => element.status === 'Not Completed')
+    },
     showDisplayPrompt (itemId) {
       this.taskIdToEdit  = itemId
       this.displayPrompt = true
@@ -136,15 +138,18 @@ export default {
   created () {
     this.setSidebarWidth()
 
-    const filter = this.$route.params.filter
+    // const filter = this.$route.params.filter
 
     // Fetch Tasks
     const params = this.$route.params.id
     this.$store.dispatch('todo/fetchTaskForWorker', params)
-    this.$store.commit('todo/UPDATE_TODO_FILTER', filter)
+      .then((response) => {
+        this.taskList = response.data
+      })
+    // this.$store.commit('todo/UPDATE_TODO_FILTER', filter)
 
     // Fetch Tags
-    this.$store.dispatch('todo/fetchTags')
+    // this.$store.dispatch('todo/fetchTags')
   },
   beforeUpdate () {
     this.currFilter = this.$route.params.filter
@@ -156,10 +161,12 @@ export default {
 
 <style lang="scss">
 @import "@/assets/scss/vuexy/apps/todo.scss";
-.todo-content-scroll-area-container {
+// @import "@/../node_modules/perfect-scrollbar/css/perfect-scrollbar.css";
+
+.scroll-area {
   position: relative;
   margin: auto;
-  width: 1200px;
-  height: 1200px;
+  width: auto;
+  height: calc(100vh - 210px);
 }
 </style>

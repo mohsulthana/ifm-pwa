@@ -9,8 +9,8 @@
 
 
 <template>
-  <div >
-    <vs-button @click="activePrompt = true" class="w-full" icon="add">Add Task</vs-button>
+  <div>
+    <vs-button @click="activePrompt = true" class="w-full" icon="add">Task</vs-button>
     <vs-prompt
       title="Add Task"
       accept-text="Add Task"
@@ -38,16 +38,6 @@
                 label="Add description"
                 v-model="taskLocal.description"
               />
-              <!-- <div v-if="!qrCodeActive">
-                <vs-button
-                  @click="generateQRCode()"
-                  class="w-full"
-                  >Generate QR Code</vs-button
-                >
-              </div>
-              <div v-else class="my-5">
-                <qr-code ref="qrCode" :text="qr_code"></qr-code>
-              </div> -->
             </div>
           </div>
         </form>
@@ -93,9 +83,8 @@ export default {
   methods: {
     clearFields () {
       Object.assign(this.taskLocal, {
-        // task: '',
-        // description: '',
-        // status: ''
+        task: '',
+        description: ''
       })
     },
     generateQRCode () {
@@ -124,7 +113,9 @@ export default {
             .catch((error) => {
               console.log(error)
             })
-          this.clearFields()
+            .finally(() => {
+              this.clearFields()
+            })
         }
       })
     }

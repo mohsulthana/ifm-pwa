@@ -3,7 +3,7 @@
     <vs-button
       @click="todoModalPrompt = !todoModalPrompt"
       icon-pack="feather"
-      icon="icon-eye"
+      icon="icon-aperture"
       color="primary"
       class="mr-2"
     />
@@ -68,7 +68,7 @@ export default {
   data () {
     return {
       todoModalPrompt: false,
-      task: this.$store.getters['todo/getTask'](this.taskId)
+      task: []
     }
   },
   methods: {
@@ -77,9 +77,11 @@ export default {
       const a = document.createElement('a')
       a.href = this.task.qr_code //Image Base64 Goes here
       a.download = `${this.task.task}_QRCode` //File name Here
+      a.target = '_blank'
+      document.body.appendChild(a)
       a.click()
       a.remove()
-
+      document.body.removeChild(a)
       this.$vs.notify({
         title: 'Image downloaded successfully',
         icon: 'check_box',
@@ -88,6 +90,9 @@ export default {
     },
     fetchTask () {
       this.$store.dispatch('todo/fetchSingleTask', this.taskId)
+        .then((response) => {
+          this.task = response.data.task
+        })
     }
   },
   created () {
