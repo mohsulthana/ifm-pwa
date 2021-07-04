@@ -20,7 +20,7 @@
                 <vs-th>PROJECT NAME</vs-th>
                 <vs-th>DESCRIPTION</vs-th>
                 <vs-th>CUSTOMER</vs-th>
-                <vs-th>CREATED ON</vs-th>
+                <vs-th>RATING</vs-th>
               </template>
 
               <template slot-scope="{data}">
@@ -38,7 +38,7 @@
                     <span>{{data[indextr].name}}</span>
                   </vs-td>
                   <vs-td :data="data[indextr].orderNo">
-                    <span>{{data[indextr].created_date}}</span>
+                    <star-rating read-only :show-rating="false" :rating="data[indextr].rate == null ? 0 : parseInt(data[indextr].rate)"/>
                   </vs-td>
                 </vs-tr>
               </template>
@@ -51,7 +51,7 @@
 </template>
 
 <script>
-
+import StarRating from 'vue-star-rating'
 export default {
   data () {
     return {
@@ -60,6 +60,7 @@ export default {
     }
   },
   components: {
+    StarRating
   },
   created () {
     this.fetchProjects()
