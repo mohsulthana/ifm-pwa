@@ -2,14 +2,18 @@
   <div id="project-detail">
     <vx-card title="Project Detail" class="mb-base">
       <template slot="actions">
-        <todo-add-new :projectId="project.id" />
+        <PDF-Uploader />
       </template>
       <!-- Avatar -->
       <div class="vx-row">
         <!-- Avatar Col -->
         <div class="vx-col" id="avatar-col">
           <div class="img-container mb-4">
-            <img :src="project.image" class="ml-5 img-fluid rounded" height="250" />
+            <img
+              :src="project.image"
+              class="ml-5 img-fluid rounded"
+              height="200"
+            />
           </div>
         </div>
         <!-- Information - Col 1 -->
@@ -34,19 +38,27 @@
           </table>
         </div>
         <div class="vx-col flex-1" id="account-info-col-1">
-          <table>
-          </table>
+          <table></table>
         </div>
-        <div class="vx-col w-full flex" id="account-manage-buttons">
+        <div class="vx-col w-full flex" id="account-manage-buttons"></div>
+      </div>
+      <template slot="footer">
+        <div class="flex justify-end">
           <project-edit :projectId="project.id" />
           <project-delete :projectId="project.id" />
         </div>
-      </div>
+      </template>
     </vx-card>
     <vx-card v-if="task == ''" title="No Tasks available" class="mb-base">
+      <template slot="actions">
+        <todo-add-new :projectId="project.id" />
+      </template>
       <p class="text-warning">To create more task, press button above</p>
     </vx-card>
     <vx-card v-else title="Tasks available" class="mb-base">
+      <template slot="actions">
+        <todo-add-new :projectId="project.id" />
+      </template>
       <vs-list>
         <vs-list-item
           v-for="(value, index) in task"
@@ -56,9 +68,6 @@
         >
           <todo-modal :taskId="value.id" />
           <todo-delete :taskId="value.id" />
-          <!-- <vs-button icon-pack="feather" disabled icon="icon-edit" color="primary"
-            >Edit</vs-button
-          > -->
         </vs-list-item>
       </vs-list>
     </vx-card>
@@ -66,6 +75,7 @@
 </template>
 
 <script>
+import PDFUploader from '@/components/PDFUploader.vue'
 import ProjectEdit from './ProjectEdit.vue'
 import ProjectDelete from './ProjectDelete.vue'
 import TodoAddNew from './apps/todo/TodoAddNew.vue'
@@ -88,7 +98,8 @@ export default {
     ProjectEdit,
     ProjectDelete,
     TodoModal,
-    TodoDelete
+    TodoDelete,
+    PDFUploader
   },
   created () {
     this.$store.dispatch('todo/getTasksByProject', this.id)

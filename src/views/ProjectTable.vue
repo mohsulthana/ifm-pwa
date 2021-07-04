@@ -3,7 +3,7 @@
     <vx-card title="Project folder">
       <!-- TABLE ACTION COL-2: ADD NEW USERS -->
       <template slot="actions">
-        <project-add-new :customer="customers"/>
+        <project-add-new/>
       </template>
       <vs-table max-items="10" pagination search stripe :data="projectList">
         <template slot="thead">
@@ -72,20 +72,10 @@ export default {
         .then((response) => {
           this.projects = response.data
         })
-    },
-    fetchCustomer () {
-      this.$store.dispatch('user/fetchUsers', 'customer')
-        .then((response) => {
-          this.customers = response.data
-        })
-        .catch((error) => {
-          console.error(error)
-        })
     }
   },
   created () {
     this.fetchProjects()
-    this.fetchCustomer()
   }
 }
 </script>

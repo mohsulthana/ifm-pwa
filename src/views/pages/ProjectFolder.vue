@@ -24,7 +24,11 @@
           </h3>
         </div>
         <div slot="media">
-            <img :src="value.image" height="250" style="object-fit: cover" />
+              <VuePureLightbox
+    style="width: auto; height: 300px; object-fit: cover"
+    :thumbnail="value.image"
+    :images="[value.image]"
+/>
         </div>
         <div>
           <p>{{ value.description }}</p>
@@ -47,11 +51,16 @@
 </template>
 
 <script>
+import VuePureLightbox from 'vue-pure-lightbox'
+
 export default {
   data () {
     return {
       projects: ''
     }
+  },
+  components: {
+    VuePureLightbox
   },
   methods: {
     fetchProjects () {
@@ -68,6 +77,15 @@ export default {
   }
 }
 </script>
+
+<style>
+.lightbox__element {
+  width: 80em !important;
+}
+.lightbox  {
+  z-index: 999999;
+}
+</style>
 <style lang="stylus">
 .cardx {
   margin: 15px;

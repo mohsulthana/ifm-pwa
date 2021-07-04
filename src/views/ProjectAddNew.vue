@@ -5,7 +5,7 @@
       class="w-full"
       icon="icon-plus"
       icon-pack="feather"
-      >Add Project</vs-button
+      >Project</vs-button
     >
     <vs-prompt
       title="Add New Project"
@@ -128,13 +128,9 @@ import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 
 export default {
-  props: {
-    customer: {
-      type: Array
-    }
-  },
   data () {
     return {
+      customer: [],
       worker: [],
       projectTag: null,
       activePrompt: false,
@@ -230,7 +226,6 @@ export default {
               })
             })
             .catch((error) => {
-              console.log(error)
               this.$vs.notify({
                 title: 'Error',
                 text: error.data.message,
@@ -242,7 +237,16 @@ export default {
         }
       })
         .catch((error) => {
-          console.log(error)
+          console.error(error)
+        })
+    },
+    fetchCustomer () {
+      axios.get('api/users')
+        .then((response) => {
+          this.customer = response.data
+        })
+        .catch((error) => {
+          console.error(error)
         })
     },
     fetchTags () {
@@ -252,7 +256,7 @@ export default {
           this.tags = response.data
         })
         .catch((error) => {
-          console.log(error)
+          console.error(error)
         })
     },
     changeProjectTag (label, color, tagId) {
@@ -269,6 +273,7 @@ export default {
     }
   },
   mounted () {
+    this.fetchCustomer()
     this.fetchWorker()
     this.fetchTags()
   }

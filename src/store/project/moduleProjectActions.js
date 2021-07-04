@@ -88,11 +88,21 @@ export default {
     return new Promise((resolve, reject) => {
       axios.post(`/api/project/update/${payload.id}`, payload)
         .then((response) => {
-          console.log(response)
           commit('UPDATE_PROJECT', Object.assign({}, {id: response.data.project.id, project: response.data.project}))
           resolve(response)
         })
         .catch((error) => { reject(error) })
+    })
+  },
+  updateRating ({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      axios.post(`api/project/updateRating/${payload.id}`, {rating: payload.rating})
+        .then((response) => {
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error.response)
+        })
     })
   }
 }
