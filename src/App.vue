@@ -88,3 +88,4 @@ export default {
 }
 
 </script>
+<style src="vue-pure-lightbox/dist/VuePureLightbox.css"></style>
