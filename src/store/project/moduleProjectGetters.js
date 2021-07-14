@@ -11,6 +11,7 @@
 export default {
   getProject: state => (id) => state.project.find((project) => project.id == id),
   getProjects: state => state.project,
-  getSingleProject: state => state.singleProject
+  getSingleProject: state => state.singleProject,
+  getPDF: state => state.pdf
   // getTodosBySection: state => (sectionId) => state.todoArray.filter((task) => task.sectionId == sectionId),
 }

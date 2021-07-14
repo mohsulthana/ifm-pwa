@@ -73,6 +73,10 @@
                 v-model="project.project"
                 :color="validateForm ? 'success' : 'danger'"
               />
+            </div>
+          </div>
+          <div class="vx-row">
+            <div class="vx-col w-full">
               <vs-textarea
                 v-validate="'required'"
                 name="description"
@@ -81,7 +85,12 @@
                 v-model="project.description"
                 :color="validateForm ? 'success' : 'danger'"
               />
-              <vs-select
+            </div>
+          </div>
+          <div class="vx-row">
+            <div class="vx-col w-full">
+              <v-select placeholder="Choose customer" class="w-full mb-4 mt-5" :reduce="customer => customer.user_id" v-model="project.customer" label="name" :options="customer"></v-select>
+              <!-- <vs-select
                 class="w-full mb-4 mt-5"
                 label="Customer"
                 v-model="project.customer"
@@ -92,10 +101,35 @@
                   :text="item.name"
                   v-for="(item, index) in customer"
                 />
-              </vs-select>
-              <flat-pickr class="mt-5 w-1/2" :config="configFromdateTimePicker" v-model="fromDate" placeholder="From Date" @on-change="onFromChange" />
-              <flat-pickr class="mt-5 w-1/2" :config="configTodateTimePicker" v-model="toDate" placeholder="To Date" @on-change="onToChange" />
-              <vs-select
+              </vs-select> -->
+              <small v-if="customer.length == 0" class="text-danger"
+                >You dont' have any customer. Please add new one before
+                continue</small
+              >
+            </div>
+          </div>
+          <div class="vx-row">
+            <div class="vx-col w-full">
+              <flat-pickr
+                class="mt-5 w-1/2"
+                :config="configFromdateTimePicker"
+                v-model="fromDate"
+                placeholder="From Date"
+                @on-change="onFromChange"
+              />
+              <flat-pickr
+                class="mt-5 w-1/2"
+                :config="configTodateTimePicker"
+                v-model="toDate"
+                placeholder="To Date"
+                @on-change="onToChange"
+              />
+            </div>
+          </div>
+          <div class="vx-row">
+            <div class="vx-col w-full">
+              <v-select placeholder="Choose worker" multiple class="w-full mb-4 mt-5" :reduce="worker => worker.worker_id" v-model="project.worker" label="name" :options="worker"></v-select>
+              <!-- <vs-select
                 multiple
                 autocomplete
                 class="w-full mb-4 mt-5"
@@ -108,12 +142,17 @@
                   v-for="(item, index) in worker"
                   :key="index"
                 />
-              </vs-select>
-              <vs-upload
-                limit="1"
-                @change="connvertImage"
-                show-upload-button
-              />
+              </vs-select> -->
+              <small v-if="worker.length == 0" class="text-danger"
+                >You dont' have any worker. Please add new one before
+                continue</small
+              >
+            </div>
+          </div>
+          <div class="vx-row">
+            <div class="vx-col w-full">
+              <vs-upload limit="1" @change="convertImage" show-upload-button />
+              <small for="projectImage">Upload Project Image</small>
             </div>
           </div>
         </form>
@@ -126,6 +165,7 @@
 import axios from '@/axios'
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
+import vSelect from 'vue-select'
 
 export default {
   data () {
@@ -155,11 +195,16 @@ export default {
     }
   },
   components: {
-    flatPickr
+    flatPickr,
+    vSelect
   },
   computed: {
     validateForm () {
-      return !this.errors.any() && this.project.project !== ''
+      return (
+        !this.errors.any() &&
+        this.project.project !== '' &&
+        this.project.customer !== ''
+      )
     }
   },
   methods: {
@@ -169,15 +214,8 @@ export default {
     onToChange (selectedDates, dateStr) {
       this.$set(this.configFromdateTimePicker, 'maxDate', dateStr)
     },
-    connvertImage (event, target) {
-      const self = this
-
-      const reader = new FileReader()
-
-      reader.readAsDataURL(target[0])
-      reader.onload = function (event) {
-        self.project.image = event.target.result
-      }
+    convertImage (event, target) {
+      this.project.image = target[0]
     },
     clearFields () {
       // Object.assign(this.project, {
@@ -189,59 +227,65 @@ export default {
       // })
     },
     createProject () {
-      this.$validator.validateAll().then((result) => {
-        if (result) {
-          const project = {
-            project: this.project.project,
-            description: this.project.description,
-            customer: this.project.customer,
-            image: this.project.image,
-            service_id: this.$store.state.AppActiveUser.service,
-            tag: this.projectTag === null ? null : this.projectTag.id,
-            start_date: this.fromDate,
-            end_date: this.toDate,
-            service: this.$store.state.AppActiveUser.service
-          }
-          this.$store
-            .dispatch('project/addProject', Object.assign({}, project))
-            .then((response) => {
-              const project_id = response.data.id
-              const worker = this.project.worker_id
-              for (let i = 0; i < worker.length; i++) {
-                const element = worker[i]
-                const project = {
-                  project_id,
-                  worker_id: element
+      this.$validator
+        .validateAll()
+        .then((result) => {
+          if (result) {
+            const data = new FormData()
+            data.append('project', this.project.project)
+            data.append('description', this.project.description)
+            data.append('customer', this.project.customer)
+            data.append('service_id', this.$store.state.AppActiveUser.service)
+            data.append(
+              'tag',
+              this.projectTag === null ? null : this.projectTag.id
+            )
+            data.append('start_date', this.fromDate)
+            data.append('end_date', this.toDate)
+            data.append('image', this.project.image)
+
+            this.$store
+              .dispatch('project/addProject', data)
+              .then((response) => {
+                const project_id = response.data.id
+                const worker = this.project.worker_id
+                for (let i = 0; i < worker.length; i++) {
+                  const element = worker[i]
+                  const project = {
+                    project_id,
+                    worker_id: element
+                  }
+                  this.$store.dispatch(
+                    'project/createProjectWorker',
+                    Object.assign({}, project)
+                  )
                 }
-                this.$store.dispatch(
-                  'project/createProjectWorker',
-                  Object.assign({}, project)
-                )
-              }
-              this.$vs.notify({
-                title: 'Success',
-                text: 'Project successfully created!',
-                icon: 'check_box',
-                color: 'success'
+                this.$vs.notify({
+                  title: 'Success',
+                  text: 'Project successfully created!',
+                  icon: 'check_box',
+                  color: 'success'
+                })
               })
-            })
-            .catch((error) => {
-              this.$vs.notify({
-                title: 'Error',
-                text: error.data.message,
-                icon: 'error',
-                color: 'danger'
+              .catch((error) => {
+                console.error(error)
+                this.$vs.notify({
+                  title: 'Error',
+                  text: error.data.message,
+                  icon: 'error',
+                  color: 'danger'
+                })
               })
-            })
-          this.clearFields()
-        }
-      })
+            // this.clearFields()
+          }
+        })
         .catch((error) => {
           console.error(error)
         })
     },
     fetchCustomer () {
-      axios.get('api/users')
+      axios
+        .get('api/users')
         .then((response) => {
           this.customer = response.data
         })

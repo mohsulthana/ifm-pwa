@@ -3,7 +3,7 @@
     <vx-card title="Project folder">
       <!-- TABLE ACTION COL-2: ADD NEW USERS -->
       <template slot="actions">
-        <project-add-new/>
+        <project-add-new />
       </template>
       <vs-table max-items="10" pagination search stripe :data="projectList">
         <template slot="thead">
@@ -14,8 +14,13 @@
         </template>
 
         <template slot-scope="{ data }">
-          <router-link :to="{path: '/project-detail/' + data[indextr].id}" :key="indextr" v-for="(tr, indextr) in data" tag="tr">
-          <!-- <vs-tr :key="indextr" v-for="(tr, indextr) in data"> -->
+          <router-link
+            :to="{ path: '/project-detail/' + data[indextr].id }"
+            :key="indextr"
+            v-for="(tr, indextr) in data"
+            tag="tr"
+          >
+            <!-- <vs-tr :key="indextr" v-for="(tr, indextr) in data"> -->
             <vs-td :data="data[indextr].project">
               {{ indextr + 1 }}
             </vs-td>
@@ -25,17 +30,21 @@
             <vs-td :data="data[indextr].description">
               {{ data[indextr].description }}
             </vs-td>
-            <vs-td :data="data[indextr].tag" v-if="data[indextr].tag != null">
+            <vs-td
+              :data="data[indextr].tag"
+              v-if="data[indextr].tag == null || data[indextr].tag == 0"
+            >
+              No tag
+            </vs-td>
+            <vs-td :data="data[indextr].tag" v-else>
+              {{ data[indextr].tag == 0 }}
               <div
                 class="h-3 w-3 inline-block rounded-full mr-2"
-                :style="{background: data[indextr].tag_color}"
+                :style="{ background: data[indextr].tag_color }"
               ></div>
               <span>{{ data[indextr].tag_name }}</span>
             </vs-td>
-            <vs-td :data="data[indextr].tag" v-else>
-                          No tag
-            </vs-td>
-          <!-- </vs-tr> -->
+            <!-- </vs-tr> -->
           </router-link>
         </template>
       </vs-table>
@@ -44,9 +53,9 @@
 </template>
 
 <script>
-import ProjectAddNew          from './ProjectAddNew.vue'
-import ProjectEdit            from './ProjectEdit.vue'
-import ProjectDelete           from './ProjectDelete.vue'
+import ProjectAddNew from './ProjectAddNew.vue'
+import ProjectEdit from './ProjectEdit.vue'
+import ProjectDelete from './ProjectDelete.vue'
 
 export default {
   name: 'users-table',
@@ -68,10 +77,9 @@ export default {
   },
   methods: {
     fetchProjects () {
-      this.$store.dispatch('project/fetchProjects')
-        .then((response) => {
-          this.projects = response.data
-        })
+      this.$store.dispatch('project/fetchProjects').then((response) => {
+        this.projects = response.data
+      })
     }
   },
   created () {
@@ -82,9 +90,9 @@ export default {
 
 <style>
 tr:hover {
-  background: #F8F8F8;
+  background: #f8f8f8;
   cursor: pointer;
-  color: #0158A3;
+  color: #0158a3;
   transform: translateY(-4px);
 }
 </style>

@@ -34,6 +34,7 @@ export default {
   fetchSingleProject ({ commit }, projectId) {
     axios.get(`api/project/show/${projectId}`)
       .then((response) => {
+        console.log(response)
         commit('SET_SINGLE_PROJECT', response.data)
       })
       .catch((error) => {
@@ -65,9 +66,16 @@ export default {
   },
   addProject ({ commit }, project) {
     return new Promise((resolve, reject) => {
-      axios.post('/api/project/create', {project})
+      console.log(project)
+      const config = {
+        header : {
+          'Content-Type' : 'multipart/form-data'
+        }
+      }
+      axios.post('/api/project/create', project, config)
         .then((response) => {
-          console.log(response)
+          const id = response.data.id
+          response.data.data.id = id
           commit('ADD_PROJECT', response.data.data)
           resolve(response)
         })
@@ -78,8 +86,7 @@ export default {
     return new Promise((resolve, reject) => {
       axios.post('/api/project/createProjectWorker', {project})
         .then((response) => {
-          console.log(response)
-          // commit('ADD_TASK', Object.assign(task, {id: response.data.id}))
+          resolve(response)
         })
         .catch((error) => { console.log(error); reject(error) })
     })
@@ -103,6 +110,16 @@ export default {
         .catch((error) => {
           reject(error.response)
         })
+    })
+  },
+  storePDF ({ commit }, payload) {
+    new Promise((resolve, reject) => {
+      if (payload.target.status == 200) {
+        commit('STORE_PDF', JSON.parse(payload.target.response))
+        resolve('RESOLVED')
+      } else {
+        reject('REJECTED')
+      }
     })
   }
 }

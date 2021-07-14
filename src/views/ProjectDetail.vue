@@ -10,7 +10,7 @@
         <div class="vx-col" id="avatar-col">
           <div class="img-container mb-4">
             <img
-              :src="project.image"
+              :src="project.image == undefined ? 'https://icon2.cleanpng.com/20180605/ijl/kisspng-computer-icons-image-file-formats-no-image-5b16ff0d2414b5.0787389815282337411478.jpg' : project.image"
               class="ml-5 img-fluid rounded"
               height="200"
             />
@@ -34,6 +34,11 @@
             <tr>
               <td class="font-semibold">End Date</td>
               <td>{{ project.end_date }}</td>
+            </tr>
+            <tr>
+              <td class="font-semibold">Document</td>
+              <td v-if="project.pdf != null"><a :href="project.pdf" target="_blank">Open Document</a></td>
+              <td v-else>No Document Exist</td>
             </tr>
           </table>
         </div>
@@ -91,6 +96,9 @@ export default {
   methods: {
     fetchSingleProject () {
       this.$store.dispatch('project/fetchSingleProject', this.id)
+    },
+    fetchTasks () {
+      this.$store.dispatch('todo/getTasksByProject', this.id)
     }
   },
   components: {
@@ -101,9 +109,9 @@ export default {
     TodoDelete,
     PDFUploader
   },
-  created () {
-    this.$store.dispatch('todo/getTasksByProject', this.id)
+  mounted () {
     this.fetchSingleProject()
+    this.fetchTasks()
   },
   computed: {
     project () {
