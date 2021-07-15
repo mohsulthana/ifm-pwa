@@ -1,7 +1,7 @@
 <template>
   <div >
     <vs-button @click="activePrompt = true" class="w-full" icon="add"
-      >Add Admin</vs-button
+      >Admin</vs-button
     >
     <vs-prompt
       title="Add New Admin"
@@ -47,7 +47,8 @@
                 :color="validateForm ? 'success' : 'danger'"
               />
               <span>{{ errors.first("password") }}</span>
-              <vs-select
+              <v-select placeholder="Choose Service" class="w-full mb-4 mt-5" :reduce="service => service.id" v-model="user.service_id" label="service" :options="service"></v-select>
+              <!-- <vs-select
                 class="w-full mb-4 mt-5"
                 label="Service"
                 name="service"
@@ -60,7 +61,8 @@
                   :text="item.service"
                   v-for="(item, index) in service"
                 />
-              </vs-select>
+              </vs-select> -->
+              <small class="text-danger" v-if="service.length == 0">Your service is empty, please add new one</small>
               <span>{{ errors.first("service") }}</span>
             </div>
           </div>
