@@ -23,11 +23,10 @@ export default {
     state.singleProject = project
   },
   UPDATE_PROJECT (state, payload) {
-    console.log(payload.project)
-    console.log(state.project)
     const projectIndex = state.project.findIndex((u) => u.id === payload.id)
-    console.log(projectIndex)
     state.project[projectIndex] = payload.project
-    console.log(state.project)
+  },
+  STORE_PDF (state, payload) {
+    state.singleProject.data.pdf = payload.pdf
   }
 }
