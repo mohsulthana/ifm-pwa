@@ -27,15 +27,13 @@
       >
         <div slot="header" class="mb-4">
           <div class="vx-row no-gutter">
-            <!-- Month Name -->
             <div class="vx-col w-1/3 items-center sm:flex hidden">
-              <!-- Add new event button -->
-              <vs-button
+              <!-- <vs-button
                 icon-pack="feather"
                 icon="icon-plus"
                 @click="promptAddNewEvent(new Date())"
                 >Add</vs-button
-              >
+              > -->
             </div>
 
             <!-- Current Month -->
