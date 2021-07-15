@@ -1,7 +1,7 @@
 <template>
   <div >
     <vs-button @click="activePrompt = true" class="w-full" icon="add"
-      >Add Service</vs-button
+      >Service</vs-button
     >
     <vs-prompt
       title="Add New Service"
