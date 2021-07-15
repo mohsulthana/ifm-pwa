@@ -24,6 +24,7 @@
         <form>
           <vs-select class="selectExample w-full" label="Your Reasons" v-model="reason">
             <vs-select-item :key="index" :value="item.reason" :text="item.reason" v-for="(item,index) in options" />
+            <vs-select-item :key="0" value="Other" text="Other" />
           </vs-select>
         </form>
       </div>

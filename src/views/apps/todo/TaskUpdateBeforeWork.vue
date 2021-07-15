@@ -11,7 +11,7 @@
 <template>
   <div>
     <vs-button
-      :disabled="task.status !== 'Not Completed' || task.status === 'Cancelled'"
+      :disabled="task.status !== 'Not Completed' && task.status !== 'Cancelled'"
       class="mt-4 mr-2 shadow-lg"
       type="gradient"
       color="#7367F0"
@@ -33,6 +33,7 @@
       <div>
         <form>
           <small>You need to scan this task QR Code to get the token. Please input your token to verify your work after you scan the QR Code</small>
+    {{this.project.before_work }}
 
           <vs-row
             vs-align="flex-start"
@@ -40,56 +41,6 @@
             vs-justify="center"
             vs-w="12"
           >
-            <!-- <div v-if="isCameraOpen && !isLoading" class="camera-shoot">
-              <vs-button
-                @click="takePhoto"
-                icon-pack="feather"
-                icon="icon-camera"
-              >
-              </vs-button>
-            </div> -->
-            <!-- <vs-col
-              vs-type="flex"
-              vs-justify="center"
-              vs-align="center"
-              vs-w="12"
-            >
-              <div v-show="isCameraOpen && isLoading" class="camera-loading">
-                <ul class="loader-circle">
-                  <li></li>
-                  <li></li>
-                  <li></li>
-                </ul>
-              </div>
-
-              <div
-                v-if="isCameraOpen"
-                v-show="!isLoading"
-                class="camera-box"
-                :class="{ flash: isShotPhoto }"
-              >
-                <div
-                  class="camera-shutter"
-                  :class="{ flash: isShotPhoto }"
-                ></div>
-
-                <video
-                  v-show="!isPhotoTaken"
-                  ref="camera"
-                  width="'auto'"
-                  :height="300.5"
-                  autoplay
-                ></video>
-
-                <canvas
-                  v-show="isPhotoTaken"
-                  id="photoTaken"
-                  ref="canvas"
-                  :width="300"
-                  :height="300.5"
-                ></canvas>
-              </div>
-            </vs-col> -->
             <vs-col
               vs-type="flex"
               vs-justify="center"
@@ -117,32 +68,6 @@
           </vs-row>
           <div v-if="wrongToken" class="text-left text-danger">Invalid token</div>
           <div v-if="isTokenValid" class="text-success">Token is valid</div>
-          <!-- <vs-row
-            vs-align="flex-start"
-            vs-type="flex"
-            vs-justify="center"
-            vs-w="12"
-          >
-            <vs-col
-              vs-type="flex"
-              vs-justify="center"
-              vs-align="center"
-              vs-w="12"
-            >
-              <div class="camera-button">
-                <vs-button
-                  class="mt-4 mr-2 shadow-lg"
-                  v-if="!isCameraOpen"
-                  :color="!isCameraOpen ? 'primary' : 'danger'"
-                  @click="toggleCamera"
-                  >{{
-                    !isCameraOpen ? "Open Camera" : "Close Camera"
-                  }}</vs-button
-                >
-              </div>
-            </vs-col>
-          </vs-row> -->
-
           <vs-row
             v-if="isTokenValid"
             vs-align="flex-center"
@@ -160,7 +85,7 @@
                 limit="1"
                 @on-delete="uploadDeleted"
                 @on-success="successUpload"
-                @change="connvertImage"
+                @change="convertImage"
                 show-upload-button
               />
             </vs-col>
@@ -173,7 +98,6 @@
 </template>
 
 <script>
-import { WebCam } from 'vue-web-cam'
 export default {
   props: {
     task: {
@@ -193,18 +117,15 @@ export default {
       isTokenValid: false,
       project: {
         id: this.task.id,
-        before_work: '',
+        before_work: null,
         status: 'On Progress'
       }
     }
   },
   computed: {
     validateForm () {
-      return !this.errors.any() && this.project.before_work.length > 0 && this.isTokenValid === true
+      return !this.errors.any() && this.project.before_work instanceof File && this.isTokenValid === true
     }
-  },
-  components: {
-    WebCam
   },
   methods: {
     uploadDeleted () {
@@ -222,18 +143,22 @@ export default {
           this.isTokenValid = false
         })
     },
-    convertImage () {
-      const canvas = document
-        .getElementById('photoTaken')
-        .toDataURL('image/jpeg')
-        .replace('image/jpeg', 'image/png')
-      this.project.before_work = canvas
+    convertImage (event, target) {
+      this.project.before_work = target[0]
+      console.log(this.project.before_work)
     },
     updateBeforeWork () {
       this.$validator.validateAll().then((result) => {
         if (result) {
+          const id = this.$route.params.id
+
+          const data = new FormData()
+          data.append('id', id)
+          data.append('before_work', this.project.before_work)
+          data.append('status', 'On Progress')
+
           this.$store
-            .dispatch('todo/updatePhotoBeforeWork', this.project)
+            .dispatch('todo/updatePhotoBeforeWork', {data, id})
             .then(() => {
               this.$vs.notify({
                 title: 'Success',
@@ -302,16 +227,6 @@ export default {
 
       const context = this.$refs.canvas.getContext('2d')
       context.drawImage(this.$refs.camera, 0, 0, 450, 337.5)
-    },
-    connvertImage (event, target) {
-      const self = this
-
-      const reader = new FileReader()
-
-      reader.readAsDataURL(target[0])
-      reader.onload = function (event) {
-        self.project.before_work = event.target.result
-      }
     }
   }
 }

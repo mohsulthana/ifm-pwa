@@ -93,10 +93,9 @@ export default {
   },
   updatePhotoBeforeWork ({ commit }, payload) {
     return new Promise((resolve, reject) => {
-      axios.put(`/api/task/updateBeforeWork/${payload.id}`, payload)
+      axios.post(`/api/task/updateBeforeWork/${payload.id}`, payload.data)
         .then((response) => {
-          console.log(response)
-          commit('UPDATE_PHOTO_BEFORE', response.data.photo.before_work)
+          commit('UPDATE_PHOTO_BEFORE', response.data.photo)
           resolve(response)
         })
         .catch((error) => {
@@ -106,9 +105,10 @@ export default {
   },
   updatePhotoAfterWork ({ commit }, payload) {
     return new Promise((resolve, reject) => {
-      axios.put(`/api/task/updateAfterWork/${payload.id}`, payload)
+      axios.post(`/api/task/updateAfterWork/${payload.id}`, payload.data)
         .then((response) => {
-          commit('UPDATE_PHOTO_AFTER', response.data.photo.after_work)
+          console.log(response)
+          commit('UPDATE_PHOTO_AFTER', response.data.photo)
           resolve(response)
         })
         .catch((error) => {
@@ -119,7 +119,6 @@ export default {
   },
   // eslint-disable-next-line no-unused-vars
   verifyToken ({ commit }, payload) {
-    console.log(payload)
     return new Promise((resolve, reject) => {
       axios.post('/api/task/verifyToken', payload)
         .then((response) => {

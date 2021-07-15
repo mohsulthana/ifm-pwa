@@ -24,7 +24,7 @@ export default {
     state.task = task
   },
   ADD_TASK (state, task) {
-
+    console.log(task)
     state.tasks.push(task.data[0])
   },
   DELETE_TASK (state, task) {

@@ -11,7 +11,7 @@
 <template>
   <div>
     <vs-button
-      :disabled="task.status === 'Done' || task.status === 'Not Completed' || task.status === 'Cancelled'"
+      :disabled="task.status === 'Done' || task.status === 'Not Completed'"
       class="mt-4 mr-2 shadow-lg"
       type="border"
       color="#7367F0"
@@ -135,7 +135,7 @@
                 limit="1"
                 @on-delete="uploadDeleted"
                 @on-success="successUpload"
-                @change="connvertImage"
+                @change="convertImage"
                 show-upload-button
               />
             </vs-col>
@@ -174,14 +174,21 @@ export default {
   },
   computed: {
     validateForm () {
-      return !this.errors.any() && this.project.after_work.length > 0 && this.isTokenValid === true
+      return !this.errors.any() && this.project.after_work instanceof File && this.isTokenValid === true
     }
   },
   methods: {
     updateAfterWork () {
       this.$validator.validateAll().then((result) => {
         if (result) {
-          this.$store.dispatch('todo/updatePhotoAfterWork', this.project)
+          const id = this.$route.params.id
+
+          const data = new FormData()
+          data.append('id', id)
+          data.append('after_work', this.project.after_work)
+          data.append('status', 'Done')
+
+          this.$store.dispatch('todo/updatePhotoAfterWork', {data, id})
             .then(() => {
               this.$vs.notify({
                 title: 'Success',
@@ -211,15 +218,8 @@ export default {
           this.isTokenValid = false
         })
     },
-    connvertImage (event, target) {
-      const self = this
-
-      const reader = new FileReader()
-
-      reader.readAsDataURL(target[0])
-      reader.onload = function (event) {
-        self.project.after_work = event.target.result
-      }
+    convertImage (event, target) {
+      this.project.after_work = target[0]
     }
   }
 }

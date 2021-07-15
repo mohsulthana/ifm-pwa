@@ -12,22 +12,12 @@
     <vs-button
       color="primary"
       type="border"
-      @click="$router.go(-1)"
+      @click="$router.push({path: `/task/${$route.query.projectId}`})"
       class="mb-5"
       icon="icon-chevron-left"
       icon-pack="feather"
       >Back</vs-button
     >
-    <!-- <vs-button
-      color="primary"
-      type="border"
-      :key="nextTask.id"
-      @click="$router.push({ path: `/task-detail/${nextTask.id}` })"
-      class="mb-5"
-      icon="icon-chevron-right"
-      icon-pack="feather"
-      >Next Task</vs-button
-    > -->
 
     <vx-card :title="`${task.task}`">
       <template slot="actions">
@@ -99,6 +89,20 @@
                 <vs-divider />
                 <h6>Description</h6>
                 <p>{{ task.description }}</p>
+                <vs-button
+                  :disabled="NotCompleted[2].status != 'Not Completed'"
+                  color="primary"
+                  type="line"
+                  :key="nextTask.id"
+                  @click="
+                    $router.push({
+                      name: 'task-detail', params: {id: NotCompleted[1].id }, query: {projectId: $route.query.projectId}})
+                  "
+                  class="mt-4 mr-2"
+                  icon="icon-chevron-right"
+                  icon-pack="feather"
+                  >Next Task</vs-button
+                >
               </div>
             </div>
           </div>
@@ -150,6 +154,9 @@ export default {
     taskList () {
       const list = this.$store.getters['todo/getTasks']
       return list.find((element) => element.status === 'Not Completed')
+    },
+    NotCompleted () {
+      return this.allTasks.filter((element) => element.status === 'Not Completed')
     }
   },
   mounted () {
@@ -161,6 +168,15 @@ export default {
         location.reload()
       }
     }
+  },
+  methods: {
+    // fetchAllTask () {
+    //   const params = this.$route.query.projectId
+    //   this.$store.dispatch('todo/fetchTaskForWorker', params)
+    //     .then((response) => {
+    //       this.allTasks = response.data
+    //     })
+    // }
   }
 }
 </script>
