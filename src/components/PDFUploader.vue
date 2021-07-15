@@ -3,16 +3,17 @@
     <vs-button @click="activePrompt = true" icon-pack="feather" icon="icon-upload">PDF</vs-button>
     <vs-prompt
       title="Upload document"
-      accept-text="Upload"
-      button-cancel="border"
-      :is-valid="validateForm"
+      button-cancel="false"
+      color="primary"
+      buttons-hidden="true"
+      accept-text="Close"
       :active.sync="activePrompt"
     >
       <div>
         <form>
           <div class="vx-row">
             <div class="vx-col w-full">
-              <vs-upload limit="1" fileName="pdf" automatic show-upload-button :action="`${baseURL}/api/project/uploadPDF/${$route.params.id}`" @on-success="successUpload" />
+              <vs-upload automatic text="Only .pdf file allowed" accept=".pdf" limit="1" fileName="pdf" show-upload-button :action="`${baseURL}/api/project/uploadPDF/${$route.params.id}`" @on-success="successUpload" />
             </div>
           </div>
         </form>
@@ -25,13 +26,24 @@
 export default {
   data () {
     return {
-      baseURL: process.env.VUE_APP_BASE_URL,
+      baseURL: 'https://api.ifmservice.de',
       activePrompt: false
     }
   },
   methods: {
-    successUpload () {
-      alert('Success')
+    successUpload (args) {
+      this.$store.dispatch('project/storePDF', args)
+        .then(() => {
+          this.$vs.notify({
+            title: 'Success',
+            text: 'Document uploaded succesfully',
+            icon: 'check_box',
+            color: 'success'
+          })
+        })
+        .finally(() => {
+          this.activePrompt = false
+        })
     }
   }
 }
